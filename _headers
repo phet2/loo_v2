@@ -1,0 +1,21 @@
+# Cloudflare Pages — HTTP headers
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(self)
+
+# เอกสาร HTML: ให้ revalidate ทุกครั้ง (แก้แล้วเห็นทันที ไม่ค้าง cache)
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# engine: cache สั้นๆ + revalidate
+/loo-checklist.js
+  Cache-Control: public, max-age=60, must-revalidate
+
+# หมายเหตุ: จงใจไม่ตั้ง Content-Security-Policy เพราะหน้านี้ต้องโหลด
+# Google Fonts + Firebase SDK (gstatic) + เชื่อม Realtime Database (websocket)
+# ถ้าจะใส่ CSP ภายหลัง ต้อง allow: fonts.googleapis.com, fonts.gstatic.com,
+# www.gstatic.com, *.firebasedatabase.app, *.googleapis.com
