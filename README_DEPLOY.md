@@ -2,22 +2,29 @@
 
 โฟลเดอร์นี้พร้อม deploy แล้ว (static ล้วน ไม่ต้อง build)
 
-## ไฟล์ในโปรเจกต์
+## ไฟล์ในโปรเจกต์ (ลากขึ้น deploy **ทั้งหมด**)
 | ไฟล์ | หน้าที่ |
 |------|--------|
-| `index.html` | หน้า hub (ปุ่มเข้า 2 เอกสาร + progress รวม) |
-| `LOO-Customer-Brain-Overview.html` | สะบับเข้าใจง่าย (สำหรับทุกคน) |
+| `index.html` | หน้า hub (ปุ่มเข้า 2 เอกสาร + ปุ่มไป checklist + progress รวม) |
+| `LOO-Customer-Brain-Overview.html` | สะบับเข้าใจง่าย ภาษาลาว (สำหรับทุกคน) — ตาราง+ติ๊ก อ่านจาก Firebase |
 | `LOO-Customer-Brain-Plan.html` | Dev Technical Reference ⚠️ **ภายใน/NDA** |
-| `loo-checklist.js` | engine ติ๊ก + sync realtime (Firebase ตั้งค่าแล้ว) |
+| `checklist.html` | จัดการ checklist (เพิ่ม/แก้/ลบ/ติ๊ก) — **แก้ที่นี่ → Overview เปลี่ยนตามทันที** |
+| `loo-data.js` | config Firebase + seed (ข้อมูลเริ่มต้น ภาษาลาว) — โหลดก่อน |
+| `loo-clist.js` | data-layer `clist` (sync realtime + CRUD + กล่องตอบ Bou) — ใช้ใน Overview + checklist |
+| `loo-overview-render.js` | render ตารางงานในหน้า Overview จาก `clist` |
+| `loo-checklist.js` | engine ติ๊กของ Plan (index-based) + progress 2 การ์ดในหน้า hub |
 | `_headers` | HTTP headers (security + cache) ของ Cloudflare Pages |
 | `404.html` | หน้า not-found |
+| `DESIGN.md` | บันทึกระบบดีไซน์ (ไม่ขึ้นเว็บ ลากไปด้วยหรือไม่ก็ได้) |
+
+> **ข้อมูล checklist ถูก seed ลง Firebase แล้ว** (6 กลุ่ม · ມື້1 เสร็จ 5/19) — เปิดเว็บมาเห็นข้อมูลทันทีทุกหน้า
 
 ---
 
 ## วิธี deploy
 
-### วิธี A — ผ่าน Git (auto-deploy ทุกครั้งที่ push) — แนะนำ
-1. push โฟลเดอร์นี้ขึ้น GitHub/GitLab (เป็น repo อยู่แล้ว)
+### วิธี A — ผ่าน Git (auto-deploy ทุกครั้งที่ push)
+1. `git init` ในโฟลเดอร์นี้ แล้ว push ขึ้น GitHub/GitLab
 2. **dash.cloudflare.com → Workers & Pages → Create → Pages → Connect to Git**
 3. เลือก repo → ตั้งค่า build:
    - **Framework preset:** `None`
@@ -28,10 +35,10 @@
 ### วิธี B — Direct Upload (ลากไฟล์ ไม่ต้องใช้ Git)
 1. **Workers & Pages → Create → Pages → Upload assets**
 2. ตั้งชื่อ project (เช่น `loo-plan`)
-3. ลาก **ไฟล์ทั้งหมดในโฟลเดอร์นี้** (index.html, 2 เอกสาร, loo-checklist.js, _headers, 404.html) เข้าไป
+3. ลาก **ไฟล์ทั้งหมดในโฟลเดอร์นี้** เข้าไป (4 หน้า .html + 4 ไฟล์ .js + `_headers` + `404.html`)
 4. **Deploy** → ได้ URL `ชื่อ.pages.dev`
 
-> ⚠️ อย่าลาก `.git/` ขึ้นไป (ไม่จำเป็น) · วิธี B ลากเฉพาะ 6 ไฟล์ก็พอ
+> ⚠️ ต้องลากไฟล์ `.js` ครบทั้ง 4 (`loo-data.js`, `loo-clist.js`, `loo-overview-render.js`, `loo-checklist.js`) ไม่งั้นตาราง/ติ๊กจะไม่ทำงาน · ถ้ามี `.git/` ไม่ต้องลากขึ้น
 
 ---
 

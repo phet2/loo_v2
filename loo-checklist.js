@@ -240,9 +240,11 @@
   function renderHub() {
     Array.prototype.slice.call(document.querySelectorAll('[data-loo-doc]')).forEach(function (slot) {
       var id = slot.getAttribute('data-loo-doc');
-      var total = (state.meta[id] || {}).total || 0;
-      var done = 0;
-      Object.keys(state.checks).forEach(function (k) { if (k.indexOf(id + ':') === 0 && state.checks[k]) done++; });
+      var meta = state.meta[id] || {};
+      var total = meta.total || 0;
+      var done;
+      if (meta.done != null) { done = meta.done; } // overview: done อยู่ใน meta (จาก clist)
+      else { done = 0; Object.keys(state.checks).forEach(function (k) { if (k.indexOf(id + ':') === 0 && state.checks[k]) done++; }); } // plan: นับจาก checks
       var pctNum = total ? Math.round(done / total * 100) : 0;
       slot.innerHTML = '<span class="bar"><i style="width:' + pctNum + '%"></i></span>' +
         '<span class="pct">' + (total ? done + '/' + total : '—') + '</span>';
