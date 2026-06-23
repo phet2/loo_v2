@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="lo" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOO · ສະໝອງລູກຄ້າ — ເຂົ້າໃຈແບບລະອຽດ (ສຳລັບທຸກຄົນ)</title>
+<meta name="description" content="ອະທິບາຍລະອຽດແບບບໍ່ຕ້ອງຮູ້ເລື່ອງເຕັກນິກ: ລະບົບກຳລັງເຮັດຫຍັງ, ເພາະຫຍັງ, ໄດ້ຫຍັງ, ແລະ ເຮັດເຖິງໃສແລ້ວ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#5d87ff; --blue-600:#4a6fe6; --blue-700:#3a57c4; --cyan:#49beff;
+    --navy:#101a40; --navy-2:#1c2a63;
+    --ink:#0e1626; --ink-s:#394561; --muted:#5b667f;
+    --bg:#f4f7fd; --surface:#fff; --surface-2:#eef3fc; --line:#e0e7f5; --line-strong:#cdd8ee;
+    --green:#10b981; --green-ink:#0a7a55; --amber:#f59e0b; --amber-ink:#a8690a; --red:#f0476a; --red-ink:#bb2945;
+    --r-lg:22px; --r-md:16px; --r-sm:11px;
+    --shadow:0 1px 2px rgba(16,26,38,.04), 0 12px 34px -14px rgba(33,52,110,.28);
+    --shadow-lift:0 2px 4px rgba(16,26,38,.05), 0 26px 54px -18px rgba(33,52,110,.38);
+    --maxw:1080px; --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Lao",system-ui,sans-serif;
+    font-size:clamp(15.5px,1.05vw,17.5px);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:"Noto Sans Lao",sans-serif;line-height:1.34;margin:0;letter-spacing:0;color:var(--ink);text-wrap:balance;font-weight:800}
+  p{margin:0;text-wrap:pretty}
+  .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(20px,5vw,40px)}
+
+  .no-js [data-reveal]{opacity:1;transform:none}
+  @media (prefers-reduced-motion:no-preference){
+    html:not(.no-js) [data-reveal]{opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+    html:not(.no-js) [data-reveal].in{opacity:1;transform:none}
+    html:not(.no-js) [data-reveal][data-d="1"]{transition-delay:.08s}
+    html:not(.no-js) [data-reveal][data-d="2"]{transition-delay:.16s}
+    html:not(.no-js) [data-reveal][data-d="3"]{transition-delay:.24s}
+    html:not(.no-js) [data-reveal][data-d="4"]{transition-delay:.32s}
+  }
+
+  .nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(1.4) blur(10px);background:color-mix(in oklab,var(--bg) 80%,transparent);border-bottom:1px solid transparent;transition:border-color .3s}
+  .nav.sc{border-color:var(--line)}
+  .nav .wrap{display:flex;align-items:center;gap:14px;height:62px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:1.1rem}
+  .brand .dot{width:27px;height:27px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:#fff;font-size:.82rem}
+  .nav nav{margin-left:auto;display:flex;gap:4px;align-items:center}
+  .nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none;padding:7px 11px;border-radius:8px;white-space:nowrap}
+  .nav nav a:hover{color:var(--ink);background:var(--surface-2)}
+  @media(max-width:840px){.nav nav .nl{display:none}}
+
+  .hero{position:relative;color:#fff;padding:clamp(52px,8vw,96px) 0 clamp(56px,8vw,100px);overflow:hidden;
+    background:radial-gradient(120% 90% at 10% -10%,rgba(73,190,255,.4),transparent 55%),radial-gradient(120% 120% at 110% 5%,rgba(93,135,255,.5),transparent 55%),linear-gradient(160deg,var(--navy),var(--navy-2) 50%,#243a8c)}
+  .hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(120% 80% at 50% 0,#000,transparent 73%);opacity:.5}
+  .hero .wrap{position:relative}
+  .kick{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.86rem;color:#cfe0ff;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);padding:8px 15px;border-radius:999px}
+  .kick .d{width:7px;height:7px;border-radius:50%;background:var(--cyan)}
+  .hero h1{font-size:clamp(1.9rem,4.6vw,3.3rem);color:#fff;margin:22px 0 0;max-width:20ch}
+  .hero h1 em{font-style:normal;color:var(--cyan)}
+  .lede{margin:22px 0 0;max-width:62ch;font-size:clamp(1.02rem,1.5vw,1.2rem);color:#dbe6ff;line-height:1.85}
+  .ns{margin-top:26px;padding:18px 20px;border-radius:var(--r-md);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);max-width:66ch}
+  .ns b{color:#fff}
+
+  .sec{padding:clamp(50px,7vw,92px) 0}
+  .band{background:linear-gradient(180deg,var(--bg),var(--surface-2))}
+  .eye{font-weight:700;font-size:.95rem;color:var(--blue-600)}
+  .sec h2{font-size:clamp(1.6rem,3.3vw,2.4rem);margin-top:12px;line-height:1.3}
+  .sec .sub{margin-top:16px;color:var(--ink-s);font-size:clamp(1rem,1.3vw,1.13rem);max-width:64ch}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:40px}
+  .c{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:26px 24px;box-shadow:var(--shadow);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+  .c:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift)}
+  .c .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px}
+  .c .ic svg{width:25px;height:25px}
+  .c h3{font-size:1.18rem;font-weight:700;line-height:1.34}
+  .c p{margin-top:10px;color:var(--ink-s);font-size:.98rem}
+  .c .impact{margin-top:14px;font-size:.9rem;font-weight:600;padding:8px 12px;border-radius:10px;display:inline-block}
+  .ic.amber{background:color-mix(in oklab,var(--amber) 16%,#fff);color:var(--amber-ink)}
+  .impact.amber{background:color-mix(in oklab,var(--amber) 11%,#fff);color:var(--amber-ink)}
+
+  .loop{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:42px}
+  @media(max-width:820px){.loop{grid-template-columns:1fr 1fr}}
+  @media(max-width:480px){.loop{grid-template-columns:1fr}}
+  .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:22px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .step .n{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-weight:700;font-family:"JetBrains Mono";font-size:.8rem;background:linear-gradient(135deg,var(--blue),var(--blue-600))}
+  .step h3{font-size:1.1rem;margin-top:13px;font-weight:700}
+  .step p{margin-top:7px;font-size:.92rem;color:var(--ink-s)}
+  .step .tag{display:inline-block;margin-top:13px;font-size:.78rem;font-weight:600;padding:4px 11px;border-radius:999px;background:color-mix(in oklab,var(--green) 15%,#fff);color:var(--green-ink)}
+  .step.fix{border-color:color-mix(in oklab,var(--green) 45%,var(--line))}
+  .step.fix .tag{background:color-mix(in oklab,var(--green) 18%,#fff);color:var(--green-ink)}
+  .arc{margin-top:18px;display:flex;align-items:center;gap:14px;padding:18px 22px;border-radius:var(--r-md);background:color-mix(in oklab,var(--green) 8%,var(--surface));border:1px solid color-mix(in oklab,var(--green) 35%,var(--line))}
+  .arc .ai{flex:0 0 auto;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:color-mix(in oklab,var(--green) 18%,#fff);color:var(--green-ink)}
+  .arc .ai svg{width:24px;height:24px}
+  .arc b{color:var(--green-ink)}
+  .arc p{font-size:.97rem;color:var(--ink-s)}
+
+  .tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:42px}
+  @media(max-width:880px){.tracks{grid-template-columns:1fr}}
+  .tr{border-radius:var(--r-lg);padding:26px 24px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+  .tr .badge{font-size:.8rem;font-weight:700;padding:5px 13px;border-radius:999px}
+  .tr h3{font-size:1.2rem;margin-top:10px;font-weight:800}
+  .tr .meta{font-size:.88rem;color:var(--muted);margin-top:3px}
+  .tr ul{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+  .tr li{display:flex;gap:11px;font-size:.96rem;color:var(--ink-s);line-height:1.6}
+  .tr li svg{flex:0 0 auto;width:20px;height:20px;margin-top:3px}
+  .tr.have{border-top:4px solid var(--green)} .tr.have .badge{background:color-mix(in oklab,var(--green) 15%,#fff);color:var(--green-ink)} .tr.have li svg{color:var(--green)}
+  .tr.build{border-top:4px solid var(--blue);box-shadow:var(--shadow-lift);position:relative} .tr.build .badge{background:color-mix(in oklab,var(--blue) 16%,#fff);color:var(--blue-700)} .tr.build li svg{color:var(--blue-600)}
+  .tr.build .flag{position:absolute;top:-13px;right:18px;font-weight:700;font-size:.78rem;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-600));padding:5px 13px;border-radius:999px}
+  .tr.later{border-top:4px solid var(--line-strong);background:var(--surface-2)} .tr.later .badge{background:#e7ecf6;color:var(--muted)} .tr.later li svg{color:var(--muted)} .tr.later h3{color:var(--ink-s)}
+
+  .done{margin-top:8px;background:linear-gradient(160deg,#0f7a52,var(--green));color:#fff;border-radius:var(--r-lg);padding:clamp(28px,4vw,40px);position:relative;overflow:hidden}
+  .done::after{content:"";position:absolute;inset:0;background:radial-gradient(80% 80% at 90% 0,rgba(255,255,255,.18),transparent 60%);pointer-events:none}
+  .done>*{position:relative}
+  .done .chip{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.84rem;background:rgba(255,255,255,.18);padding:6px 13px;border-radius:999px}
+  .done h3{color:#fff;font-size:clamp(1.3rem,2.4vw,1.7rem);margin-top:14px}
+  .done .items{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .done .it{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:13px;padding:15px 16px}
+  .done .it b{display:block;font-size:.98rem}
+  .done .it span{font-size:.88rem;color:#e6f6ee}
+
+  .tl{margin-top:42px;display:flex;flex-direction:column;gap:15px}
+  .wk{display:grid;grid-template-columns:122px 1fr;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+  .wk:hover{transform:translateX(4px);box-shadow:var(--shadow-lift)}
+  @media(max-width:620px){.wk{grid-template-columns:1fr}}
+  .wk .l{background:linear-gradient(165deg,var(--blue),var(--blue-700));color:#fff;padding:22px;display:flex;flex-direction:column;justify-content:center;gap:3px}
+  @media(max-width:620px){.wk .l{flex-direction:row;align-items:baseline;gap:10px;padding:15px 22px}}
+  .wk .l .wkt{font-weight:600;font-size:.84rem;opacity:.85} .wk .l .wkn{font-family:"JetBrains Mono";font-weight:600;font-size:2rem;line-height:1}
+  .wk.dn .l{background:linear-gradient(165deg,#0f7a52,var(--green))}
+  .wk .b{padding:22px 26px;position:relative}
+  .wk .b h3{font-size:1.18rem;font-weight:800}
+  .wk .b p{margin-top:8px;color:var(--ink-s);font-size:1rem}
+  .wk .b .st{position:absolute;top:14px;right:16px;font-size:.76rem;font-weight:700;padding:4px 11px;border-radius:999px;background:color-mix(in oklab,var(--green) 16%,#fff);color:var(--green-ink)}
+
+  .demos{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px}
+  @media(max-width:760px){.demos{grid-template-columns:1fr}}
+  .demo{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:26px 24px;box-shadow:var(--shadow)}
+  .demo .top{display:flex;align-items:center;gap:13px}
+  .demo .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:color-mix(in oklab,var(--blue) 13%,#fff);color:var(--blue-700)}
+  .demo .ic svg{width:24px;height:24px}
+  .demo h3{font-size:1.15rem;font-weight:700}
+  .demo .who{font-size:.86rem;color:var(--muted)}
+  .demo p{margin-top:13px;color:var(--ink-s);font-size:.96rem}
+  .demo .feat{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+  .demo .feat li{font-size:.84rem;color:var(--blue-700);background:color-mix(in oklab,var(--blue) 9%,#fff);border:1px solid color-mix(in oklab,var(--blue) 22%,var(--line));padding:6px 12px;border-radius:999px}
+
+  .dec{margin-top:38px;display:flex;flex-direction:column;gap:14px}
+  .dr{display:grid;grid-template-columns:46px 1fr;gap:16px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:20px 22px;box-shadow:var(--shadow)}
+  .dr .n{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:#fff;font-weight:700;font-family:"JetBrains Mono";background:linear-gradient(135deg,var(--amber),var(--amber-ink))}
+  .dr .q{font-weight:700;font-size:1.04rem} .dr .q span{display:block;font-weight:400;color:var(--ink-s);font-size:.95rem;margin-top:5px}
+
+  .dod{margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+  .dg{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:24px;box-shadow:var(--shadow)}
+  .dg h3{font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:10px}
+  .dg h3 .gd{width:11px;height:11px;border-radius:3px;background:var(--blue);flex:0 0 auto}
+  .dg ul{list-style:none;margin:15px 0 0;padding:0;display:flex;flex-direction:column;gap:11px}
+  .dg li{display:flex;gap:10px;font-size:.95rem;color:var(--ink-s)} .dg li svg{flex:0 0 auto;width:19px;height:19px;color:var(--green);margin-top:3px}
+
+  .out{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:40px}
+  .oc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:24px;box-shadow:var(--shadow)}
+  .oc h3{font-size:1.1rem;font-weight:700}
+  .oc p{margin-top:12px;color:var(--ink-s);font-size:.95rem} .oc p b{color:var(--ink)}
+  .oc .when{margin-top:14px;display:inline-block;font-size:.82rem;font-weight:600;color:var(--blue-700);background:color-mix(in oklab,var(--blue) 9%,#fff);padding:6px 13px;border-radius:999px}
+
+  .close{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff;padding:clamp(54px,8vw,92px) 0;position:relative;overflow:hidden}
+  .close::after{content:"";position:absolute;inset:0;background:radial-gradient(90% 70% at 80% 0,rgba(73,190,255,.32),transparent 60%);pointer-events:none}
+  .close .wrap{position:relative}
+  .close h2{color:#fff;font-size:clamp(1.5rem,3vw,2.2rem);max-width:22ch}
+  .close p{margin-top:18px;color:#dbe6ff;max-width:60ch;font-size:1.06rem;line-height:1.85}
+  .sched{margin-top:34px;display:flex;flex-direction:column;gap:18px}
+  .swk{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
+  .swk h4{font-size:1.06rem;font-weight:800}
+  .swk .wt{display:inline-block;font-family:"JetBrains Mono";font-size:.76rem;font-weight:600;color:var(--blue-700);background:color-mix(in oklab,var(--blue) 10%,#fff);padding:3px 11px;border-radius:999px;margin-left:8px;vertical-align:2px}
+  .sday{display:flex;gap:11px;align-items:flex-start;padding:9px 2px;border-top:1px solid var(--line);flex-wrap:wrap}
+  .swk .sday:first-of-type{border-top:0}
+  .sday .cb{flex:0 0 auto;width:17px;height:17px;border:2px solid var(--line-strong);border-radius:5px;margin-top:3px}
+  .sday .dn{flex:0 0 auto;white-space:nowrap;font-weight:700;color:var(--blue-700);font-size:.92rem;margin-top:1px}
+  .sday .dt{flex:1;min-width:210px;color:var(--ink-s);font-size:.95rem;line-height:1.56}
+  .sday .hr{flex:0 0 auto;font-family:"JetBrains Mono";font-size:.78rem;font-weight:600;color:var(--blue-700);margin-top:2px}
+  .note-est{margin-top:12px;font-size:.86rem;color:var(--muted);line-height:1.6}
+  footer{padding:28px 0;color:var(--muted);font-size:.85rem;text-align:center;background:var(--navy);line-height:1.8}
+  footer .w{color:#9aa8cc}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <div class="brand"><span class="dot">L</span>LOO Delivery</div>
+    <nav>
+      <a class="nl" href="#why">ບັນຫາ</a>
+      <a class="nl" href="#brain">ສະໝອງລູກຄ້າ</a>
+      <a class="nl" href="#loop">ວົງຈອນ</a>
+      <a class="nl" href="#done">ຫົວໃຈ</a>
+      <a class="nl" href="#driver">ແອັບຄົນຂັບ</a>
+      <a class="nl" href="#plan">ແຜນ</a>
+      <a class="nl" href="#sched">ຕາຕະລາງ</a>
+      <a class="nl" href="#demo">ເດໂມ</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="kick"><span class="d"></span>ສຳລັບທຸກຄົນ · ບໍ່ຕ້ອງຮູ້ເລື່ອງເຕັກນິກ · ອະທິບາຍລະອຽດ</span>
+    <h1>ເຮັດໃຫ້ລະບົບ <em>ຈື່ລູກຄ້າໄດ້ເອງ</em> ແລ້ວວາງແຜນສົ່ງໃຫ້ແມ່ນຂຶ້ນທຸກຮອບ</h1>
+    <p class="lede">ເອກະສານນີ້ອະທິບາຍ <b>ແບບລະອຽດ</b> ວ່າເຮົາກຳລັງເຮັດຫຍັງ, ເພາະຫຍັງ, ໄດ້ປະໂຫຍດຫຍັງ ແລະ ເຮັດໄປເຖິງໃສແລ້ວ — ໂດຍບໍ່ມີຄຳສັບເຕັກນິກ. ອ່ານຈົບແລ້ວເຫັນພາບທັງໝົດ. <b>ສະບັບນີ້ລວມ “ແອັບຄົນຂັບ” ເຂົ້າມາໃນແຜນເດືອນນີ້ນຳ</b> ຕາມການຕັດສິນໃຈໃຫ້ລວມວຽກ.</p>
+    <div class="ns"><p>ຫຼັກການດຽວທີ່ຍຶດ: <b>ຄົນຂັບບັນທຶກເທື່ອດຽວຕອນເຮັດວຽກ</b> → ຫຼັງບ້ານເຫັນຄວາມຈິງທັນທີ → ຮອບຕໍ່ໄປ ລະບົບແນະນຳແຜນໄດ້ແມ່ນຂຶ້ນເອງ ໂດຍບໍ່ມີໃຜຕ້ອງເຮັດເອກະສານເພີ່ມ</p></div>
+  </div>
+</section>
+
+<section class="sec" id="why">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ບັນຫາ</span>
+      <h2>ມື້ນີ້ລະບົບສົ່ງເຮັດວຽກໄດ້ດີ ແຕ່ມັນຍັງ “ລືມ” ຢູ່ 3 ຢ່າງ</h2>
+      <p class="sub">ແຕ່ລະຢ່າງ ບໍ່ແມ່ນແຄ່ “ບໍ່ສະດວກ” ແຕ່ມັນເຮັດໃຫ້ເຮົາ <b>ເສຍລູກຄ້າ ໂດຍບໍ່ຮູ້ໂຕ</b> ແລະ ໃຫ້ລະບົບຊ່ວຍຄິດເສັ້ນທາງເອງໃນອະນາຄົດບໍ່ໄດ້</p>
+    </div>
+    <div class="cards">
+      <div class="c" data-reveal data-d="1">
+        <div class="ic amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>ບໍ່ຈື່ວ່າ ລູກຄ້າແຕ່ລະຄົນ ຮັບນ້ຳຄັ້ງສຸດທ້າຍ ມື້ໃດ</h3>
+        <p>ລະບົບຮູ້ແຕ່ຕາຕະລາງທີ່ຕັ້ງໄວ້ ບໍ່ຮູ້ວ່າຄວາມຈິງລູກຄ້າຄົນໃດງຽບຫາຍໄປ</p>
+        <span class="impact amber">ຜົນ: ເຕືອນບໍ່ໄດ້ວ່າໃຜກຳລັງຈະຂາດນ້ຳ → ລູກຄ້າຍ້າຍໄປຮ້ານອື່ນ ໂດຍເຮົາບໍ່ທັນຮູ້</span>
+      </div>
+      <div class="c" data-reveal data-d="2">
+        <div class="ic amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg></div>
+        <h3>ບໍ່ເກັບ ທີ່ຕັ້ງຈິງ ຕອນຄົນຂັບໄປສົ່ງ</h3>
+        <p>ເວລາສົ່ງຮອດໜ້າບ້ານ ເຮົາບໍ່ໄດ້ບັນທຶກຈຸດທີ່ຢູ່ຈິງໄວ້</p>
+        <span class="impact amber">ຜົນ: ໃນອະນາຄົດ ໃຫ້ລະບົບຊ່ວຍຈັດລຳດັບເສັ້ນທາງໃຫ້ສັ້ນສຸດເອງບໍ່ໄດ້ (ບໍ່ມີຂໍ້ມູນທີ່ຕັ້ງພໍ)</span>
+      </div>
+      <div class="c" data-reveal data-d="3">
+        <div class="ic amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-6"/></svg></div>
+        <h3>ວາງແຜນຈາກ “ຕາຕະລາງ” ບໍ່ແມ່ນ “ຄວາມຈິງ”</h3>
+        <p>ການຈັດຮອບສົ່ງເບິ່ງແຕ່ຕາຕະລາງສະມາຊິກ ບໍ່ໄດ້ເບິ່ງວ່າໃຜຄ້າງສົ່ງ ຫຼື ງຽບເກີນຮອບຂອງຕົນເອງ</p>
+        <span class="impact amber">ຜົນ: ໄປສົ່ງຄົນທີ່ບໍ່ຈຳເປັນ ແລະ ລືມຄົນທີ່ກຳລັງຈະຫາຍ</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="brain">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ແນວຄິດຫຼັກ</span>
+      <h2>“ສະໝອງລູກຄ້າ” — ໃຫ້ລະບົບຈື່ ແລະ ເຕືອນເຮົາ ກ່ອນເສຍລູກຄ້າ</h2>
+      <p class="sub">ຄິດແບບງ່າຍໆ: ເໝືອນເຮົາມີ <b>ຜູ້ຊ່ວຍທີ່ຈື່ໄດ້ໝົດ</b> ວ່າບ້ານໃດນ້ຳກຳລັງຈະໝົດ ແລ້ວເຕືອນໃຫ້ໄປສົ່ງກ່ອນ — ໂດຍບໍ່ຕ້ອງມີໃຜນັ່ງຈື່ເອງ</p>
+    </div>
+    <div class="cards">
+      <div class="c" data-reveal data-d="1">
+        <div class="ic" style="background:color-mix(in oklab,var(--blue) 13%,#fff);color:var(--blue-700)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 4 2 6h10c0-2 2-3 2-6a7 7 0 0 0-7-7Z"/><path d="M9 21h6"/></svg></div>
+        <h3>ຈື່ “ມື້ສົ່ງລ່າສຸດ” → ຄິດ “ງຽບໄປຈັກມື້”</h3>
+        <p>ທຸກຄັ້ງທີ່ສົ່ງ ລະບົບຈື່ມື້ໄວ້ ແລ້ວຄິດເອງວ່າລູກຄ້າຄົນນັ້ນງຽບໄປຈັກມື້ ແລ້ວແບ່ງເປັນ <b>ສີ</b>: ປົກກະຕິ (ຂຽວ) → ເລີ່ມງຽບ (ເຫຼືອງ) → ສ່ຽງ (ສົ້ມ) → ສ່ຽງສູງ/ໃກ້ເສຍ (ແດງ)</p>
+      </div>
+      <div class="c" data-reveal data-d="2">
+        <div class="ic" style="background:color-mix(in oklab,var(--blue) 13%,#fff);color:var(--blue-700)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></div>
+        <h3>ໃຫ້ດາວ + ລະດັບ ລູກຄ້າແຕ່ລະຄົນ</h3>
+        <p>ລະບົບໃຫ້ <b>ດາວ (1–5)</b> ແລະ ລະດັບຄວາມສຳຄັນ ຕາມຍອດຊື້/ຄວາມຖີ່/ກຳໄລ → ຮູ້ວ່າຄົນໃດສຳຄັນ ຄວນດູແລກ່ອນ</p>
+      </div>
+      <div class="c" data-reveal data-d="3">
+        <div class="ic" style="background:color-mix(in oklab,var(--blue) 13%,#fff);color:var(--blue-700)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.2-8.6"/><path d="M21 4v5h-5"/></svg></div>
+        <h3>ວົງມົນ “ຄວາມງຽບ” → ດຶງລູກຄ້າກັບ</h3>
+        <p>ໜ້າຫຼັກສະແດງເປັນວົງມົນວ່າມີລູກຄ້າງຽບຈັກຄົນ (7/14/20/30 ມື້) → ກົດເບິ່ງລາຍຊື່ → <b>ສົ່ງໂປຣໂມຊັນດຶງກັບ</b> ກ່ອນເສຍຈິງ</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="loop">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ພາບລວມ</span>
+      <h2>ວົງຈອນດຽວ 4 ຂັ້ນ ທີ່ຍິ່ງໃຊ້ດົນຍິ່ງແມ່ນ</h2>
+      <p class="sub">ທຸກຢ່າງໝຸນເປັນວົງດຽວ. ສາມຂັ້ນທຳອິດເຮັດວຽກໄດ້ແລ້ວ — ເຫຼືອ “ຂັ້ນທີ່ສົ່ງຂໍ້ມູນກັບຄືນ” ທີ່ເປັນ <b>ຫົວໃຈຂອງເຟສນີ້</b></p>
+    </div>
+    <div class="loop" data-reveal data-d="1">
+      <div class="step"><span class="n">1</span><h3>ສະໝອງລູກຄ້າ</h3><p>ຮູ້ຈັກລູກຄ້າແຕ່ລະຄົນ: ຮອບເຕີມ, ດາວ, ໜີ້, ຖັງຄ້າງ, ທີ່ຕັ້ງ</p><span class="tag">ມີພື້ນຖານແລ້ວ</span></div>
+      <div class="step"><span class="n">2</span><h3>ຈັດແຜນ</h3><p>ເລືອກວ່າມື້ນີ້ໄປສົ່ງໃຜ ຈັດເປັນກຸ່ມເສັ້ນທາງ ຜູກລົດ/ຄົນຂັບ</p><span class="tag">ມີພື້ນຖານແລ້ວ</span></div>
+      <div class="step"><span class="n">3</span><h3>ສົ່ງໜ້າງານ</h3><p>ຄົນຂັບແລ່ນຕາມເສັ້ນ ເຫັນແຜນທີ່+ລູກຄ້າ ເທິງມືຖື</p><span class="tag">ມີພື້ນຖານແລ້ວ</span></div>
+      <div class="step fix"><span class="n">4</span><h3>ບັນທຶກເທື່ອດຽວ</h3><p>ສົ່ງສຳເລັດ ບັນທຶກ ຮູບ+ເງິນ+ຖັງຄືນ — ບວກ ທີ່ຕັ້ງ+ມື້ສົ່ງ</p><span class="tag">ຫົວໃຈເຟສນີ້</span></div>
+    </div>
+    <div class="arc" data-reveal data-d="2">
+      <div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <p><b>ນີ້ຄືຈຸດທີ່ເຄີຍຂາດ:</b> ຂັ້ນ 4 (ບັນທຶກ) ບໍ່ສົ່ງຂໍ້ມູນກັບໄປຂັ້ນ 1 (ສະໝອງລູກຄ້າ). ເມື່ອຕໍ່ເສັ້ນນີ້ ທຸກການສົ່ງຈະປ້ອນຂໍ້ມູນກັບຄືນເອງ → ສະໝອງລູກຄ້າສະຫຼາດຂຶ້ນເອງທຸກມື້ ໂດຍບໍ່ມີໃຜເຮັດເພີ່ມ</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec band">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ຫົວໃຈລະບົບ</span>
+      <h2 id="done">ສ່ວນຮາກຖານທີ່ສຳຄັນສຸດ — “ກະແຈ” ທີ່ປົດລັອກທຸກຢ່າງ</h2>
+      <p class="sub">ນີ້ຄືສ່ວນທີ່ເຮັດໃຫ້ <b>ສະໝອງລູກຄ້າເຮັດວຽກໄດ້</b> — ໂດຍບໍ່ມີໃຜຕ້ອງເຮັດເພີ່ມ</p>
+    </div>
+    <div class="done" data-reveal data-d="1">
+      <span class="chip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 3v18M3 12h18"/></svg> ຫົວໃຈຂອງເຟສນີ້</span>
+      <h3>ທຸກຄັ້ງທີ່ຄົນຂັບສົ່ງນ້ຳ ລະບົບຈະຈື່ອັດຕະໂນມັດ</h3>
+      <div class="items">
+        <div class="it"><b>ໃຜເປັນຄົນສົ່ງ</b><span>ບັນທຶກໄວ້ທຸກຈຸດ — ເປັນຮາກຖານໃຫ້ “ໃຜສົ່ງ ຄົນນັ້ນໄດ້ເງິນ”</span></div>
+        <div class="it"><b>ສົ່ງຢູ່ບ່ອນໃດ (ທີ່ຕັ້ງ)</b><span>ເກັບພິກັດຈິງຕອນສົ່ງ — ສະສົມໄວ້ໃຫ້ລະບົບຈັດເສັ້ນທາງເອງໃນອະນາຄົດ</span></div>
+        <div class="it"><b>ລູກຄ້າຮັບນ້ຳມື້ໃດ</b><span>ອັບເດດ “ມື້ສົ່ງລ່າສຸດ” ໃຫ້ເອງ — ສະໝອງລູກຄ້າເລີ່ມຄິດຄວາມງຽບໄດ້</span></div>
+        <div class="it"><b>ເງິນໄປຫາຄົນສົ່ງຈິງ</b><span>ແກ້ໃຫ້ເງິນຜູກກັບຄົນທີ່ສົ່ງຕົວຈິງ ບໍ່ແມ່ນຄົນອື່ນ</span></div>
+      </div>
+      <p style="margin-top:18px;color:#eafaf2;font-size:.97rem">ບວກກັບ: ລູກຄ້າເກົ່າທັງໝົດ ລະບົບຈະຄິດ “ມື້ສົ່ງລ່າສຸດ” ໃຫ້ຍ້ອນຫຼັງຈາກປະຫວັດ — ສະໝອງລູກຄ້າເຮັດວຽກໄດ້ທັນທີ ບໍ່ຕ້ອງລໍສະສົມໃໝ່</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ຄວາມຈິງ</span>
+      <h2>ເຮົາມີຂອງຢູ່ແລ້ວຫຼາຍກວ່າທີ່ຄິດ</h2>
+      <p class="sub">ແຍກໃຫ້ຊັດເຈນ ເພື່ອບໍ່ໃຫ້ຄາດຫວັງຜິດ: ຫຍັງມີແລ້ວ · ຫຍັງສ້າງເດືອນນີ້ · ຫຍັງໄວ້ພາຍຫຼັງ</p>
+    </div>
+    <div class="tracks">
+      <div class="tr have" data-reveal data-d="1">
+        <span class="badge">ມີແລ້ວ</span><h3>ພ້ອມໃຊ້ມື້ນີ້</h3><div class="meta">ພື້ນຖານທີ່ໝັ້ນຄົງ</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ແຜນທີ່ + ໜ້າຈັດສົ່ງເທິງເວັບ (ພື້ນຖານ)</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ຕິດຕາມຄົນຂັບແບບສົດ</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ບັນທຶກສົ່ງ: ຮູບ+ເກັບເງິນ+ຖັງຄືນ ໃນຈໍດຽວ</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ໜ້າຍິ້ມ/ບຶ້ງ ບອກວ່າລູກຄ້າງຽບໄປຈັກມື້</li>
+        </ul>
+      </div>
+      <div class="tr build" data-reveal data-d="2">
+        <span class="flag">ໂຟກັສເດືອນນີ້</span><span class="badge">ສ້າງເດືອນນີ້</span><h3>4 ອາທິດ</h3><div class="meta">ຄວາມສ່ຽງຕ່ຳ ເຫັນຜົນຈິງ</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>ເກັບທີ່ຕັ້ງ+ຄົນສົ່ງ+ມື້ສົ່ງ ທຸກຄັ້ງ</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>ບັດລູກຄ້າສະແດງຄວາມງຽບຈາກຂໍ້ມູນຈິງ</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>ລາຍການ “ໃຜຄວນໄປສົ່ງມື້ນີ້” ອັດຕະໂນມັດ</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>ແຕ້ມເສັ້ນທາງໄດ້ຫຼາຍເສັ້ນ ແຍກສີ ແຍກມື້</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>ເຜີຍລູກຄ້າທີ່ຢູ່ໃກ້ເສັ້ນທາງມື້ນັ້ນ</li>
+        </ul>
+      </div>
+      <div class="tr later" data-reveal data-d="3">
+        <span class="badge">ໄວ້ພາຍຫຼັງ</span><h3>ລໍເງື່ອນໄຂພ້ອມ</h3><div class="meta">ລໍຂໍ້ມູນສະສົມ + Bou ຕັດສິນ</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg>ຄະແນນບໍລິການເຕັມຮູບແບບ (ໃຜເບິ່ງແຍງດີ/ຖິ້ມ)</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg>ບໍລິການຂ້າມສາຂາ (ລົດຜ່ານຊ່ວຍເກັບລູກຄ້າທີ່ຖືກປະຖິ້ມ)</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg>ໃຫ້ລະບົບຄິດເສັ້ນທາງສັ້ນສຸດເອງ (optimizer)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="driver">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ແອັບຄົນຂັບ</span>
+      <h2>ການເພີ່ມໃໝ່: ລວມ “ແອັບຄົນຂັບ” ເຂົ້າແຜນເດືອນນີ້ນຳ</h2>
+      <p class="sub">ໃຫ້ເອົາ <b>ແອັບຄົນຂັບ (ເດໂມ V2)</b> ມາລວມກັບວຽກສະໝອງລູກຄ້າ ໃຫ້ສຳເລັດພ້ອມກັນ. ຂ່າວດີ: <b>ຫຼັງບ້ານສ່ວນໃຫຍ່ມີຢູ່ແລ້ວ</b> — ວຽກຫຼັກຄືເຮັດ “ໜ້າຈໍເທິງມືຖື” ມາຕໍ່ ບໍ່ແມ່ນສ້າງຫຼັງບ້ານໃໝ່ທັງໝົດ</p>
+    </div>
+    <div class="cards">
+      <div class="c" data-reveal data-d="1">
+        <div class="ic" style="background:color-mix(in oklab,var(--blue) 13%,#fff);color:var(--blue-700)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+        <h3>ແອັບຄົນຂັບເຮັດຫຍັງ</h3>
+        <p>ເຂົ້າລະບົບ (ລະຫັດ+PIN) → ກວດກ່ອນອອກລົດ (ເຊັກອິນ · ກວດລົດ · ໂຫຼດນ້ຳຂຶ້ນລົດ) → ໜ້າວຽກມື້ນີ້ → ແຕ່ລະຈຸດ <b>ຈົບໃນຈໍດຽວ</b> (ເກັບເງິນ · ນັບຖັງຄືນ · ຖ່າຍຮູບ · ຢືນຢັນ) → ໃບຮັບເງິນ → ແຜນທີ່ → ກະເປົ໋າເງິນ → ອັນດັບ/ປິດກະ</p>
+      </div>
+      <div class="c" data-reveal data-d="2">
+        <div class="ic" style="background:color-mix(in oklab,var(--green) 15%,#fff);color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h3>ສ່ວນໃຫຍ່ຫຼັງບ້ານມີແລ້ວ</h3>
+        <p>ສິ່ງທີ່ຄົນຂັບເຮັດ (ສົ່ງ · ເກັບເງິນ · ນັບຖັງ · ເກັບທີ່ຕັ້ງ · ໂຫຼດນ້ຳຂຶ້ນລົດ · ປິດກະ) ລະບົບ <b>ຮັບໄດ້ໝົດແລ້ວ</b> ໃນຫຼັງບ້ານຈິງ. ສະນັ້ນວຽກນີ້ສ່ວນໃຫຍ່ແມ່ນ “ເຮັດໜ້າຈໍມືຖື” ມາຕໍ່ກັບຂອງທີ່ມີ ບໍ່ແມ່ນເລີ່ມໃໝ່ໝົດ. <b>ອັບເດດ:</b> ໜ້າຈໍຫຼັກ (ເຂົ້າລະບົບ PIN · ໜ້າວຽກມື້ນີ້ · ໜ້າຈຸດສົ່ງ) ເລີ່ມເຮັດແລ້ວ ແລະ ຕໍ່ກັບຫຼັງບ້ານຈິງແລ້ວ</p>
+      </div>
+      <div class="c" data-reveal data-d="3">
+        <div class="ic amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+        <h3>ສິ່ງທີ່ຍັງຕ້ອງສ້າງໃໝ່</h3>
+        <p>ບາງຢ່າງເດໂມມີ ແຕ່ຫຼັງບ້ານຍັງບໍ່ມີ: ຍິງຂາຍໜ້າງານ · ບັນທຶກນ້ຳມັນ · ອັນດັບ/ແຕ້ມ · ລາຍຮັບຄົນຂັບ · ໃຊ້ໄດ້ຕອນບໍ່ມີເນັດ (offline). ກຸ່ມນີ້ໃຊ້ເວລາຫຼາຍກວ່າ ‘ການຕໍ່ຂອງທີ່ມີ’</p>
+      </div>
+    </div>
+    <div class="arc" data-reveal data-d="2">
+      <div class="ai"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
+      <p><b>ຄວາມຊື່ສັດເລື່ອງເວລາ:</b> ເຮັດ <b>2 ວຽກໃຫຍ່ເຕັມຮູບແບບ</b> (ສະໝອງລູກຄ້າ+ເສັ້ນທາງ ກັບ ແອັບຄົນຂັບ) ດ້ວຍທີມ 2 ຄົນ ປະເມີນຈິງ ≈ <b>~8 ອາທິດ</b> ບໍ່ແມ່ນ 4. ໃນເດືອນທຳອິດ ທີມ 2 ຄົນຈະໄດ້ປະມານ <b>ເຄິ່ງທາງ</b>. ຖ້າຕ້ອງໃຫ້ໃຊ້ໄດ້ໃນ 1 ເດືອນ — ແນະນຳເຮັດ <b>ສະບັບ MVP ກ່ອນ</b> (ໜ້າຈໍຫຼັກ + ຕໍ່ຫຼັງບ້ານທີ່ມີ + ກ້ອງ/ທີ່ຕັ້ງ/PIN) ແລ້ວເລື່ອນ ຍິງຂາຍ · ນ້ຳມັນ · ອັນດັບ · ລາຍຮັບ · offline ໄປເຟສຕໍ່ໄປ</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="plan">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ແຜນວຽກ</span>
+      <h2>ແຜນ 1 ເດືອນ · 4 ອາທິດ</h2>
+      <p class="sub">ແຕ່ລະອາທິດມີຜົນທີ່ຈັບຕ້ອງໄດ້ ໄລ່ຈາກພື້ນຖານ ໄປສູ່ການໃຊ້ຈິງເທິງແຜນທີ່</p>
+    </div>
+    <div class="tl">
+      <div class="wk" data-reveal data-d="1"><div class="l"><span class="wkt">ອາທິດ</span><span class="wkn">1</span></div><div class="b"><h3>ປິດຊ່ອງຄວາມຈຳ (ຮາກຖານ)</h3><p>ທຸກການສົ່ງເລີ່ມເກັບ ທີ່ຕັ້ງ+ຄົນສົ່ງ+ມື້ສົ່ງລ່າສຸດ ອັດຕະໂນມັດ ພ້ອມແກ້ໃຫ້ເງິນໄປຫາຄົນສົ່ງຈິງ</p></div></div>
+      <div class="wk" data-reveal data-d="2"><div class="l"><span class="wkt">ອາທິດ</span><span class="wkn">2</span></div><div class="b"><h3>ສະໝອງລູກຄ້າ + ໃຜຄວນໄປສົ່ງ</h3><p>ບັດລູກຄ້າສະແດງຄວາມງຽບຈິງ ແລະ ມີລາຍການ “ຄົນທີ່ຄວນໄປສົ່ງມື້ນີ້” ໃຫ້ຜູ້ວາງແຜນເບິ່ງກ່ອນແຕ້ມເສັ້ນ · ມືຖືເລີ່ມສົ່ງທີ່ຕັ້ງ</p></div></div>
+      <div class="wk" data-reveal data-d="3"><div class="l"><span class="wkt">ອາທິດ</span><span class="wkn">3</span></div><div class="b"><h3>ແຕ້ມເສັ້ນທາງໄດ້ຈິງ</h3><p>ສ້າງເສັ້ນທາງເທິງແຜນທີ່ ຕັ້ງຊື່ ເລືອກສີ ເລືອກມື້ ຜູກລົດ/ຄົນຂັບ ແລະ ບັນທຶກໄວ້ໃຊ້ຄືນໄດ້</p></div></div>
+      <div class="wk" data-reveal data-d="4"><div class="l"><span class="wkt">ອາທິດ</span><span class="wkn">4</span></div><div class="b"><h3>ກອງ + ເຜີຍລູກຄ້າໃກ້ເສັ້ນ + ວັດຜົນ</h3><p>ກອງແຜນທີ່ຕາມມື້/ເສັ້ນ · ເລືອກເສັ້ນແລ້ວເຫັນລູກຄ້າໃກ້ເສັ້ນທີ່ຄວນແວ່ · ມີລາຍງານວ່າເກັບທີ່ຕັ້ງໄດ້ຈັກເປີເຊັນ</p></div></div>
+    </div>
+    <div class="ns" data-reveal style="margin-top:22px"><p><b>ໝາຍເຫດສຳຄັນ (ຄວາມຊື່ສັດ):</b> ຕາຕະລາງ 4 ອາທິດນີ້ແມ່ນ <b>ວຽກສະໝອງລູກຄ້າ + ເສັ້ນທາງ</b> ຢ່າງດຽວ. ເມື່ອລວມ <b>ແອັບຄົນຂັບເຕັມຮູບແບບ</b> ເຂົ້າມານຳ ດ້ວຍທີມ 2 ຄົນ ປະເມີນຈິງ ≈ <b>~8 ອາທິດ</b>. ໃນ 1 ເດືອນ ຈະໄດ້ປະມານເຄິ່ງທາງ — ລາຍລະອຽດເບິ່ງຫົວຂໍ້ “ແອັບຄົນຂັບ” ດ້ານເທິງ</p></div>
+  </div>
+</section>
+
+<section class="sec" id="sched">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ຕາຕະລາງລາຍວັນ</span>
+      <h2>ແຕ່ລະມື້ເຮັດຫຍັງ · ໃຊ້ເວລາເທົ່າໃດ</h2>
+      <p class="sub">ໄລ່ມື້ຕໍ່ມື້ ໃຫ້ເຫັນວ່າແຕ່ລະມື້ເຮັດຫຍັງ ແລະ ໃຊ້ເວລາປະມານເທົ່າໃດ</p>
+    </div>
+    <div class="sched">
+      <div class="swk" data-reveal data-d="1">
+        <h4>ອາທິດ 1 — ຮາກຖານ (ຄວາມຈຳຂອງລະບົບ) <span class="wt">5 ມື້ + ເຄິ່ງ</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 1</span><span class="dt">ເພີ່ມ “ຊ່ອງເກັບ” ມື້ຮັບລ່າສຸດ / ຄົນສົ່ງ / ທີ່ຕັ້ງ ໃນຖານຂໍ້ມູນ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 2</span><span class="dt">ອັບເດດຖານຂໍ້ມູນ + ເຕີມຂໍ້ມູນເກົ່າຍ້ອນຫຼັງ + ກວດ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 3</span><span class="dt">ເຮັດໃຫ້ “ພິກັດ + ໃຜສົ່ງ” ບັນທຶກຕອນສົ່ງຈິງ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 4</span><span class="dt">ບັນທຶກ “ມື້ສົ່ງລ່າສຸດ + ນັບຄັ້ງ” + ແກ້ເງິນໃຫ້ໄປຫາຄົນສົ່ງຈິງ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 5</span><span class="dt">ຂຽນຊຸດທົດສອບ ກວດໃຫ້ໝັ້ນໃຈ (ກັນພລາດ)</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເຄິ່ງມື້</span><span class="dt">ກວດ + loo-check + ສ້າງ PR · ເກັບງານປະຈຳອາທິດ</span><span class="hr" style="color:var(--muted)">~½ ມື້</span></div>
+      </div>
+      <div class="swk" data-reveal data-d="2">
+        <h4>ອາທິດ 2 — ສະໝອງລູກຄ້າ + ໃຜຄວນໄປສົ່ງ <span class="wt">5 ມື້ + ເຄິ່ງ</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 6</span><span class="dt">ມືຖືເລີ່ມສົ່ງພິກັດຕອນກົດສົ່ງ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 7</span><span class="dt">ຈູນປຸ່ມເກັບພິກັດໃຫ້ນິ່ງ + ບັດລູກຄ້າສະແດງ “ງຽບໄປຈັກມື້”</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 8</span><span class="dt">ສ້າງສູດຄິດ “ຮອບສະເລ່ຍ” ຂອງລູກຄ້າແຕ່ລະຄົນ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 9–10</span><span class="dt">ສ້າງລາຍການ “ໃຜຄວນໄປສົ່ງມື້ນີ້” (ຮວມ 4 ສັນຍານ) + ເປີດໃຫ້ໃຊ້ + ຮວມລູກຄ້າທີ່ບໍ່ມີຮອບປະຈຳ</span><span class="hr">~2 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເຄິ່ງມື້</span><span class="dt">ທົດສອບລວມ + ກວດ + ສ້າງ PR</span><span class="hr" style="color:var(--muted)">~½ ມື້</span></div>
+      </div>
+      <div class="swk" data-reveal data-d="3">
+        <h4>ອາທິດ 3 — ເສັ້ນທາງ + ວາດເສັ້ນ <span class="wt">5 ມື້ + ເຄິ່ງ</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 11</span><span class="dt">ສ້າງ “ບ່ອນເກັບເສັ້ນທາງ” ໃນຖານຂໍ້ມູນ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 12–13</span><span class="dt">ຫຼັງບ້ານ: ສ້າງ/ແກ້/ລຶບ/ເບິ່ງ ເສັ້ນທາງ + ຕໍ່ໜ້າເວັບໃຫ້ເອີ້ນໃຊ້ໄດ້</span><span class="hr">~2 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 14–15</span><span class="dt">ເຄື່ອງມືແຕ້ມເສັ້ນເທິງແຜນທີ່ (ກົດຈຸດ → ລາກ → ສີ/ມື້ → ບັນທຶກ) + ຕົວສະແດງເສັ້ນສີ</span><span class="hr">~2 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເຄິ່ງມື້</span><span class="dt">ທົດສອບແຕ້ມເສັ້ນເທິງຈໍຈິງ + ກວດ + PR</span><span class="hr" style="color:var(--muted)">~½ ມື້</span></div>
+      </div>
+      <div class="swk" data-reveal data-d="4">
+        <h4>ອາທິດ 4 — ກອງ + ເຜີຍລູກຄ້າໃກ້ເສັ້ນ + ວັດຜົນ <span class="wt">5 ມື້ + ເຄິ່ງ</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 16–17</span><span class="dt">“ເຜີຍລູກຄ້າໃກ້ເສັ້ນ” (ຄິດໄລຍະ ໃນສາຂາຕົນເອງ) + ກອງຕາມມື້/ເສັ້ນ</span><span class="hr">~2 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 18</span><span class="dt">ໝຸດບອກ 2 ຢ່າງ (ສີ=ຄວາມງຽບ, ຂອບ=ເສັ້ນ) + ປ້າຍອະທິບາຍ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 19</span><span class="dt">ລາຍງານ “ເກັບພິກັດໄດ້ຈັກ %” (ວັດຄວາມພ້ອມ)</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 20</span><span class="dt">ລາຍງານ “ຄະແນນດິບລາຍຄົນຂັບ” (ຍັງບໍ່ໃຫ້ຄະແນນ) + ເກັບງານ/ກວດຮວມ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເຄິ່ງມື້</span><span class="dt">ເກັບງານລວມ + ກຽມສະແດງ demo + PR</span><span class="hr" style="color:var(--muted)">~½ ມື້</span></div>
+      </div>
+      <div class="swk" data-reveal data-d="5">
+        <h4>+ ແອັບຄົນຂັບ (ເພີ່ມຕາມການລວມວຽກ) — ປະມານ 4 ອາທິດ <span class="wt">ຕໍ່ທ້າຍ/ຂະໜານ</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ກຸ່ມ 1</span><span class="dt">ໂຄງແອັບເທິງມືຖື (Capacitor) + ເຂົ້າລະບົບ ລະຫັດ+PIN · <b>ສ່ວນນີ້ເຮັດແລ້ວ</b> · offline ຍ້າຍໄປເຟສຕໍ່ໄປ</span><span class="hr">~1 ອາທິດ</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ກຸ່ມ 2</span><span class="dt">ຕໍ່ໜ້າຈໍເຂົ້າຫຼັງບ້ານທີ່ມີ: ໜ້າວຽກມື້ນີ້ · ຈຸດສົ່ງ (ຈົບໃນຈໍດຽວ) · ໃບຮັບເງິນ · ແຜນທີ່ · ປິດກະ + ກ້ອງ ແລະ ທີ່ຕັ້ງ · <b>(ໜ້າວຽກ+ຈຸດສົ່ງ ເຮັດແລ້ວ · ເຫຼືອ ໃບຮັບເງິນ/ແຜນທີ່/ປິດກະ)</b></span><span class="hr">~1.5 ອາທິດ</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ກຸ່ມ 3</span><span class="dt">ສ້າງສ່ວນໃໝ່: ຍິງຂາຍໜ້າງານ · ບັນທຶກນ້ຳມັນ · ອັນດັບ/ແຕ້ມ · ລາຍຮັບຄົນຂັບ · SOS · ແຈ້ງລູກຄ້າ</span><span class="hr">~1.5 ອາທິດ</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ໝາຍເຫດ</span><span class="dt">ກຸ່ມ 1–2 = “ຕໍ່ຂອງທີ່ມີ” ໄວ · ກຸ່ມ 3 = “ສ້າງໃໝ່” ຊ້າ → ຖ້າຕ້ອງຈົບໃນ 1 ເດືອນ ໃຫ້ເລື່ອນ ກຸ່ມ 3 ໄປເຟສຕໍ່ໄປ</span><span class="hr" style="color:var(--muted)">—</span></div>
+      </div>
+    </div>
+    <p class="note-est" data-reveal>ໝາຍເຫດ: ເຮັດວຽກ 6 ມື້/ອາທິດ (5 ມື້ເຕັມ + 1 ມື້ເຄິ່ງ) · ມື້ເຄິ່ງໄວ້ກວດ ແລະ ເກັບງານ · ຖ້າ 1 ຄົນ ໃຊ້ເວລາ ~2 ເທົ່າ · ເວລາເປັນປະມານ ອາດປ່ຽນຕາມໜ້າວຽກ. <b>ຕາຕະລາງ ມື້ 1–20 ແມ່ນ ສະໝອງລູກຄ້າ+ເສັ້ນທາງ ຢ່າງດຽວ</b> (~4 ອາທິດ ທີມ 2 ຄົນ) · ສ່ວນ “ແອັບຄົນຂັບ” ເພີ່ມອີກ ~4 ອາທິດ → 2 ວຽກເຕັມຮູບແບບ ≈ ~8 ອາທິດ</p>
+  </div>
+</section>
+
+<section class="sec band">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ຄວາມຊື່ສັດ</span>
+      <h2>ສິ່ງທີ່ “ຍັງບໍ່ເຮັດ” ເດືອນນີ້ ແລະ ເຫດຜົນ</h2>
+      <p class="sub">ສິ່ງເຫຼົ່ານີ້ດີ ແລະ ຈະເຮັດແນ່ ແຕ່ເຮັດໃນເດືອນທຳອິດໃຫ້ມີຄຸນນະພາບບໍ່ໄດ້ — ບອກໃຫ້ຊັດ ບໍ່ໃຫ້ຄາດຫວັງຜິດ</p>
+    </div>
+    <div class="out">
+      <div class="oc" data-reveal data-d="1"><h3>ຄະແນນບໍລິການເຕັມຮູບແບບ</h3><p>ວັດ “ໃຜເບິ່ງແຍງດີ / ໃຜຖິ້ມລູກຄ້າ”. <b>ຕ້ອງໃຫ້ Bou ຕັດສິນນ້ຳໜັກຄະແນນກ່ອນ.</b> ເດືອນນີ້ເກັບຂໍ້ມູນດິບໄວ້ຄົບແລ້ວ ພໍຕັດສິນແລ້ວຕໍ່ໄດ້ທັນທີ</p><span class="when">ເກັບຂໍ້ມູນໄວ້ແລ້ວ</span></div>
+      <div class="oc" data-reveal data-d="2"><h3>ບໍລິການຂ້າມສາຂາ</h3><p>ໃຫ້ລົດສາຂາອື່ນຊ່ວຍເກັບລູກຄ້າທີ່ຖືກປະຖິ້ມ. <b>ປ່ຽນວິທີຈ່າຍເງິນ + ເປີດສິດຂ້າມສາຂາ</b> ເປັນການຕັດສິນໃຈລະດັບເຈົ້າຂອງ</p><span class="when">ຕ້ອງການ Bou ອະນຸມັດ</span></div>
+      <div class="oc" data-reveal data-d="3"><h3>ໃຫ້ລະບົບຄິດເສັ້ນທາງເອງ</h3><p>ໃຫ້ລະບົບຄິດລຳດັບສັ້ນສຸດເອງ. <b>ຕ້ອງມີທີ່ຕັ້ງລູກຄ້າຄົບ 80%</b> ກ່ອນ ຊຶ່ງມື້ນີ້ຍັງບໍ່ມີ. ເດືອນນີ້ເຮັດໃຫ້ “ວັດໄດ້” ວ່າພ້ອມເມື່ອໃດ</p><span class="when">ລໍຂໍ້ມູນສະສົມ 3-6 ເດືອນ</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ການຕັດສິນໃຈ</span>
+      <h2>ສິ່ງທີ່ Bou ຕ້ອງເຄາະ (ອະທິບາຍແບບງ່າຍ)</h2>
+      <p class="sub">ມີບໍ່ຫຼາຍ — ສ່ວນໃຫຍ່ມີຄຳແນະນຳພ້ອມແລ້ວ</p>
+    </div>
+    <div class="dec">
+      <div class="dr" data-reveal data-d="1"><div class="n">1</div><div class="q">ເກັບທີ່ຕັ້ງ (GPS) ຕອນສົ່ງ ໄດ້ບໍ?<span>ຕ້ອງໝັ້ນໃຈວ່າເກັບຕຳແໜ່ງໜ້າວຽກເໝາະສົມຕາມກົດໝາຍລາວ ຄວາມສ່ຽງຕ່ຳ ແຕ່ຢາກໄດ້ການຕົກລົງກ່ອນ</span></div></div>
+      <div class="dr" data-reveal data-d="2"><div class="n">2</div><div class="q">ຊື່ວິທີຈ່າຍເງິນ ໃຫ້ກົງກັນທັງລະບົບ<span>ຕ້ອງໃຫ້ຄຳວ່າ ເງິນສົດ / QR / ໂອນ ກົງກັນໝົດ ບໍ່ດັ່ງນັ້ນເງິນອາດບັນທຶກຜິດຊ່ອງ</span></div></div>
+      <div class="dr" data-reveal data-d="3"><div class="n">3</div><div class="q">ແອັບຄົນຂັບ: ຢືນຢັນທິດທາງ Capacitor (native)?<span>ຕອນນີ້ເລີ່ມເຮັດເປັນ Capacitor (Android) ແລ້ວ · ໄດ້ GPS ແລະ ຕໍ່ເຄື່ອງພິມ Bluetooth/ສະແກນ ໄດ້ດີກວ່າ PWA · ຂໍຢືນຢັນ</span></div></div>
+      <div class="dr" data-reveal data-d="4"><div class="n">4</div><div class="q">ປ່ອຍ optimizer ເມື່ອໃດ<span>ໃຫ້ລະບົບຈັດເສັ້ນທາງເອງ ຕໍ່ເມື່ອມີທີ່ຕັ້ງລູກຄ້າຄົບ 80% + ປະຫວັດສົ່ງພໍ</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec band">
+  <div class="wrap">
+    <div data-reveal><span class="eye">ທ້າຍເດືອນ</span>
+      <h2>ທ້າຍເດືອນນີ້ ເຮົາຈະໄດ້ຫຍັງ</h2>
+      <p class="sub">ເປົ້າໝາຍທີ່ວັດໄດ້ຈິງ ຕອນທ້າຍເດືອນ</p>
+    </div>
+    <div class="dod">
+      <div class="dg" data-reveal data-d="1"><h3><span class="gd"></span>ຄວາມຈຳຂອງລະບົບ</h3><ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ທຸກການສົ່ງເກັບ ທີ່ຕັ້ງ+ຄົນສົ່ງ+ມື້ສົ່ງລ່າສຸດ</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ລູກຄ້າເກົ່າໄດ້ມື້ສົ່ງລ່າສຸດເຕີມຍ້ອນຫຼັງ</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ເບິ່ງໄດ້ວ່າເກັບທີ່ຕັ້ງໄດ້ຈັກເປີເຊັນ</li></ul></div>
+      <div class="dg" data-reveal data-d="2"><h3><span class="gd"></span>ວາງແຜນແມ່ນຂຶ້ນ</h3><ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ບັດລູກຄ້າສະແດງຄວາມງຽບຈາກຂໍ້ມູນຈິງ</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ລາຍການ “ໃຜຄວນໄປສົ່ງ” ໃຊ້ໄດ້</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ເຫັນລູກຄ້າສະມາຊິກທັງໝົດໃນບ່ອນດຽວ</li></ul></div>
+      <div class="dg" data-reveal data-d="3"><h3><span class="gd"></span>ເສັ້ນທາງເທິງແຜນທີ່</h3><ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ແຕ້ມເສັ້ນທາງ ຕັ້ງຊື່/ສີ/ມື້ ບັນທຶກຖາວອນ</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ກອງຕາມມື້ ແລະ ເສັ້ນທາງ</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>ເລືອກເສັ້ນແລ້ວເຫັນລູກຄ້າໃກ້ເສັ້ນ</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="close">
+  <div class="wrap" data-reveal>
+    <h2>ສະຫຼຸບ: ເລີ່ມໝຸນວົງຈອນແລ້ວ — ຍິ່ງໃຊ້ ຍິ່ງສະຫຼາດ</h2>
+    <p>ເລີ່ມຈາກຮາກຖານ (ປິດຊ່ອງຄວາມຈຳ) ແລ້ວໄລ່ໄປ ສະໝອງລູກຄ້າ · ແຕ້ມເສັ້ນທາງ · ເຜີຍລູກຄ້າໃກ້ເສັ້ນ. ສະໝອງລູກຄ້າຈະສະຫຼາດຂຶ້ນເອງທຸກມື້ ຈາກການສົ່ງຈິງ ໂດຍບໍ່ມີໃຜຕ້ອງເຮັດເອກະສານເພີ່ມ. ສ່ວນ ບໍລິການຂ້າມສາຂາ · ຄະແນນບໍລິການ · ໃຫ້ລະບົບຄິດເສັ້ນທາງເອງ — ໄວ້ຕໍ່ເມື່ອຂໍ້ມູນພ້ອມ + Bou ເຄາະ.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="w">LOO Delivery · “ສະໝອງລູກຄ້າ + ຈັດເສັ້ນທາງ” — ສະບັບເຂົ້າໃຈງ່າຍ ສຳລັບທຸກຄົນ · 2026-06-22<br><span style="opacity:.72">ກວດສອບເນື້ອໃນທຽບກັບລະບົບ/ໂຄ້ດຈິງແລ້ວ · 2026-06-22</span></div>
+</footer>
+
+<script>
+  document.documentElement.classList.remove('no-js');
+  const nav=document.getElementById('nav');
+  const sc=()=>nav.classList.toggle('sc',scrollY>8); sc(); addEventListener('scroll',sc,{passive:true});
+  const items=document.querySelectorAll('[data-reveal]');
+  if('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{rootMargin:'0px 0px -8% 0px',threshold:.12});
+    items.forEach(el=>io.observe(el));
+  } else items.forEach(el=>el.classList.add('in'));
+</script>
+<script src="loo-checklist.js"></script>
+</body>
+</html>

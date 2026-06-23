@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="lo" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LOO · Customer-Brain + Flexible Routing · Dev Technical Reference (Block A)</title>
+<meta name="description" content="เอกสารอ้างอิงทางเทคนิคฉบับเต็มสำหรับ developer: สถาปัตยกรรม, data-model, gap R1-R10, Block A implementation, แผน 4 สัปดาห์, demo vs real code, landmines">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#5d87ff; --blue-600:#4a6fe6; --blue-700:#3a57c4; --cyan:#49beff;
+    --navy:#0c1430; --navy-2:#16204d;
+    --ink:#0e1626; --ink-soft:#36425d; --muted:#5b667f;
+    --bg:#f3f6fc; --surface:#ffffff; --surface-2:#eef3fc; --line:#dde6f4; --line-strong:#c9d6ec;
+    --green:#10b981; --green-ink:#0a7a55; --amber:#f59e0b; --amber-ink:#9a6206; --red:#e23b59; --red-ink:#b3243f;
+    --code-bg:#0e1730; --code-ink:#d7e2f7; --code-line:#22304f;
+    --r-lg:18px; --r-md:13px; --r-sm:9px;
+    --shadow:0 1px 2px rgba(16,26,38,.05), 0 10px 28px -14px rgba(33,52,110,.26);
+    --shadow-lift:0 2px 4px rgba(16,26,38,.06), 0 22px 46px -18px rgba(33,52,110,.34);
+    --maxw:1180px; --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Lao",system-ui,sans-serif;
+    font-size:clamp(14.5px,1vw,16px);line-height:1.78;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:"Noto Sans Lao",sans-serif;line-height:1.3;margin:0;letter-spacing:0;color:var(--ink);text-wrap:balance;font-weight:800}
+  p{margin:0;text-wrap:pretty}
+  a{color:var(--blue-700);text-decoration:none}
+  code,kbd,.mono{font-family:"JetBrains Mono",monospace;font-feature-settings:"tnum" 1}
+  :not(pre)>code{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:.08em .4em;font-size:.86em;color:var(--blue-700);white-space:nowrap}
+  .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(18px,4vw,38px)}
+
+  .shell{display:grid;grid-template-columns:248px 1fr;gap:0;max-width:1340px;margin-inline:auto}
+  @media(max-width:1000px){.shell{grid-template-columns:1fr}}
+  .toc{position:sticky;top:0;align-self:start;height:100dvh;overflow-y:auto;padding:22px 14px 40px 22px;border-right:1px solid var(--line);background:color-mix(in oklab,var(--bg) 70%,#fff)}
+  @media(max-width:1000px){.toc{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}}
+  .toc .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:1.05rem;margin-bottom:4px}
+  .toc .brand .dot{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:#fff;font-size:.8rem}
+  .toc .tag{font-family:"JetBrains Mono";font-size:.68rem;color:var(--muted);margin-bottom:16px;display:block}
+  .toc ol{list-style:none;margin:0;padding:0}
+  .toc a{display:block;color:var(--ink-soft);font-size:.84rem;padding:5px 9px;border-radius:7px;border-left:2px solid transparent;line-height:1.35;transition:background .2s,color .2s,border-color .2s}
+  .toc a:hover{background:var(--surface-2);color:var(--ink)}
+  .toc a.sub{padding-left:20px;font-size:.79rem;color:var(--muted)}
+  .content{min-width:0;padding:0 clamp(16px,3vw,34px) 80px}
+
+  .hero{margin:0 calc(-1*clamp(16px,3vw,34px)) 0;padding:clamp(40px,6vw,72px) clamp(20px,4vw,48px) clamp(34px,5vw,52px);color:#fff;position:relative;overflow:hidden;
+    background:radial-gradient(120% 120% at 100% 0%,rgba(73,190,255,.4),transparent 55%),linear-gradient(155deg,var(--navy),var(--navy-2) 60%,#243a8c)}
+  .hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(120% 80% at 50% 0,#000,transparent 72%);opacity:.5}
+  .hero>*{position:relative}
+  .hero .eyebrow{font-family:"JetBrains Mono";font-size:.78rem;color:#bcd2ff;letter-spacing:.04em}
+  .hero h1{font-size:clamp(1.6rem,3.6vw,2.6rem);color:#fff;margin:12px 0 0;max-width:26ch}
+  .hero p{margin-top:16px;color:#d7e2fb;max-width:74ch;font-size:clamp(.96rem,1.2vw,1.08rem)}
+  .hero .meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px}
+  .hero .meta span{font-family:"JetBrains Mono";font-size:.74rem;color:#e7eeff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:6px 11px;border-radius:7px}
+
+  section.s{padding:clamp(30px,4vw,46px) 0;border-bottom:1px solid var(--line)}
+  section.s>h2{font-size:clamp(1.3rem,2.4vw,1.8rem);display:flex;align-items:baseline;gap:12px}
+  section.s>h2 .no{font-family:"JetBrains Mono";font-size:.9rem;color:var(--blue-600);font-weight:600}
+  section.s>.lead{margin-top:12px;color:var(--ink-soft);max-width:78ch}
+  h3.sub{font-size:1.08rem;margin-top:30px;padding-top:4px}
+  .lead-sm{color:var(--ink-soft);margin-top:8px}
+
+  pre{background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-line);border-radius:var(--r-md);
+    padding:16px 18px;overflow-x:auto;font-family:"JetBrains Mono",monospace;font-size:.8rem;line-height:1.7;margin:16px 0;tab-size:2}
+  pre .cm{color:#6f86b8}
+  pre .kw{color:#7db4ff}
+  pre .ty{color:#5bd6b0}
+  pre .st{color:#e0a878}
+  pre .add{color:#7ee2a8;display:block;background:rgba(46,160,90,.14)}
+  pre .del{color:#ff9bb0;display:block;background:rgba(220,60,90,.14)}
+  pre .fn{color:#c9a6ff}
+  .filemark{font-family:"JetBrains Mono";font-size:.74rem;color:var(--muted);margin:18px 0 -8px;display:flex;align-items:center;gap:7px}
+  .filemark::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--blue);flex:0 0 auto}
+
+  .scroll-x{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:var(--r-md)}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;background:var(--surface)}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--surface-2);font-weight:700;color:var(--ink);white-space:nowrap;position:sticky;top:0}
+  td code{font-size:.84em}
+  tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:color-mix(in oklab,var(--blue) 4%,#fff)}
+
+  .pill{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap;font-family:"JetBrains Mono"}
+  .pill.exists,.pill.done{background:color-mix(in oklab,var(--green) 16%,#fff);color:var(--green-ink)}
+  .pill.partial{background:color-mix(in oklab,var(--amber) 18%,#fff);color:var(--amber-ink)}
+  .pill.missing{background:color-mix(in oklab,var(--red) 14%,#fff);color:var(--red-ink)}
+  .pill.A{background:color-mix(in oklab,var(--blue) 15%,#fff);color:var(--blue-700)}
+  .pill.B{background:color-mix(in oklab,#9b6bff 16%,#fff);color:#6a3fc0}
+  .pill.C{background:#e9edf5;color:var(--muted)}
+
+  .note{border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;margin:16px 0;background:var(--surface);display:flex;gap:12px}
+  .note .ic{flex:0 0 auto;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-weight:800;font-family:"JetBrains Mono";font-size:.8rem}
+  .note.warn{background:color-mix(in oklab,var(--amber) 7%,#fff);border-color:color-mix(in oklab,var(--amber) 30%,var(--line))}
+  .note.warn .ic{background:color-mix(in oklab,var(--amber) 20%,#fff);color:var(--amber-ink)}
+  .note.danger{background:color-mix(in oklab,var(--red) 6%,#fff);border-color:color-mix(in oklab,var(--red) 28%,var(--line))}
+  .note.danger .ic{background:color-mix(in oklab,var(--red) 16%,#fff);color:var(--red-ink)}
+  .note.ok{background:color-mix(in oklab,var(--green) 6%,#fff);border-color:color-mix(in oklab,var(--green) 26%,var(--line))}
+  .note.ok .ic{background:color-mix(in oklab,var(--green) 16%,#fff);color:var(--green-ink)}
+  .note b{color:var(--ink)}
+
+  ul.tight,ol.tight{margin:12px 0;padding-left:22px}
+  ul.tight li,ol.tight li{margin:5px 0;color:var(--ink-soft)}
+  ul.tight li b,ul.tight li strong,ol.tight li b{color:var(--ink)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;box-shadow:var(--shadow)}
+  .card h4{font-size:.96rem;margin-bottom:6px}
+  .swatch{display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.15);vertical-align:-1px;margin-right:5px}
+  .sched{margin-top:22px;display:flex;flex-direction:column;gap:16px}
+  .swk{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:16px 18px;box-shadow:var(--shadow)}
+  .swk h4{font-size:1.02rem;font-weight:800}
+  .swk .wt{display:inline-block;font-family:"JetBrains Mono";font-size:.74rem;font-weight:600;color:var(--blue-700);background:color-mix(in oklab,var(--blue) 10%,#fff);padding:3px 10px;border-radius:999px;margin-left:8px;vertical-align:2px}
+  .sday{display:flex;gap:11px;align-items:flex-start;padding:8px 2px;border-top:1px solid var(--line);flex-wrap:wrap}
+  .swk .sday:first-of-type{border-top:0}
+  .sday .cb{flex:0 0 auto;width:16px;height:16px;border:2px solid var(--line-strong);border-radius:5px;margin-top:3px}
+  .sday .dn{flex:0 0 auto;white-space:nowrap;font-family:"JetBrains Mono";font-weight:600;color:var(--blue-700);font-size:.84rem;margin-top:2px}
+  .sday .dt{flex:1;min-width:230px;color:var(--ink-soft);font-size:.9rem;line-height:1.55}
+  .sday .hr{flex:0 0 auto;font-family:"JetBrains Mono";font-size:.76rem;font-weight:600;color:var(--blue-700);margin-top:2px}
+  .note-est{margin-top:12px;font-size:.84rem;color:var(--muted);line-height:1.6}
+  footer{padding:26px 0;color:var(--muted);font-size:.82rem;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<nav class="toc">
+  <div class="brand"><span class="dot">L</span>LOO Dev Ref</div>
+  <span class="tag">Customer-Brain + Routing · Block A</span>
+  <ol>
+    <li><a href="#arch">1 · ສະຖາປັດຕະຍະກຳ: loop 4 ຂັ້ນ</a></li>
+    <li><a href="#datamodel">2 · Data-model reality</a></li>
+    <li><a href="#gap">3 · Gap analysis R1–R10</a></li>
+    <li><a href="#blockA">4 · Block A — ການແກ້ໂຄ້ດ</a></li>
+    <li><a class="sub" href="#blockA-schema">4.1 schema diff</a></li>
+    <li><a class="sub" href="#blockA-migration">4.2 migration SQL</a></li>
+    <li><a class="sub" href="#blockA-service">4.3 service diff</a></li>
+    <li><a href="#plan">5 · ແຜນ build 4 ອາທິດ</a></li>
+    <li><a class="sub" href="#tasktable">5.1 task table</a></li>
+    <li><a class="sub" href="#sched">5b · ตารางรายวัน + เวลา</a></li>
+    <li><a href="#trackB">5c · Track B — แอปคนขับ (driver app)</a></li>
+    <li><a class="sub" href="#trackB-recon">5c.1 reconcile เดโม↔โค้ดจริง</a></li>
+    <li><a class="sub" href="#trackB-tasks">5c.2 task list B</a></li>
+    <li><a class="sub" href="#trackB-capacity">5c.3 capacity reality</a></li>
+    <li><a href="#demo">6 · Demo vs real code</a></li>
+    <li><a class="sub" href="#enum">6.1 enum contract</a></li>
+    <li><a class="sub" href="#demoloop">6.2 เดโม web-loop — constants</a></li>
+    <li><a href="#snapshot">7 · snapshot vs live repo</a></li>
+    <li><a href="#seed">8 · Seed dataset</a></li>
+    <li><a href="#landmines">9 · Landmines / conventions</a></li>
+    <li><a href="#decisions">10 · Decisions</a></li>
+    <li><a href="#blueprint">11 · Blueprint + brand tokens</a></li>
+  </ol>
+</nav>
+
+<main class="content">
+
+<header class="hero">
+  <span class="eyebrow">DEV TECHNICAL REFERENCE · 2026-06-22 · branch feat/a0-customer-brain-capture</span>
+  <h1>Customer-Brain + Flexible Routing — ເອກະສານເຕັກນິກສຳລັບ developer</h1>
+  <p>ລວມທຸກຢ່າງໃນບ່ອນດຽວ: ສະຖາปัດຕະຍະກຳ loop 4 ຂັ້ນແມັບກັບໂມດູນຈິງ, data-model reality, gap analysis R1–R10, ການແກ້ Block A (schema/migration/diff + file:line), ແຜນ build, demo-vs-real-code + enum contract, snapshot delta, seed data, landmines, ແລະ decisions. <b>ສະບັບນີ້ລວມ Track B — ແອปຄนขับ mobile (V2) ເຂົ້າແຜนเดียวกัน ตามมติรวมงาน (§5c).</b> ສຳລັບ dev ທີ່ຮັບ branch ໄປສ້າງຕໍ່.</p>
+  <div class="meta">
+    <span>NestJS 11</span><span>Prisma 7.8</span><span>Next.js 16</span><span>PostgreSQL</span><span>repo: loo-platform</span><span>migrations → 20260622100000_driver_pin_auth</span><span>+ Track B: driver app</span><span style="background:rgba(45,163,114,.22);border-color:rgba(126,226,168,.45);color:#d9ffe9">✓ cross-checked vs live repo · 2026-06-22</span>
+  </div>
+</header>
+
+<section class="s" id="arch">
+  <h2><span class="no">01</span> ສະຖາປັດຕະຍະກຳ — North-Star loop 4 ຂັ້ນ ແມັບໂມດູນຈິງ</h2>
+  <p class="lead"><b>North Star:</b> "ຄົນຂັບບັນທຶກເທື່ອດຽວຕອນເຮັດວຽກ → ຫຼັງບ້ານເຫັນຄວາມຈິງ real-time → ຮອບຕໍ່ໄປ plan ແມ່ນຂຶ້ນເອງ." ວົງຈอน stage4→1→2 ປັດຈຸບັນ <b>ຂາດ</b> (ບໍ່ persist recency, ບໍ່ເກັບ GPS ຕอนส่ง).</p>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>Stage</th><th>ໂມດູນຈິງ (live repo)</th><th>ສະຖານະ loop</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Customer brain</b></td><td><code>modules/customers/*</code> + <code>customer-priorities/types/groups</code> · model <code>Customer</code> (schema:856)</td><td>master-data ຄົບ · <span class="pill missing">ຂາດ field ປັນຍາ</span> (lastReceivedDate/satisfaction/stars/grade)</td></tr>
+      <tr><td><b>2 · Plan</b></td><td><code>delivery-runs/services/delivery-dispatch.service.ts</code> (<code>autoGenerateForDate</code>, <code>listEligibleCustomersForZone</code>) + <code>orders.generateForTenant</code> + <code>customer-subscriptions</code></td><td>auto-gen ຕາມ calendar ມີ · <span class="pill partial">blind ຕໍ່ delivery history</span> — ບໍ່ມີ lapse/overdue/cadence</td></tr>
+      <tr><td><b>3 · Field delivery</b></td><td><code>delivery-runs/services/driver-day.service.ts</code> · <code>deliver-stop-modal.tsx</code> · <code>findTodayForDriver</code></td><td>dispatch→driver ໃຊ້ໄດ້ · sequencing manual (<code>reorderStops</code>)</td></tr>
+      <tr><td><b>4 · Record-once</b></td><td><code>delivery-runs/services/delivery-operations.service.ts</code> → <code>deliverOrder()</code> (~1129–2176)</td><td><span class="pill exists">ແຂງແຮງ</span> POD+payment+bottles 1 tx · <span class="pill A">Block A: ເພີ່ມ GPS + lastReceivedDate</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note ok"><div class="ic">OK</div><div><b>keystone ທີ່ປິດ loop:</b> ຂຽນ GPS + <code>Customer.lastReceivedDate</code> ໃນ tx ດຽວກັນກັບ <code>deliverOrder</code> ທີ່ມີຢູ່ແລ້ວ — ນີ້ຄື Block A0 (ดู §4). ທຸກຢ່າງໃນ A/B/C ຕໍ່ຍอดจากจุดนี้.</div></div>
+</section>
+
+<section class="s" id="datamodel">
+  <h2><span class="no">02</span> Data-model reality</h2>
+  <p class="lead">ສະຖານະຈິງຂອງແຕ່ລະ field (verify ກັບ <code>backend/prisma/schema.prisma</code>) ແລະ ສ່ວນທີ່ Block A ກ່ຽວຂ້ອງ.</p>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>Field / capability</th><th>State</th><th>ບ່ອນຢູ່ຈິງ / "absent"</th><th>ການແກ້</th></tr></thead>
+    <tbody>
+      <tr><td><code>Customer.lastReceivedDate</code></td><td><span class="pill A">Block A</span></td><td>ບໍ່ມີມາກ່อน · ມີແຕ່ <code>Order.deliveredAt</code> (:1126) computed read-time</td><td>Block A: <code>DateTime?</code> + index + backfill</td></tr>
+      <tr><td><code>Customer.deliveryCount</code></td><td><span class="pill A">Block A</span></td><td>ບໍ່ມີ — <code>totalPurchaseCount</code> ປົນ counter-sale + ນັບຊ້ຳ</td><td>Block A: <code>Int @default(0)</code>, guard <code>!isReRecord</code></td></tr>
+      <tr><td><code>DeliveryRunOrder.deliveringUserId</code></td><td><span class="pill A">Block A</span></td><td>ບໍ່ມີ — pay ผูก crew[0]</td><td>Block A: <code>String? @db.Uuid</code> + FK SetNull + index</td></tr>
+      <tr><td>GPS <code>deliveredLatitude/Longitude</code></td><td><span class="pill A">Block A</span></td><td>schema:1739-1740 ມีก่อน ແຕ່ບໍ່ມີໃຜຂຽນຜ່ານ deliverOrder (updateStopStatus = trap)</td><td>Block A: ຂຽນໃນ deliverOrder ໂດຍກົງ</td></tr>
+      <tr><td><code>Customer.satisfaction</code> (1-5)</td><td><span class="pill missing">MISSING</span></td><td>ບໍ່ມີທີ່ໃດ</td><td>deferred (Service Score input · D4)</td></tr>
+      <tr><td><code>Customer.stars</code> (1-5)</td><td><span class="pill missing">MISSING</span></td><td>ບໍ່ມີ grade column</td><td>deferred (computed/locked · D4)</td></tr>
+      <tr><td>importance (S/A/B/C)</td><td><span class="pill partial">PARTIAL</span></td><td><code>customerPriorityId</code> → <code>CustomerPriority</code> (:1561) <b>ແລະ</b> <code>customerType="VIP"</code> = 2 ສັນຍານຊ້ອນ</td><td>D3: ເລືອກ <code>customerPriorityId</code> ເປັນ grade ຫຼັກ</td></tr>
+      <tr><td>route geometry ເທິง <code>DeliveryRun</code></td><td><span class="pill missing">MISSING</span></td><td>(:1285) ມີແຕ່ branch/vehicle/zone/date/status · ບໍ່ມີ color/day/name/geometry</td><td>Week 3: entity <code>Route</code> + <code>DeliveryRun.routeId?</code></td></tr>
+      <tr><td><code>Vehicle.capacity</code> (CVRP)</td><td><span class="pill partial">มีแต่ตาย</span></td><td>(:1624) <code>Int?</code> ແກ້ໄດ້ใน UI ແຕ່ບໍ່ມີໃຜ read · scalar ດຽວ</td><td>Block C: CVRP ຕ້ອງເພີ່ມ volume/slot ຕໍ່ Product</td></tr>
+      <tr><td>demand ຕໍ່ລູກຄ້າ</td><td><span class="pill exists">EXISTS</span></td><td><code>OrderItem.quantity</code> (:1250) + <code>CustomerSubscriptionItem.quantity</code> (:1921)</td><td>input ດຽວທີ່ພ້อมจริง</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="s" id="gap">
+  <h2><span class="no">03</span> Gap analysis R1–R10</h2>
+  <p class="lead">effort: <b>S</b>=ມື້ · <b>M</b>=1-2 ອາທິດ · <b>L</b>=multi-week.</p>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>R</th><th>requirement</th><th>state</th><th>implementing modules</th><th>ຂາດຫຍັງ</th><th>eff</th><th>blk</th></tr></thead>
+    <tbody>
+      <tr><td>R1</td><td>customer-brain fields + GPS</td><td><span class="pill A">Block A</span></td><td><code>Customer</code> · <code>CUSTOMER_SELECT</code> customers.service.ts:33-138</td><td>satisfaction/stars (deferred)</td><td>M</td><td><span class="pill A">A</span></td></tr>
+      <tr><td>R2</td><td>lapse tiers 7/14/20/30 → relative cadence</td><td><span class="pill partial">partial</span></td><td><code>recency-face.tsx</code> (7/14 ຫຍາບ)</td><td>tier helper + median-gap cadence</td><td>M</td><td><span class="pill A">A</span>/C</td></tr>
+      <tr><td>R3</td><td>multi-route draw (color/day/palette)</td><td><span class="pill missing">missing</span></td><td>—</td><td>Route entity + line-draw + day/color filter</td><td>L</td><td><span class="pill A">A</span></td></tr>
+      <tr><td>R4</td><td>corridor reveal (incl cross-branch)</td><td><span class="pill missing">missing</span></td><td><code>Branch.boundary</code> (:462) · <code>ops-map.tsx</code></td><td>near-line query + multi-attr pin · cross-branch carve-out</td><td>L</td><td><span class="pill A">A</span>/<span class="pill B">B</span></td></tr>
+      <tr><td>R5</td><td>plan-gen 5 steps (who's-due → seq)</td><td><span class="pill partial">partial</span></td><td><code>listEligibleCustomersForZone</code> · <code>isSubscriptionDueOnDate</code> (shared:675) · <code>autoGenerateForDate</code> (:866)</td><td>selection = calendar-only · step4 manual</td><td>L</td><td><span class="pill A">A</span>/<span class="pill C">C</span></td></tr>
+      <tr><td>R6</td><td>cross-branch rescue ≠ poach</td><td><span class="pill partial">partial</span></td><td>overdue LATERAL orders.service.ts:664-755</td><td>ownership/release/claim model · 30-min auto-release</td><td>L</td><td><span class="pill B">B</span></td></tr>
+      <tr><td>R7</td><td>pay-follows-work</td><td><span class="pill partial">partial</span></td><td><code>PaymentCollection.driverId</code> (:2294) · <code>Settlement</code> (:2326) · <code>LoyaltyTransaction</code> (:2928)</td><td>credit collection-based · R7-2 driverId attribution · Settlement.create deleted</td><td>L</td><td><span class="pill B">B</span></td></tr>
+      <tr><td>R8</td><td>Service Score (computed + audited)</td><td><span class="pill missing">missing</span></td><td>ບໍ່ມี model · raw signals ກະຈາຍ</td><td>ທັງ engine · ບໍ່ມี SLA baseline · complaint ບໍ່ link driver</td><td>L</td><td><span class="pill B">B</span></td></tr>
+      <tr><td>R9</td><td>record-once POD+GPS+ชำระ+ถัง + recency</td><td><span class="pill A">Block A</span></td><td><code>deliverOrder</code> (:1129-2176)</td><td>ขาด GPS+lastReceivedDate (Block A)</td><td>S–M</td><td><span class="pill A">A</span></td></tr>
+      <tr><td>R10</td><td>optimizer (OR-Tools + OSRM + CVRP)</td><td><span class="pill missing">missing</span></td><td>ບໍ່ມี · <code>reorderStops</code> manual</td><td>ທັງ optimizer · OSRM <b>ບໍ່ມีใน repo</b> (Google Maps)</td><td>L</td><td><span class="pill C">C</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="s" id="blockA">
+  <h2><span class="no">04</span> Block A — ການແກ້ໂຄ້ດ (schema / migration / diff)</h2>
+  <p class="lead">ການແກ້ໃນ branch <code>feat/a0-customer-brain-capture</code> — files + migration + diff ດ້ານລຸ່ມ. (pre-existing dep errors <code>otplib</code>/<code>@sentry/node</code> ບໍ່ກ່ຽວ)</p>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>file</th><th>Δ</th><th>ສິ່ງທີ່ทำ</th></tr></thead>
+    <tbody>
+      <tr><td><code>backend/prisma/schema.prisma</code></td><td>+44/−27*</td><td>Customer/DeliveryRunOrder/User (* −27 = <code>prisma format</code> realign)</td></tr>
+      <tr><td><code>…/delivery-runs.controller.ts</code></td><td>+18</td><td><code>DeliverOrderDto</code> +lat/lng validators</td></tr>
+      <tr><td><code>…/delivery-runs.service.ts</code></td><td>+3</td><td>wrapper dto type +GPS</td></tr>
+      <tr><td><code>…/services/delivery-operations.service.ts</code></td><td>+34</td><td>GPS+actor · lastReceivedDate+deliveryCount · pay</td></tr>
+      <tr><td><code>…/migrations/20260622090000_customer_brain_capture/migration.sql</code></td><td>new</td><td>DDL + FK + index + backfill</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 class="sub" id="blockA-schema">4.1 · schema diff</h3>
+  <div class="filemark">backend/prisma/schema.prisma — model Customer</div>
+<pre><span class="cm">// Customer-brain capture (Block A)</span>
+<span class="add">  lastReceivedDate    DateTime?</span>
+<span class="add">  deliveryCount       Int      @default(0)</span>
+  ...
+<span class="add">  @@index([tenantId, lastReceivedDate])</span></pre>
+  <div class="filemark">model DeliveryRunOrder (GPS cols :1739-1740ມີຢູ່ກ່อนแล้ว)</div>
+<pre><span class="add">  deliveringUserId    String?   @db.Uuid</span>
+  ...
+<span class="add">  deliveringUser User? @relation(<span class="st">"DeliveryRunOrderDeliveredBy"</span>, fields: [deliveringUserId], references: [id], onDelete: SetNull)</span>
+  ...
+<span class="add">  @@index([deliveringUserId])</span></pre>
+  <div class="filemark">model User — inverse relation</div>
+<pre><span class="add">  deliveredRunOrders DeliveryRunOrder[] @relation(<span class="st">"DeliveryRunOrderDeliveredBy"</span>)</span></pre>
+
+  <h3 class="sub" id="blockA-migration">4.2 · migration SQL</h3>
+  <div class="filemark">migrations/20260622090000_customer_brain_capture/migration.sql</div>
+<pre><span class="kw">ALTER TABLE</span> <span class="st">"Customer"</span> <span class="kw">ADD COLUMN</span> <span class="st">"lastReceivedDate"</span> TIMESTAMP(3);
+<span class="kw">ALTER TABLE</span> <span class="st">"Customer"</span> <span class="kw">ADD COLUMN</span> <span class="st">"deliveryCount"</span> INTEGER NOT NULL DEFAULT 0;
+<span class="kw">ALTER TABLE</span> <span class="st">"DeliveryRunOrder"</span> <span class="kw">ADD COLUMN</span> <span class="st">"deliveringUserId"</span> UUID;
+
+<span class="kw">CREATE INDEX</span> <span class="st">"Customer_tenantId_lastReceivedDate_idx"</span> ON <span class="st">"Customer"</span>(<span class="st">"tenantId"</span>, <span class="st">"lastReceivedDate"</span>);
+<span class="kw">CREATE INDEX</span> <span class="st">"DeliveryRunOrder_deliveringUserId_idx"</span> ON <span class="st">"DeliveryRunOrder"</span>(<span class="st">"deliveringUserId"</span>);
+<span class="kw">ALTER TABLE</span> <span class="st">"DeliveryRunOrder"</span> <span class="kw">ADD CONSTRAINT</span> <span class="st">"DeliveryRunOrder_deliveringUserId_fkey"</span>
+  <span class="kw">FOREIGN KEY</span> (<span class="st">"deliveringUserId"</span>) <span class="kw">REFERENCES</span> <span class="st">"User"</span>(<span class="st">"id"</span>) ON DELETE SET NULL ON UPDATE CASCADE;
+
+<span class="cm">-- backfill: lastReceivedDate = latest COMPLETED delivery (walk-ins excluded)</span>
+<span class="kw">UPDATE</span> <span class="st">"Customer"</span> c <span class="kw">SET</span> <span class="st">"lastReceivedDate"</span> = sub.maxd
+<span class="kw">FROM</span> (<span class="kw">SELECT</span> <span class="st">"customerId"</span>, MAX(<span class="st">"deliveredAt"</span>) AS maxd <span class="kw">FROM</span> <span class="st">"Order"</span>
+  <span class="kw">WHERE</span> <span class="st">"status"</span>=<span class="st">'COMPLETED'</span> AND <span class="st">"deliveredAt"</span> IS NOT NULL AND <span class="st">"customerId"</span> IS NOT NULL
+  <span class="kw">GROUP BY</span> <span class="st">"customerId"</span>) sub <span class="kw">WHERE</span> c.<span class="st">"id"</span> = sub.<span class="st">"customerId"</span>;</pre>
+  <div class="note ok"><div class="ic">OK</div><div>apply ด้วย <code>npx prisma migrate deploy</code> (ບໍ່ຕ້อง shadow DB). ຖ້າຈะใช้ <code>migrate dev</code> ຕ້องสร้าง <code>loo_shadow</code> ກ່อน.</div></div>
+
+  <h3 class="sub" id="blockA-service">4.3 · service diff — deliverOrder()</h3>
+  <div class="filemark">delivery-operations.service.ts — tx.deliveryRunOrder.updateMany (~1802, ຂ້າງ podPhotoUrl)</div>
+<pre>  data: {
+    status: DELIVERY_RUN_ORDER_STATUS.DELIVERED,
+    deliveredAt: <span class="kw">new</span> Date(), attemptedAt: <span class="kw">new</span> Date(),
+<span class="add">    deliveringUserId: currentUser.sub,                 // who actually delivered</span>
+    ...(dto.podPhotoUrl !== undefined ? { podPhotoUrl: dto.podPhotoUrl || null } : {}),
+    ...(dto.podSignatureUrl !== undefined ? { podSignatureUrl: dto.podSignatureUrl || null } : {}),
+<span class="add">    ...(dto.deliveredLatitude !== undefined ? { deliveredLatitude: dto.deliveredLatitude } : {}),</span>
+<span class="add">    ...(dto.deliveredLongitude !== undefined ? { deliveredLongitude: dto.deliveredLongitude } : {}),</span>
+  },</pre>
+  <div class="filemark">delivery-operations.service.ts — tx.customer.update (~1966, ใน if(order.customerId))</div>
+<pre>  data: {
+    totalPurchaseCount: { increment: 1 }, isFirstTimeCustomer: <span class="kw">false</span>,
+<span class="add">    // FIRST delivery only — re-record (admin correction) ບໍ່ advance/ບໍ່ນັບຊ້ຳ</span>
+<span class="add">    ...(isReRecord ? {} : { lastReceivedDate: new Date(), deliveryCount: { increment: 1 } }),</span>
+  },</pre>
+  <div class="filemark">delivery-operations.service.ts — PaymentCollection.create (~1580) · R7-2</div>
+<pre>  orderId,
+<span class="del">  driverId: order.deliveryRun?.crew?.[0]?.userId ?? null,   // OLD: crew[0]</span>
+<span class="add">  driverId: currentUser.sub,                                // NEW: acting user (pay-follows-work)</span></pre>
+  <div class="filemark">delivery-runs.controller.ts — DeliverOrderDto (:230 · GPS fields :341, validator จาก UpdateStopStatusDto:460-473)</div>
+<pre>  <span class="fn">@IsOptional</span>() <span class="fn">@Type</span>(() =&gt; Number) <span class="fn">@IsNumber</span>() <span class="fn">@Min</span>(-90)  <span class="fn">@Max</span>(90)  deliveredLatitude?: <span class="ty">number</span>;
+  <span class="fn">@IsOptional</span>() <span class="fn">@Type</span>(() =&gt; Number) <span class="fn">@IsNumber</span>() <span class="fn">@Min</span>(-180) <span class="fn">@Max</span>(180) deliveredLongitude?: <span class="ty">number</span>;</pre>
+  <div class="note warn"><div class="ic">!</div><div><b>trap ທີ່ຫຼີກໄດ້:</b> per-stop GPS column ຂຽນຜ່ານ <code>updateStopStatus</code> ໄດ້ບ່ອນດຽວ ซึ่ง <b>ปฏิเสธ DELIVERED ຖ້າ order ຍັງບໍ່ COMPLETED</b> (delivery-stops.service.ts:398-405) → ຂຽນໃນ <code>deliverOrder</code> ໂດຍກົງ. <code>idempotencyKey</code> (H1) ครอบ tx ຢູ່ແລ້ว → field ใหม่ retry-safe ฟรี.</div></div>
+</section>
+
+<section class="s" id="plan">
+  <h2><span class="no">05</span> ແຜນ build 4 ອາທິດ (Block A end-to-end + B/C groundwork)</h2>
+  <p class="lead">1 ເດືອນ ship Block A + ວາງ data-capture ໃຫ້ B/C. <b>OUT:</b> Service Score engine ເຕັມ, cross-branch rescue, OSRM/OR-Tools optimizer (gate: GPS≥80% + ≥8 verified rounds — ວັນนี้ວັດบ่ได้).</p>
+  <div class="grid2">
+    <div class="card"><h4>W1 · keystone A0</h4><p class="lead-sm">schema + migration + GPS/actor write + lastReceivedDate/deliveryCount + R7-2 pay. (ดู §4)</p></div>
+    <div class="card"><h4>W2 · brain reads + who's-due</h4><p class="lead-sm">FE one-shot <code>getCurrentPosition</code> ໃນ <code>deliver-stop-modal.tsx</code> + <code>api.ts</code> · card อ่าน recency · <code>listDueCustomers</code> (CALENDAR∪OVERDUE∪LAPSED∪SUBLESS) + <code>GET /due-customers</code> · mount <code>customer-subscriptions</code></p></div>
+    <div class="card"><h4>W3 · Route entity + draw</h4><p class="lead-sm"><code>model Route</code> + <code>DeliveryRun.routeId?</code> · module <code>routes/</code> · route-LINE draw บน ops-map · <code>route-lines.tsx</code> (ROUTE_PALETTE)</p></div>
+    <div class="card"><h4>W4 · filter + pins + corridor + measure</h4><p class="lead-sm">day/route filter · pin (ring=route, fill=lapse) · <code>customersNearRoute</code> (bbox + point-near-line, within-branch) · <code>isVerifiedStop</code> + coverage report</p></div>
+  </div>
+
+  <h3 class="sub" id="tasktable">5.1 · task table (master checklist)</h3>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>id</th><th>title</th><th>blk</th><th>eff</th><th>wk</th></tr></thead>
+    <tbody>
+      <tr><td><code>A0-schema-lrd</code></td><td>Customer/DeliveryRunOrder cols + indexes</td><td>A</td><td>S</td><td>W1</td></tr>
+      <tr><td><code>A0-migration-backfill</code></td><td>migrate + backfill</td><td>A</td><td>M</td><td>W1</td></tr>
+      <tr><td><code>A0-dto-controller</code></td><td>DeliverOrderDto lat/lng</td><td>A</td><td>XS</td><td>W1</td></tr>
+      <tr><td><code>A0-svc-gps-write</code></td><td>GPS + deliveringUserId in tx</td><td>A</td><td>S</td><td>W1</td></tr>
+      <tr><td><code>A0-svc-lastreceived</code></td><td>lastReceivedDate + deliveryCount</td><td>A</td><td>S</td><td>W1</td></tr>
+      <tr><td><code>R7-2-pay-attribution</code></td><td>driverId = acting user</td><td>B-gw</td><td>S</td><td>W1</td></tr>
+      <tr><td><code>A0-spec-extend</code></td><td>spec: GPS/lastReceived/re-record/idempotency</td><td>A</td><td>M</td><td>W1</td></tr>
+      <tr><td><code>A1-api-payload</code></td><td>FE deliverOrder payload lat/lng</td><td>A</td><td>XS</td><td>W2</td></tr>
+      <tr><td><code>A1-modal-getposition</code></td><td>one-shot GPS at submit (best-effort)</td><td>A</td><td>M</td><td>W2</td></tr>
+      <tr><td><code>A1-brain-card</code></td><td>card reads persisted lastReceivedDate</td><td>A</td><td>S</td><td>W2</td></tr>
+      <tr><td><code>A2-1-cadence-fn</code></td><td>pure medianGapDays helper</td><td>A</td><td>S</td><td>W2</td></tr>
+      <tr><td><code>A2-2-due-query</code></td><td>listDueCustomers (calendar∪overdue∪lapsed∪subless)</td><td>A</td><td>L</td><td>W2</td></tr>
+      <tr><td><code>A2-3-endpoint</code></td><td>GET /due-customers + DTO + perm</td><td>A</td><td>S</td><td>W2</td></tr>
+      <tr><td><code>R5-1-mount-subs-list</code></td><td>mount customer-subscriptions controller</td><td>A</td><td>S</td><td>W2</td></tr>
+      <tr><td><code>A3-route-schema</code></td><td>Route entity + DeliveryRun.routeId</td><td>A</td><td>S</td><td>W3</td></tr>
+      <tr><td><code>A3-routes-module</code></td><td>routes/ CRUD (whereWithBranch + broadcast)</td><td>A</td><td>M</td><td>W3</td></tr>
+      <tr><td><code>A3-routes-api-hooks</code></td><td>FE Route api + SWR hooks</td><td>A</td><td>S</td><td>W3</td></tr>
+      <tr><td><code>A3-route-draw-tool</code></td><td>route-LINE draw (single active tool)</td><td>A</td><td>L</td><td>W3</td></tr>
+      <tr><td><code>A3-route-render-layer</code></td><td>route-lines.tsx (ROUTE_PALETTE)</td><td>A</td><td>M</td><td>W3</td></tr>
+      <tr><td><code>A4-corridor-near-query</code></td><td>customersNearRoute (bbox + point-near-line)</td><td>A</td><td>L</td><td>W4</td></tr>
+      <tr><td><code>A4-day-color-filter</code></td><td>day + per-route on/off filter</td><td>A</td><td>M</td><td>W4</td></tr>
+      <tr><td><code>A4-route-pin-encoding</code></td><td>ring=route, fill=lapse + legend</td><td>A</td><td>M</td><td>W4</td></tr>
+      <tr><td><code>R8-1-verified-derivation</code></td><td>isVerifiedStop + per-driver verifiedPct</td><td>B-gw</td><td>M</td><td>W4</td></tr>
+      <tr><td><code>R8-2-signal-inventory</code></td><td>per-driver raw +/− counts (no score)</td><td>B-gw</td><td>L</td><td>W4</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="lead-sm">ເอกสารแผนเต็ม (migration plan, risk register 22 ข้อ, DoD): <code>docs/FLEXIBLE_ROUTING_BUILD_PLAN.md</code></p>
+</section>
+
+<section class="s" id="sched">
+  <h2><span class="no">5b</span> ตารางรายวัน + เวลา (day-by-day)</h2>
+  <p class="lead">ประเมิน ~2 devs เต็มเวลา = ~4 สัปดาห์ (20 วันทำงาน) · 1 dev ≈ 8 สัปดาห์ · L=3–4 วัน · M=2 · S=1 · XS=0.5 · บางวันแยก 2 track (A/B) ขนาน · เวลาเป็นประมาณ</p>
+  <div class="sched">
+    <div class="swk">
+      <h4>W1 · A0 keystone (รากฐาน) <span class="wt">5 วัน + ครึ่ง</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">D1</span><span class="dt"><code>A0-schema-lrd</code> — schema +<code>lastReceivedDate</code>/<code>deliveryCount</code>/<code>deliveringUserId</code> + index + prisma generate</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D2</span><span class="dt"><code>A0-migration-backfill</code> — migrate + backfill <code>MAX(deliveredAt)</code> + verify บน DB</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D3</span><span class="dt"><code>A0-dto-controller</code> + <code>A0-svc-gps-write</code> — DTO lat/lng + เขียน GPS+<code>deliveringUserId</code> ใน deliverOrder tx</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D4</span><span class="dt"><code>A0-svc-lastreceived</code> + <code>R7-2-pay-attribution</code> — lastReceivedDate/deliveryCount (guard !isReRecord) + driverId=currentUser.sub</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D5</span><span class="dt"><code>A0-spec-extend</code> — jest: GPS present/absent · lastReceived/re-record · idempotency replay · walk-in skip</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ครึ่งวัน</span><span class="dt">QC + <code>/loo-check</code> + เปิด PR (PR-A0 / PR-R7-2)</span><span class="hr" style="color:var(--muted)">~½ วัน</span></div>
+    </div>
+    <div class="swk">
+      <h4>W2 · สมองลูกค้า + ใครถึงรอบ <span class="wt">5 วัน + ครึ่ง · 2 track</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">D6</span><span class="dt">(A) <code>A1-api-payload</code> + เริ่ม <code>A1-modal-getposition</code> · (B) <code>A2-1-cadence-fn</code> (medianGapDays)</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D7</span><span class="dt">(A) <code>A1-modal-getposition</code> (จบ — best-effort GPS) · (B) เริ่ม <code>A2-2-due-query</code></span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D8</span><span class="dt">(A) <code>A1-brain-card</code> (card อ่าน recency) · (B) <code>A2-2-due-query</code> (CALENDAR∪OVERDUE∪LAPSED∪SUBLESS)</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D9</span><span class="dt">(A) <code>R5-1-mount-subs-list</code> · (B) <code>A2-2</code> (จบ) + <code>A2-3-endpoint</code> (GET /due-customers)</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D10</span><span class="dt"><code>R5-2-subless-feed</code> + integration + ตรวจ (tsc/loo-check)</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ครึ่งวัน</span><span class="dt">integration test + QC + PR (PR-A1 / PR-A2 / PR-R5)</span><span class="hr" style="color:var(--muted)">~½ วัน</span></div>
+    </div>
+    <div class="swk">
+      <h4>W3 · Route entity + วาดเส้น <span class="wt">5 วัน + ครึ่ง · 2 track</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">D11</span><span class="dt"><code>A3-route-schema</code> — <code>Route</code> entity + <code>DeliveryRun.routeId</code> + migration + generate</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D12</span><span class="dt"><code>A3-routes-module</code> (เริ่ม) — CRUD, whereWithBranch, broadcast ROUTE_UPDATED</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D13</span><span class="dt">(A) <code>A3-routes-module</code> (จบ) + <code>A3-routes-api-hooks</code> · (B) เริ่ม <code>A3-route-render-layer</code></span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D14–15</span><span class="dt">(A) <code>A3-route-draw-tool</code> (วาดเส้นบน Google Maps · single active tool) · (B) <code>A3-route-render-layer</code> (จบ · ROUTE_PALETTE)</span><span class="hr">~2 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ครึ่งวัน</span><span class="dt">ทดสอบ draw บนเครื่องจริง + QC + PR (PR-A3)</span><span class="hr" style="color:var(--muted)">~½ วัน</span></div>
+    </div>
+    <div class="swk">
+      <h4>W4 · กรอง + corridor + วัดผล <span class="wt">5 วัน + ครึ่ง · 2 track</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">D16–17</span><span class="dt">(A) <code>A4-corridor-near-query</code> (bbox + point-near-line · in-branch) · (B) <code>A4-day-color-filter</code></span><span class="hr">~2 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D18</span><span class="dt"><code>A4-route-pin-encoding</code> — ring=route, fill=lapse + legend + idsKey memo</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D19</span><span class="dt"><code>R8-1-verified-derivation</code> — isVerifiedStop + per-driver verifiedPct report</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">D20</span><span class="dt"><code>R8-2-signal-inventory</code> (เริ่ม · per-driver +/− no score) + /loo-check + PR · <em>L · อาจล้น +1–2 วัน</em></span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ครึ่งวัน</span><span class="dt">เก็บงานรวม + เตรียม demo + PR (PR-A4 / PR-R8)</span><span class="hr" style="color:var(--muted)">~½ วัน</span></div>
+    </div>
+  </div>
+  <p class="note-est">เวลาเป็น "ประมาณ" · ทำงาน 6 วัน/สัปดาห์ (5 เต็ม + 1 ครึ่ง) · ครึ่งวัน = QC / review / PR · 26 task รวม ~41 person-days → 2 devs ≈ 4 สัปดาห์ · รายละเอียด/dependency ดูตาราง §5.1 · ทุก PR ผ่าน <code>/loo-check</code> + <code>loo-reviewer</code> + tsc ก่อน commit. <b>หมายเหตุ:</b> ตารางนี้คือ Track A ล้วน — Track B (แอปคนขับ) เพิ่มเข้ามาใน §5c.</p>
+</section>
+
+<section class="s" id="trackB">
+  <h2><span class="no">5c</span> Track B — Driver Mobile App (V2) · ລວມຕາมมติรวมงาน</h2>
+  <p class="lead"><b>มติหัวหน้า:</b> รวมแอปคนขับ (เดโม <code>V2_DRIVER_APP/app.html</code> v0.22) เข้ากับงานสมองลูกค้า/routing → ตั้งเป้าส่งทั้งคู่ ~1 เดือน · scope = <b>เต็มตามเดโมทุกฟีเจอร์</b> · ทีม 2 คนเท่าเดิม (ยอมรับว่าอาจล้น — ดู §5c.3).</p>
+  <div class="note ok"><div class="ic">OK</div><div><b>อัปเดตสถานะ build (2026-06-22 · ตรวจ repo จริง):</b> แอปคนขับ <b>เริ่มสร้างแล้วจริง</b> ไม่ใช่ของใหม่ทั้งหมด · มี Vite + React 19 + <b>Capacitor (Android)</b> app (<code>loo-platform/driver/</code>) ที่ spine หลัก <b>เสร็จและต่อ backend จริงแล้ว</b>: <code>B0-mobile-shell</code> · <code>B0-pin-auth</code> · <code>B1-run-screen</code> · <code>B1-stop-screen</code> (ชำระ CASH/QR/BANK + ถังคืน + รูป POD + GPS + confirm) <span class="pill done">DONE</span> · <code>B1-pretrip</code> truck-load <span class="pill partial">partial</span>. เหลือ = map · wallet · close-shift · pod-receipt + ทั้ง B2/B3 · <b>~25-30% ของ Track B เสร็จแล้ว</b> (ส่วนเสี่ยงสุด = delivery spine ทำก่อน) · <b>กลยุทธ์เปลี่ยน: Capacitor-native ตั้งแต่ต้น ไม่ใช่ PWA-first.</b></div></div>
+  <div class="note ok"><div class="ic">!</div><div><b>การค้นพบที่เปลี่ยนภาพทั้งหมด:</b> เอกสาร <code>01_BACKEND_LINK_AUDIT.md</code> ของเดโม (gap B1–B10 = "🔧 backend") เทียบกับ <b>mock loop ในเดโม</b> ไม่ใช่ repo จริง. ตรวจ repo จริงแล้ว — <b>data-loop ของคนขับมีอยู่เกือบครบใน backend จริง</b> (GPS report · POD พิกัด+รูป · deliver/fail/skip · PaymentCollection · AssetMovement/Balance ถังคืน · TruckLoad+close-variance · Settlement). งานที่เหลือจริงส่วนใหญ่ = <b>frontend mobile shell + ต่อ endpoint ที่มีอยู่</b> + โมดูลใหม่ไม่กี่ตัว (PIN auth · fuel · leaderboard · POS-on-delivery · offline-queue · notify).</div></div>
+
+  <h3 class="sub" id="trackB-recon">5c.1 · Reconciliation — เดโมคนขับ ↔ โค้ดจริง (EXISTS / net-new)</h3>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>ความสามารถ</th><th>เดโมแสดง (app.html)</th><th>โค้ดจริง backend</th><th>งานที่เหลือจริง</th></tr></thead>
+    <tbody>
+      <tr><td>GPS live คนขับ</td><td><code>gps_pings</code> ทุก 20วิ</td><td><span class="pill exists">มี</span> <code>POST /delivery-runs/me/location</code> · <code>DriverLocation</code>+<code>DriverLocationHistory</code> · hook <code>use-driver-location-reporter.ts</code></td><td>FE: live pin บนแผนที่ + staleness display</td></tr>
+      <tr><td>POD พิกัด+รูป</td><td><code>snap()</code>+<code>confirmDeliver()</code></td><td><span class="pill exists">มี</span> <code>deliveredLatitude/Longitude</code> · <code>podPhotoUrl/podSignatureUrl</code> · <code>deliveringUserId</code> (Block A)</td><td><span class="pill done">DONE</span> FE กล้อง+GPS+confirm ใน <code>StopScreen</code></td></tr>
+      <tr><td>ส่ง / ส่งไม่ได้ / ข้าม</td><td><code>done/failSave/driveSkip</code></td><td><span class="pill exists">มี</span> status <code>PENDING/DELIVERED/FAILED/SKIPPED</code> · enum <code>DeliveryFailureCategory</code> 8 เหตุ · <code>/fail</code> endpoint</td><td>FE: ผูกปุ่ม + เหตุผล dropdown</td></tr>
+      <tr><td>ชำระหน้างาน 4 แบบ</td><td><code>PAYMETA</code> canonical</td><td><span class="pill exists">มี</span> <code>PaymentCollection</code> · method <code>CASH/QR_CODE/BANK_TRANSFER/CREDIT</code> · <code>driverId</code>=actor (R7-2)</td><td><span class="pill done">DONE</span> FE picker ใน StopScreen · <span class="pill partial">QR flow ยัง</span></td></tr>
+      <tr><td>ถังคืนแยกประเภท + มัดจำ</td><td><code>ret{barrel,crate}</code> · deposit</td><td><span class="pill exists">มี</span> <code>AssetMovement/AssetBalance</code> · <code>emptyCollected</code> · <code>collect-empties</code>/<code>add-bottles</code></td><td>FE: ผูก UI · deposit=liability แยก</td></tr>
+      <tr><td>โหลดน้ำขึ้นรถ + เสียหาย</td><td><code>LOAD</code>+<code>SRC</code>+<code>DMGR</code></td><td><span class="pill exists">มี</span> <code>TruckLoad</code>+<code>TruckLoadItem</code> · <code>close-variance</code> · <code>TRUCK_LOAD/UNLOAD</code></td><td>FE: ผูก UI + damage capture</td></tr>
+      <tr><td>ปิดกะ + รายงานรายวัน</td><td><code>dailyReport</code> mock</td><td><span class="pill exists">มี</span> run close + <code>Settlement</code> · <code>close-summary</code> · <code>close-variance</code></td><td>FE: driver close UI</td></tr>
+      <tr><td>สมองลูกค้า (lapse บนจอจุดส่ง)</td><td><code>drvLapse</code> 7/14/20/30</td><td><span class="pill exists">มี</span> <code>lastReceivedDate</code>+<code>deliveryCount</code> (Block A) · <code>GET /customer-card</code></td><td><span class="pill done">DONE</span> FE brain chip ใน <code>StopScreen</code></td></tr>
+      <tr><td>login รหัส+PIN</td><td>mock PIN 4 หลัก</td><td><span class="pill exists">มี</span> <code>POST /auth/driver/login</code> · module <code>driver-auth</code> · <code>User.employeeCode/driverPinHash</code> (mig <code>20260622100000</code>)</td><td><span class="pill done">DONE</span> BE+FE keypad (<code>driver/LoginScreen.tsx</code>) · เหลือ PIN reset flow</td></tr>
+      <tr><td>POS ยิงขายหน้างาน</td><td><code>openSell</code>/<code>SaleOnSite</code></td><td><span class="pill partial">บางส่วน</span> <code>sell-water</code> (web) แยก · มี <code>add-order-items</code></td><td><span class="pill missing">net-new</span> POS-on-delivery</td></tr>
+      <tr><td>แจ้งลูกค้า (กำลังไป/ส่งแล้ว/เลื่อน)</td><td><code>notifyCust</code> mock</td><td><span class="pill missing">ไม่มี</span> integration WhatsApp/SMS</td><td><span class="pill missing">net-new</span> notify service</td></tr>
+      <tr><td>Leaderboard / แต้ม / แลกของ</td><td>gamification strip</td><td><span class="pill missing">ไม่มี</span> (<code>LoyaltyTransaction</code> = ฝั่งลูกค้า)</td><td><span class="pill missing">net-new</span> driver leaderboard+points</td></tr>
+      <tr><td>myPay รายได้คนขับ</td><td><code>myPay</code> = adoption lever</td><td><span class="pill missing">ไม่มี</span> (<code>Settlement</code> = cash close เท่านั้น)</td><td><span class="pill missing">net-new</span> earnings aggregation</td></tr>
+      <tr><td>เติมน้ำมัน + OCR ใบเสร็จ</td><td>fuel modal</td><td><span class="pill missing">ไม่มี</span> <code>FuelLog</code></td><td><span class="pill missing">net-new</span> fuel module + anomaly</td></tr>
+      <tr><td>SOS แจ้งเหตุ → ผู้จัดการ</td><td><code>fEvt</code> 5 เหตุ</td><td><span class="pill partial">บางส่วน</span> <code>Issue</code> model มี · ไม่ผูก delivery</td><td><span class="pill missing">net-new</span> wire SOS → Issue+notify</td></tr>
+      <tr><td>offline-first + PWA</td><td><code>manifest.json</code>+<code>sw.js</code></td><td><span class="pill missing">ไม่มี</span> PWA / offline queue</td><td><span class="pill missing">net-new</span> PWA + offline-sync queue</td></tr>
+      <tr><td>แผนที่</td><td>Leaflet 1.9.4 + OSRM</td><td><span class="pill exists">มี</span> Google Maps <code>@vis.gl/react-google-maps</code></td><td>โค้ดแผนที่ <b>ทำใหม่บน Google Maps</b> (reuse ไม่ได้)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="lead-sm"><b>เดโม screen (8):</b> login(emp+PIN) → shift/<b>pre-trip 4 ขั้น</b>(check-in→ยิง crew ขึ้นรถ→ตรวจรถ 7 จุด+ไมล์+รูป→โหลดน้ำ) → run(progress ring+เงินสด+ถัง+quickbar) → <b>stop "จบในจอเดียว"</b>(brain chips+stepper+promo+ชำระ 4+ถังคืน+มัดจำ+รูป+ยืนยัน) → POD(recap+ใบเสร็จ QR) → map → money(4 ก้อน drill-down) → me(leaderboard+points+redeem+myPay+ปิดกะ). <b>หลักออกแบบ 3:</b> ① บันทึกครั้งเดียวตอนทำงาน ② จบในจอเดียว ③ มือถือคือ GPS · + offline-first (เส้นตาย) · ปุ่มใหญ่มือเดียว ลาว 100%.</p>
+  <div class="note warn"><div class="ic">!</div><div><b>constants ที่ต้อง honor (จากเดโม v0.22):</b> lapse 7/14/20/30 (เขียว/เหลือง/แดง) · semantic ชำระ <b>cash=เขียว · QR=ม่วง · transfer=ฟ้า · debt/ค้าง=แดง</b> (ห้ามสลับ) · <code>VARI_CATALOG</code> 9 SKU (driver app · Sales KB v1.4): 18L=28,000₭ องค์กร 25k · บาดำ=20,000 · แก้ว=150,000/ลัง · 2L=51,000 · pH8+=88,000 · Mini=120,000 <b>⚠ ราคาขัดกับ products.json/DEMO_LOOP</b> (Master Cost · Bou 2026-06-11: บาดำ 18k · 2L 38k · pH8+ 55k · Mini 85k · แก้ว 130k) → reconcile ก่อน lock · <b>มัดจำ=liability ไม่บวกยอดขาย</b> (first-principles) · promo <code>VARI10/BULK5/BUY10GET1</code> · payment enum canonical (driver sync แล้ว · label ลาวคงเดิม <code>ຄ້າງ(ໜີ້)</code>) · ไอคอน mono SVG (ห้าม emoji) · ทุกปุ่ม P0 ต้องมี busy-guard (เดโมเจอบั๊ก <code>confirmDeliver</code> บวกเงินซ้ำ).</div></div>
+
+  <h3 class="sub" id="trackB-tasks">5c.2 · Track B task list (wire-existing + net-new)</h3>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>id</th><th>title</th><th>kind</th><th>eff</th></tr></thead>
+    <tbody>
+      <tr><td><code>B0-mobile-shell</code></td><td>driver mobile route + bottom-nav 4 แท็บ + phone frame</td><td><span class="pill done">DONE</span></td><td>L</td></tr>
+      <tr><td><code>B0-pwa</code></td><td>manifest + service worker + offline shell · <b>strategy → Capacitor-native</b> · re-scope</td><td>net-new</td><td>M</td></tr>
+      <tr><td><code>B0-pin-auth</code></td><td>emp-code + PIN login: BE <code>/auth/driver/login</code> + FE keypad <b>เสร็จ</b> · เหลือ reset flow</td><td><span class="pill done">DONE</span></td><td>S</td></tr>
+      <tr><td><code>B1-run-screen</code></td><td><code>GET /today/me</code> → run (stops + progress)</td><td><span class="pill done">DONE</span></td><td>M</td></tr>
+      <tr><td><code>B1-stop-screen</code></td><td>stop "จบในจอเดียว": brain+pay(CASH/QR/BANK)+bottle+photo POD+GPS+confirm(idempotency)</td><td><span class="pill done">DONE</span></td><td>L</td></tr>
+      <tr><td><code>B1-pod-receipt</code></td><td>POD recap + ใบเสร็จ (logo+QR) · <em>รูป POD เก็บใน stop แล้ว · เหลือหน้าใบเสร็จ</em></td><td>wire</td><td>M</td></tr>
+      <tr><td><code>B1-driver-map</code></td><td>driver map บน Google Maps (route + live pin + จุดต่อไป)</td><td>rebuild</td><td>M</td></tr>
+      <tr><td><code>B1-pretrip</code></td><td>โหลดน้ำ check (<code>/pre-trip-check</code>) <b>เสร็จ</b> · เหลือ check-in + ตรวจรถ 7 จุด + crew</td><td><span class="pill partial">partial</span></td><td>L</td></tr>
+      <tr><td><code>B1-money-wallet</code></td><td>4 ก้อน (cash/QR/transfer/ค้าง) drill-down</td><td>wire</td><td>S</td></tr>
+      <tr><td><code>B1-close-shift</code></td><td>close run + settlement summary + ปิดกะ</td><td>wire</td><td>M</td></tr>
+      <tr><td><code>B2-pos-ondelivery</code></td><td>ยิงขายหน้างาน → <code>SaleOnSite</code> (เชื่อม sell-water)</td><td>net-new</td><td>L</td></tr>
+      <tr><td><code>B2-fuel-log</code></td><td><code>FuelLog</code> model + endpoint + UI + anomaly สิ้นเปลือง</td><td>net-new</td><td>M</td></tr>
+      <tr><td><code>B2-leaderboard</code></td><td>driver perf/points engine + leaderboard + redeem</td><td>net-new</td><td>L</td></tr>
+      <tr><td><code>B2-mypay</code></td><td>driver earnings aggregation (verified-work-based)</td><td>net-new</td><td>M</td></tr>
+      <tr><td><code>B2-sos-wire</code></td><td>SOS 5 เหตุ → <code>Issue</code> + notify ผู้จัดการ</td><td>net-new</td><td>M</td></tr>
+      <tr><td><code>B2-notify-customer</code></td><td>otw/done/fail → WhatsApp/SMS service</td><td>net-new</td><td>M</td></tr>
+      <tr><td><code>B2-offline-queue</code></td><td>offline delivery capture + sync-on-reconnect</td><td>net-new</td><td>L</td></tr>
+      <tr><td><code>B3-extras</code></td><td>skip / incoming-banner / driving-mode / voice / onboarding tour</td><td>polish</td><td>M</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="lead-sm">18 task · L=3.5 / M=2 / S=1 person-days → Track B เต็ม ≈ <b>~45 person-days</b>. <b>อัปเดต:</b> spine (B0-shell/pin + B1-run/stop) <b>เสร็จแล้ว ~25-30%</b> → เหลือจริง ≈ <b>~32 pd</b> (map · wallet · close-shift · pod-receipt + B2/B3). <b>wire</b>=ต่อ backend ที่มี (เร็ว) · <b>net-new</b>=สร้างโมดูลใหม่ (ช้า). ถ้าต้องตัดเพื่อ 1 เดือน → net-new (POS/fuel/leaderboard/mypay/offline/notify) คือกลุ่มที่เลื่อนได้.</p>
+
+  <h3 class="sub" id="trackB-capacity">5c.3 · capacity reality — 2 track เต็ม / 2 dev / 1 เดือน พอไหม?</h3>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>scope</th><th>person-days</th><th>2 devs (44 pd/เดือน)</th></tr></thead>
+    <tbody>
+      <tr><td>Track A เต็ม (สมองลูกค้า + routing + corridor + R8)</td><td>~41 pd</td><td>~4 สัปดาห์</td></tr>
+      <tr><td>Track B เต็ม (แอปคนขับ ทุกฟีเจอร์) · <b>spine done ~25-30%</b></td><td>~45 pd <em>(เหลือ ~32)</em></td><td>~4 สัปดาห์ <em>(เหลือ ~3)</em></td></tr>
+      <tr><td><b>รวม 2 track เต็ม</b></td><td><b>~86 pd</b></td><td><b>≈ 8 สัปดาห์ (~2 เดือน)</b></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note danger"><div class="ic">!</div><div><b>flag ตรงๆ (ตามที่หัวหน้าขอ):</b> 2 track <u>เต็มสเปก</u> + ทีม 2 คน ≈ <b>~8 สัปดาห์</b> ไม่ใช่ 4. ใน 1 เดือนแรก 2 devs ส่งได้ ~ครึ่งทาง. ปัจจัยที่ช่วย = backend loop ของคนขับมีแล้ว (งาน wire เร็วกว่าสร้างใหม่) <b>+ Track B spine ~25-30% สร้างเสร็จแล้ว</b> (login/run/stop/deliver wired).</div></div>
+  <div class="note ok"><div class="ic">OK</div><div><b>ถ้าต้องจบใน 1 เดือนจริง — เส้น MVP cut (แนะนำเป็นทางเลือก):</b> <b>ส่งใน 1 เดือน:</b> Track A core (A0–A2 สมองลูกค้า + who's-due) + Track B MVP (<code>B0-shell/pwa/pin</code> + <code>B1-*</code> wire run/stop/pod/map/close + กล้อง/GPS). <b>เลื่อนเฟสถัดไป:</b> routing W3–4 (multi-route/corridor/optimizer) + Track B net-new (POS/fuel/leaderboard/myPay/offline-queue/notify). MVP นี้ = แอปคนขับใช้งานได้จริง pilot 2–3 คัน + สมองลูกค้าเริ่มเก็บ data.</div></div>
+  <p class="note-est">GPS ตลอดกะ (จอดับ/ในกระเป๋า) = ต้อง native. <b>อัปเดต:</b> แอป driver ตั้งเป็น <b>Capacitor (Android)</b> แล้ว (<code>capacitor.config.ts</code> · <code>@capacitor/android</code>) แต่ยังไม่ generate native project (<code>driver/android/</code>) และยังไม่มี offline queue/SW. เหลือ ~3–5 วัน setup + background-GPS plugin.</p>
+</section>
+
+<section class="s" id="demo">
+  <h2><span class="no">06</span> Demo vs real code — authoritative-truth map</h2>
+  <p class="lead">ກฎ: <b>demo = UX target · live repo = law.</b> ຂັດກັນ → ຍຶດ live code. ເດໂມ (<code>V2_DEMO_LOOP/index.html</code> 2.18MB, <code>V2_DRIVER_APP/app.html</code> 271KB) = vanilla JS + <b>Leaflet 1.9.4 + OSRM</b>.</p>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>concern</th><th>demo (aspirational)</th><th>live code (authoritative)</th></tr></thead>
+    <tbody>
+      <tr><td>maps/routing</td><td>Leaflet + CartoDB + public OSRM (<code>dpFetchRoadRoute</code>, <code>dpDrawSnap</code>, lasso/polygon/corridor)</td><td><b>Google Maps</b> (<code>@vis.gl/react-google-maps ^1.8.3</code>) → demo map code <b>reuse ไม่ได้</b></td></tr>
+      <tr><td>demo-only fns</td><td><code>dpNewPlan, DP_RUNS, dpZone, starsEl, dpPlanByDriver, dpClaim*, DP_SVCSCORE</code></td><td>ບໍ່ມีในโค้ดจริง (client-state ເດໂມ)</td></tr>
+      <tr><td>optimizer</td><td><code>dpPlanByDriver</code> = <code>CUSTOMERS.filter(zone).slice(0,5)</code> + qty ປอม (lines 4231-4235)</td><td>ບໍ່ມี optimizer · <code>reorderStops</code> manual</td></tr>
+      <tr><td>Service Score</td><td><code>DP_SVCSCORE</code> −1 in-memory counter</td><td>ບໍ່ມี model/persistence</td></tr>
+      <tr><td>live GPS trucks</td><td>4 hardcoded trucks animate ตาม OSRM geometry</td><td>real driver GPS via <code>POST /delivery-runs/me/location</code> (<code>ReportLocationDto</code>)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note ok"><div class="ic">OK</div><div><b>เดโม validate แนวทางนี้:</b> web <code>custLapseTier</code> + driver <code>drvLapse</code> คำนวณ lapse จาก <code>lastReceivedDate</code> ตรงเป๊ะ · driver <code>snap()</code> = real geolocation + <code>confirmDeliver()</code> stamp coords + <code>LAST_RECV=now</code> (reset lapse). หลาย "missing backend" ใน audit (POD, gps_pings, fail+reason) <b>มีใน live repo อยู่แล้ว</b>.</div></div>
+
+  <h3 class="sub" id="demoloop">6.2 · เดโม web-loop (V2_DEMO_LOOP) — UX spec + constants ที่ลอกได้</h3>
+  <p class="lead">เดโมหลังบ้าน <code>V2_DEMO_LOOP/index.html</code> (2.18MB · 60 รอบ design) = spec ของ ops-map งาน Track A. <b>ลอก: ดีไซน์/สเกล/สี/flow/สูตร · ทำใหม่: ทุกอย่างที่แตะแผนที่</b> (Leaflet→Google Maps).</p>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>เรื่อง</th><th>ค่าจากเดโม (honor)</th><th>task เรา</th></tr></thead>
+    <tbody>
+      <tr><td>lapse สี (บัตรลูกค้า)</td><td>บันได <b>7/14/20/30</b> · เขียว <code>#2BA372</code> / เหลือง <code>#F5B544</code> / แดง <code>#F2545B</code></td><td><code>A1-brain-card</code></td></tr>
+      <tr><td>lapse สี (บนแผนที่ · Bou แก้รอบ 43)</td><td><b>ต่างจากบัตร:</b> เขียว≤7 (ซ่อน) · เหลือง 8–13 · แดง ≥14 · <b>ม่วง <code>#A78BFA</code> = แจ้งขอวันนี้</b></td><td><code>A4-route-pin-encoding</code> · <em>ถาม Bou ใช้สเกลไหน</em></td></tr>
+      <tr><td>ดาว (custScore)</td><td><code>0.40·buy + 0.30·freq + 0.20·profit + 0.10·reputation</code> → 1–5 ดาว</td><td>deferred (D4)</td></tr>
+      <tr><td>route palette (8 สี)</td><td><code>#2563EB #06B6D4 #14B8A6 #6366F1 #8B5CF6 #EC4899 #38BDF8 #A78BFA</code> (<code>DP_DRAW_PALETTE</code>)</td><td><code>A3-route-render-layer</code> (ROUTE_PALETTE)</td></tr>
+      <tr><td>corridor "ใกล้เส้น"</td><td><b>200m</b> · point-to-polyline · 111000 m/deg · cap 60</td><td><code>A4-corridor-near-query</code></td></tr>
+      <tr><td>snap ลูกค้าใกล้สุด</td><td>~660m threshold (<code>dpNearestCust</code> brute) · lasso cap 40 · polygon ray-casting cap 60</td><td><code>A3-route-draw-tool</code></td></tr>
+      <tr><td>work process</td><td><b>"เลือก → จัด → ส่ง"</b> (panel ①②③ · รอบ 56)</td><td>กรอบ UX ทั้ง Track A</td></tr>
+      <tr><td>ชื่อเมนูวาดเส้น</td><td><b>ວາງເສັ້ນ</b> (ไม่ใช่ "วาดเส้น" · Bou เคาะ)</td><td>label ของ draw tool</td></tr>
+      <tr><td>rescue / Service Score</td><td>หมุดเงียบ (เหลือง/แดง/ม่วง) มีปุ่ม "ຄວ້າ·ຮັບໄປສົ່ง" · เขียว=ไม่มี (rescue≠poach) · คว้า→เจ้าของ −1</td><td>Block B (เลื่อน · <code>DP_SVCSCORE</code> = in-memory เดโมล้วน)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note warn"><div class="ic">!</div><div><b>demo-only (ไม่มี backend — อย่าสับสนว่าทำเสร็จ):</b> Service Score persistence · 30-min auto-release · force-assign · optimizer (<code>dpPlanByDriver</code>=<code>filter(zone).slice(0,5)</code>) · 4 trucks hardcode animate ตาม OSRM. ทั้งหมดนี้คือ Block B/C ที่ยังต้องสร้าง backend จริง.</div></div>
+
+  <h3 class="sub" id="enum">6.1 · enum / data-contract (เสี่ยงสูงสุด — ต้อง honor)</h3>
+  <div class="note warn"><div class="ic">!</div><div><b>หมายเหตุ schema (ความแม่นยำ):</b> แถวด้านล่างส่วนใหญ่เก็บเป็น <code>String</code> field + canonical comment (pipe-list) <b>ไม่ใช่ Prisma <code>enum</code></b>. enum จริงใน schema มีตัวเดียวคือ <code>DeliveryFailureCategory</code> (:1234 · 8 ค่า). <code>Order.status</code> / <code>DeliveryRunOrder.status</code> / <code>AssetMovement.*</code> เก็บเป็น String + comment (เช่น <code>order-status.constants.ts</code>) — ค่าที่ระบุถูกต้อง แต่อย่าไปหา <code>enum Order_status</code> ใน <code>schema.prisma</code> (ไม่มี).</div></div>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>field</th><th>canonical (live)</th><th>note</th></tr></thead>
+    <tbody>
+      <tr><td><code>CustomerPayment.method</code></td><td><code>{ CASH, QR_CODE, BANK_TRANSFER }</code> (3 ค่า · <code>payment-method.constants.ts</code>)</td><td><b>"5-value enum" = reports-filter union ไม่ใช่ method.</b> <code>OUTSTANDING</code>=<code>Order.paymentStatus</code> · <code>SPONSORSHIP</code>=<code>Order.isSponsorship</code> · doc <code>CREDIT</code> ເປັນ method ที่ 4</td></tr>
+      <tr><td><code>Order.status</code></td><td><code>PENDING / IN_PROGRESS / COMPLETED / CANCELLED</code></td><td><b>ບໍ່ມี DELIVERED</b> · demo <code>done/failed</code> = local · live <code>failDelivery</code> → <code>CANCELLED</code></td></tr>
+      <tr><td><code>DeliveryRunOrder.status</code></td><td><code>PENDING / DELIVERED / FAILED / SKIPPED</code></td><td>enum ແຍກ · ຢ່າສັບສົນກັບ Order.status</td></tr>
+      <tr><td><code>AssetMovement.movementType</code></td><td><code>{ ISSUED, RETURNED, TRANSFERRED, DAMAGED, LOST, ADJUSTED }</code></td><td>seed <code>asset_movements.csv</code> ໃຊ້ enum ປອມ (<code>DELIVERY_OUT/EMPTY_RETURN</code>) → import ບໍ່ໄດ້</td></tr>
+      <tr><td><code>AssetMovement.bottleCondition</code></td><td><code>{ GOOD, DAMAGED, EXPIRED, DIRTY, LEAKING }</code></td><td>seed ໃຊ້ <code>FULL/EMPTY</code> ປอม</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note danger"><div class="ic">!</div><div><b>data contract (00 §5):</b> enum/names ຕ້ອງ match backend ເປ໊ະ ບໍ່ດັ່ງນັ້น data ບໍ່ flow (ມີ bug payment lowercase-vs-uppercase ມາแล้ว). reconcile payment method ກັບ Bou ກ່อนต่อ flow ຄົນຂັບ.</div></div>
+</section>
+
+<section class="s" id="snapshot">
+  <h2><span class="no">07</span> <code>source_code/</code> snapshot vs LIVE repo</h2>
+  <ul class="tight">
+    <li>snapshot cut ≈ <b>2026-06-08</b> (last migration <code>20260608000000_subscription_product_optional</code>) — same project, additive subset.</li>
+    <li>live <b>ahead 25 migrations</b> (<code>20260609</code> → <code>20260622100000_driver_pin_auth</code>) + 3 modules: <code>customer-departments</code>, <code>health</code>, <code>stock-counts</code> · zero snapshot-only items.</li>
+    <li><b>Block A lands ONLY in live.</b> <code>deliveredLatitude/Longitude</code> ມีก่อน Block A ใน 4 snapshot files.</li>
+    <li>live + <code>@sentry/node</code> + <code>otplib</code> (MFA <code>20260617120000</code>) · schema 4,048 → 4,359 lines.</li>
+    <li><code>source_code/docs/*</code> ເກ່າກວ່າໂຄ້ดตัวเอง. <b>อ่าน snapshot ເพื่อ orientation · ຢ່າแก้ · build บน live repo.</b></li>
+  </ul>
+</section>
+
+<section class="s" id="seed">
+  <h2><span class="no">08</span> Seed dataset — <code>_SEED_DATA/</code></h2>
+  <ul class="tight">
+    <li>deterministic (<code>random.seed(20260620)</code>) · <b>~51 tables / ~206k rows / 5,000 ลูกค้าเวียงจันทน์</b> (พิกัดอาคารจริง) · Apr–Jun 2026.</li>
+    <li>big: <code>transactions</code>(31,925), <code>transaction_items</code>(35,361), <code>delivery_run_orders</code>(31,476 + POD), <code>loyalty_transactions</code>(30,885), <code>asset_movements</code>(19,413), <code>payment_collections</code>(18,477), <code>driver_locations</code>(3,871), <code>customer_photos</code>(3,000), <code>settlements</code>(1,297).</li>
+    <li>realism: data-mined จาก VARI Drive จริง · <code>products.json</code> = 11 SKU จริง + ราคา/GM%/deposit.</li>
+    <li><code>customers.csv</code> ships <code>last_received_date</code> + <code>total_orders</code> → <b>forward-compatible กับ Block A</b>.</li>
+    <li>demo consumes positional JS arrays (<code>LOO_CUSTDATA</code>, <code>LOO_ORD</code>, <code>LOO_CUSTPTS</code>, <code>LOO_DASH</code>) <b>ไม่ใช่ CSV</b> · CSV = standalone fixture, ยังไม่ wired.</li>
+  </ul>
+  <div class="note warn"><div class="ic">!</div><div><b>bug ก่อน import:</b> <code>asset_movements.csv</code> enum ปลอม (§6.1) · 18L price split (catalog 28,000 vs txn 25,000) · 3 เดือน history (lapse/churn tail flat) · <code>_specs/*</code> มี Drive path + distributor จริง (NDA).</div></div>
+</section>
+
+<section class="s" id="landmines">
+  <h2><span class="no">09</span> Landmines / conventions (ต้อง honor)</h2>
+  <ol class="tight">
+    <li><b>GPS-at-delivery trap:</b> ຂຽນ GPS ໃນ <code>deliverOrder</code> ໂดยตรง · ຢ່าผ่าน <code>updateStopStatus</code> (reject DELIVERED on not-COMPLETED, :398-405).</li>
+    <li><b>Order.status ບໍ່ມี DELIVERED</b> — DELIVERED อยู่บน <code>DeliveryRunOrder</code> (<code>/loo-check</code> สแกน).</li>
+    <li><b>AuditInterceptor global</b> (<code>APP_INTERCEPTOR</code>) — ห้าม <code>@UseInterceptors(AuditInterceptor)</code> ต่อ method. path ที่มองไม่เห็น → <code>AuditService.record()</code>.</li>
+    <li><b>tenant+branch isolation</b> ทุก query (<code>TenantScope.whereWithBranch</code>) — R4/R6 cross-branch ต้อง carve-out + audit. เคารพ <code>isCustomerBranchScopeExempt</code>.</li>
+    <li><b>Prisma 7 nested-create ห้าม scalar FK</b> — ใช้ <code>connect: { id }</code>. (update/top-level create ใส่ scalar ได้ — Block A ทำถูก).</li>
+    <li><b>broadcastTenant</b> หลังทุก tenant mutation (หลัง $transaction commit).</li>
+    <li><b>re-record double-count:</b> <code>deliveryCount</code>/<code>lastReceivedDate</code> guard <code>!isReRecord</code>. <code>totalPurchaseCount</code> นับซ้ำอยู่แล้ว (flag in PR).</li>
+    <li><b>idempotency replay</b> return ก่อน tx → spec assert <code>$transaction</code> ไม่ถูกเรียกตอน replay.</li>
+    <li><b>walk-in customerId=NULL</b> — write ใน <code>if(order.customerId)</code> · backfill <code>customerId IS NOT NULL</code>.</li>
+    <li><b>take:20000 cap</b> — corridor query bbox ก่อน take ไม่ใช่ JS-filter หลัง.</li>
+    <li><b>3 color systems แยก:</b> semantic <code>colorCode</code> · <code>TERRITORY_PALETTE</code> · route palette · lapse ladder.</li>
+    <li><b>run-creation uniqueness</b> app-enforced — path ใหม่ copy guard ครบ.</li>
+    <li><b>Settlement.create deleted (Phase 4.3)</b> — ตารางว่าง · R7 pay design ต้องรู้.</li>
+    <li><b>money Decimal</b> (18,2)/(18,4) · re-derive on reverse · 2 ledgers (<code>PaymentCollection</code> vs <code>CustomerPayment</code>) ต้อง union.</li>
+    <li><b>Lao UI labels บังคับ</b> ผ่าน Xieng QC + <code>lao_corruption_scan.py</code> · mono SVG ห้าม emoji.</li>
+    <li><b>no persisted recency = hot-path cost</b> — Block A persist + index แก้แล้ว (เดิม <code>getLastDelivered</code> MAX groupBy 3+ ที่).</li>
+  </ol>
+</section>
+
+<section class="s" id="decisions">
+  <h2><span class="no">10</span> Decisions</h2>
+  <h3 class="sub">build decisions (D1–D13)</h3>
+  <div class="scroll-x">
+  <table>
+    <thead><tr><th>#</th><th>decision</th><th>default</th><th>blocks</th></tr></thead>
+    <tbody>
+      <tr><td>D1</td><td>Route entity vs DeliveryRun extension</td><td>standalone <code>Route</code> + <code>DeliveryRun.routeId?</code></td><td>W3</td></tr>
+      <tr><td>D2</td><td>Google vs Leaflet draw</td><td><b>Google</b> (no Leaflet in package.json)</td><td>—</td></tr>
+      <tr><td>D3</td><td>importance source</td><td><code>customerPriorityId</code> only</td><td>W2/3</td></tr>
+      <tr><td>D4</td><td>stars/satisfaction</td><td>defer/locked (Service Score input)</td><td>—</td></tr>
+      <tr><td>D5</td><td>verifiedLat/Lng vs overwrite</td><td>write only in deliverOrder onto existing cols</td><td>W1</td></tr>
+      <tr><td>D6</td><td>capture deliveringUserId now</td><td><b>yes</b> (hardest to backfill)</td><td>W1</td></tr>
+      <tr><td>D7</td><td>deliveryCount column</td><td><b>add</b></td><td>W1</td></tr>
+      <tr><td>D8</td><td>lastReceivedDate re-record</td><td>stamp only <code>!isReRecord</code></td><td>W1</td></tr>
+      <tr><td>D9</td><td>LAPSED tolerance + min sample</td><td>1.5× median · suppress &lt;3 COMPLETED</td><td>W2</td></tr>
+      <tr><td>D10</td><td>SUBLESS window</td><td>cap 90 days</td><td>W2</td></tr>
+      <tr><td>D11</td><td>permission codes</td><td><code>delivery.manage</code> · <code>customers.view</code></td><td>W2/3</td></tr>
+      <tr><td>D12</td><td>GPS privacy (Lao compliance)</td><td><b>confirm Bou</b> ก่อน FE capture (W2)</td><td>W2</td></tr>
+      <tr><td>D13</td><td>corridorMeters</td><td>fixed 150m</td><td>W4</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3 class="sub">Bou ต้องเคาะ (จากแพ็กเกจ)</h3>
+  <ul class="tight">
+    <li><b>payment enum migration</b> (lowercase→uppercase) — parked since 2026-06-15 · canonical method = 3 ค่า (§6.1) → ต้อง resolve.</li>
+    <li><b>optimizer gate</b> = GPS ≥ 80% (~10/30 ตอนนี้) AND ≥ 8 deliveries/customer.</li>
+    <li><b>PWA vs native</b> — blueprint = PWA แต่ Bluetooth printer + scanner อาจบังคับ native.</li>
+    <li><b>VARI stamp/signature</b> — <code>vari-stamp-sig.png</code> = ตรา+ลายเซ็นจริง · ลบก่อน demo ภายนอก.</li>
+    <li><b>VARI price authority</b> — <code>VARI_CATALOG</code> (driver app · KB v1.4) ขัดกับ <code>products.json</code>/DEMO_LOOP (Master Cost · Bou 2026-06-11) ใน 4-5 SKU → เคาะแหล่งราคาจริงก่อน lock catalog.</li>
+  </ul>
+</section>
+
+<section class="s" id="blueprint">
+  <h2><span class="no">11</span> Blueprint constitution + brand tokens</h2>
+  <h3 class="sub">7 Design Principles (00 §3 — ทุก feature ต้องผ่านครบ)</h3>
+  <ol class="tight">
+    <li>1 page = 1 main job, 3-second grasp.</li>
+    <li>record once while working (driver ไม่มีเอกสารเพิ่ม).</li>
+    <li>real data ก่อน decoration — ทุกเลข click-trace ได้ · no dead-end · totals = line items.</li>
+    <li>one-handed, harsh sunlight, low-skill — big thumb buttons · drive mode strips to essentials.</li>
+    <li>phone IS the GPS, ติดรถ ไม่ใช่ติดคน (driver swappable).</li>
+    <li>Lao-only ผ่าน Xieng QC + <code>lao_corruption_scan.py</code> (zero Thai codepoints) · mono SVG · no emoji.</li>
+    <li>using system = full pay — points/bonus นับเฉพาะ system-verified (photo+GPS) work.</li>
+  </ol>
+  <p class="lead-sm"><b>DoD (00 §6):</b> serves the one job · ไม่ละเมิด 7 หลัก · real-data closes loop (traceable, totals match, no dead-end) · Lao QC clean · browser-verified (0 console error + screenshot) · ไม่พังของเดิม (incremental) · design-log recorded.</p>
+
+  <h3 class="sub">View/Filter standard (01)</h3>
+  <p class="lead-sm">4 modes: <b>List / Board / Calendar / Map</b> · filter registry ~18 ตัว (<code>F_SEARCH, F_DATE, F_BRANCH, F_DRIVER, F_ZONE, F_GRADE, F_PAYSTATUS, F_ORDERSTATUS, F_PAYMENT, F_SHIFT…</code>) · <b>hard rule: filter change → re-render ทุก view + KPI พร้อมกัน.</b> build registry + view-bar ครั้งเดียว แล้ว clone.</p>
+
+  <h3 class="sub">Reports reframe (05 · อย่า rebuild)</h3>
+  <p class="lead-sm">มี 9 reports แล้ว (Phase 10) → (1) re-skin tokens (no logic change) (2) ยุบเมนู 9→7 via tab-wrapper (route ยังอยู่) (3) <code>GET /reports/daily-summary</code> + cron 19:00 + PDF + auto-WhatsApp (เสี่ยงแค่ gateway → PDF/share fallback).</p>
+
+  <h3 class="sub">Brand tokens — ⚠ 2 ชุด ไม่ตรงกัน</h3>
+  <div class="grid2">
+    <div class="card"><h4>brand_kit (DARK v2.0 · aspirational)</h4><p class="lead-sm"><span class="swatch" style="background:#2563EB"></span><code>--loo-blue #2563EB</code> · bg <code>#0A0E1A</code> · surface <code>#0F172A</code><br>money: cash <span class="swatch" style="background:#34D399"></span><code>#34D399</code> · transfer <span class="swatch" style="background:#60A5FA"></span><code>#60A5FA</code> · QR <span class="swatch" style="background:#A78BFA"></span><code>#A78BFA</code> · debt <span class="swatch" style="background:#F2545B"></span><code>#F2545B</code><br>fonts: Plus Jakarta Sans / Manrope / JetBrains Mono</p></div>
+    <div class="card"><h4>live app (ปัจจุบัน)</h4><p class="lead-sm"><span class="swatch" style="background:#5d87ff"></span><code>--primary #5d87ff</code> (Modernize default) → <code>--color-cyan-500/600/700</code><br>fonts: Outfit / Noto Sans Lao / Phetsarath<br>auth/onboarding เริ่ม prototype <code>#2563EB</code> แต่ dashboard ยัง <code>#5d87ff</code></p></div>
+  </div>
+  <div class="note warn"><div class="ic">!</div><div>design system = <b>aspirational/transitional ยังไม่ freeze</b> · เป็น re-theme ไม่ใช่แค่สลับ token · master CI §5.2 ยัง list LIGHT palette เก่า ขัดกับ tokens.css. <b>anti-neon law:</b> สี = ความหมาย (60-30-10, 8pt grid) ไม่ใช่ decoration.</div></div>
+
+  <h3 class="sub">LOO Suite framing</h3>
+  <p class="lead-sm">LOO = branded-house suite (MS Office): <b>LOO Delivery Business</b> (V1 LIVE ที่ VARI ตั้งแต่ 2026-06-11) + <b>LOO Workplace</b> (HR) + <b>LOO Waste</b>. "LOO Platform" = multi-tenant engine · share Bible/tokens (swap <code>--primary</code> per vertical). domain: <code>loolao.com</code> + <code>app./api./admin.</code> · <code>payroll/checkin/teampoints</code> = link-out stub → LOO Workplace (draft).</p>
+</section>
+
+<footer>
+  LOO Platform · Customer-Brain + Flexible Routing — Dev Technical Reference (Block A) · <span class="mono">2026-06-22</span><br>
+  source: 3 review/synthesis workflows + Block A implementation · package <code>D:\Develops\Plans\LOO_Delivery</code> (NDA — local only) · full plan <code>docs/FLEXIBLE_ROUTING_BUILD_PLAN.md</code><br>cross-checked against <code>loo-platform</code> @ <code>feat/a0-customer-brain-capture</code> · 2026-06-22 · line refs synced to current schema (4,359 lines) · PIN-auth + driver-app build state updated
+</footer>
+
+</main>
+</div>
+
+<script>
+  document.documentElement.classList.remove('no-js');
+  const links=[...document.querySelectorAll('.toc a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const obs=new IntersectionObserver((es)=>{
+    es.forEach(e=>{ const a=map.get(e.target.id); if(a){ const on=e.isIntersecting; a.style.borderLeftColor=on?'var(--blue)':'transparent'; a.style.color=on?'var(--ink)':''; a.style.background=on?'var(--surface-2)':''; }});
+  },{rootMargin:'0px 0px -75% 0px'});
+  document.querySelectorAll('section.s').forEach(s=>obs.observe(s));
+</script>
+<script src="loo-checklist.js"></script>
+</body>
+</html>
