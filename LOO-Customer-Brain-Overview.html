@@ -7,177 +7,164 @@
 <meta name="description" content="ອະທິບາຍລະອຽດແບບບໍ່ຕ້ອງຮູ້ເລື່ອງເຕັກນິກ: ລະບົບກຳລັງເຮັດຫຍັງ, ເພາະຫຍັງ, ໄດ້ຫຍັງ, ແລະ ເຮັດເຖິງໃສແລ້ວ">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=Noto+Sans+Lao:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --blue:#5d87ff; --blue-600:#4a6fe6; --blue-700:#3a57c4; --cyan:#49beff;
-    --navy:#101a40; --navy-2:#1c2a63;
-    --ink:#0e1626; --ink-s:#394561; --muted:#5b667f;
-    --bg:#f4f7fd; --surface:#fff; --surface-2:#eef3fc; --line:#e0e7f5; --line-strong:#cdd8ee;
-    --green:#10b981; --green-ink:#0a7a55; --amber:#f59e0b; --amber-ink:#a8690a; --red:#f0476a; --red-ink:#bb2945;
-    --r-lg:22px; --r-md:16px; --r-sm:11px;
-    --shadow:0 1px 2px rgba(16,26,38,.04), 0 12px 34px -14px rgba(33,52,110,.28);
-    --shadow-lift:0 2px 4px rgba(16,26,38,.05), 0 26px 54px -18px rgba(33,52,110,.38);
-    --maxw:1080px; --ease:cubic-bezier(.22,1,.36,1);
+    --ink:#000;--canvas:#fff;--on-dark:#fff;
+    --hair:#e6e6e6;--hair-soft:#f1f1f1;--soft:#f7f7f5;
+    --lime:#dceeb1;--lilac:#c5b0f4;--cream:#f4ecd6;--pink:#efd4d4;--mint:#c8e6cd;--coral:#f3c9b6;--navy:#1f1d3d;
+    --magenta:#ff3d8b;--success:#1ea64a;--green:#1ea64a;
+    --r-sm:6px;--r-md:8px;--r-lg:24px;--r-xl:32px;--pill:50px;
+    --sans:'Inter','Noto Sans Lao',system-ui,sans-serif;
+    --lao:'Noto Sans Lao','Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --maxw:1080px;--ease:cubic-bezier(.16,1,.3,1);
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Lao",system-ui,sans-serif;
-    font-size:clamp(15.5px,1.05vw,17.5px);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  h1,h2,h3,h4{font-family:"Noto Sans Lao",sans-serif;line-height:1.34;margin:0;letter-spacing:0;color:var(--ink);text-wrap:balance;font-weight:800}
+  body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--lao);
+    font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:var(--lao);font-weight:700;margin:0;line-height:1.18;letter-spacing:-.01em;text-wrap:balance;color:var(--ink)}
   p{margin:0;text-wrap:pretty}
+  svg{display:block}
+  ::selection{background:var(--ink);color:var(--canvas)}
   .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(20px,5vw,40px)}
 
   .no-js [data-reveal]{opacity:1;transform:none}
   @media (prefers-reduced-motion:no-preference){
-    html:not(.no-js) [data-reveal]{opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+    html:not(.no-js) [data-reveal]{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
     html:not(.no-js) [data-reveal].in{opacity:1;transform:none}
-    html:not(.no-js) [data-reveal][data-d="1"]{transition-delay:.08s}
-    html:not(.no-js) [data-reveal][data-d="2"]{transition-delay:.16s}
-    html:not(.no-js) [data-reveal][data-d="3"]{transition-delay:.24s}
-    html:not(.no-js) [data-reveal][data-d="4"]{transition-delay:.32s}
+    html:not(.no-js) [data-reveal][data-d="1"]{transition-delay:.06s}
+    html:not(.no-js) [data-reveal][data-d="2"]{transition-delay:.12s}
+    html:not(.no-js) [data-reveal][data-d="3"]{transition-delay:.18s}
+    html:not(.no-js) [data-reveal][data-d="4"]{transition-delay:.24s}
   }
 
-  .nav{position:sticky;top:0;z-index:50;backdrop-filter:saturate(1.4) blur(10px);background:color-mix(in oklab,var(--bg) 80%,transparent);border-bottom:1px solid transparent;transition:border-color .3s}
-  .nav.sc{border-color:var(--line)}
-  .nav .wrap{display:flex;align-items:center;gap:14px;height:62px}
-  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:1.1rem}
-  .brand .dot{width:27px;height:27px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:#fff;font-size:.82rem}
-  .nav nav{margin-left:auto;display:flex;gap:4px;align-items:center}
-  .nav nav a{font-size:.9rem;color:var(--muted);text-decoration:none;padding:7px 11px;border-radius:8px;white-space:nowrap}
-  .nav nav a:hover{color:var(--ink);background:var(--surface-2)}
-  @media(max-width:840px){.nav nav .nl{display:none}}
+  .nav{position:sticky;top:0;z-index:50;background:var(--canvas);border-bottom:1px solid var(--hair)}
+  .nav .wrap{display:flex;align-items:center;gap:14px;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--sans);font-weight:800;font-size:21px;letter-spacing:-.02em}
+  .brand .dot{width:30px;height:30px;border-radius:9px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:800}
+  .nav nav{margin-left:auto;display:flex;gap:2px;align-items:center;flex-wrap:wrap}
+  .nav nav a{font-size:14px;color:var(--ink);text-decoration:none;padding:8px 13px;border-radius:var(--pill);font-weight:500}
+  .nav nav a:hover{background:var(--soft)}
+  @media(max-width:880px){.nav nav .nl{display:none}}
 
-  .hero{position:relative;color:#fff;padding:clamp(52px,8vw,96px) 0 clamp(56px,8vw,100px);overflow:hidden;
-    background:radial-gradient(120% 90% at 10% -10%,rgba(73,190,255,.4),transparent 55%),radial-gradient(120% 120% at 110% 5%,rgba(93,135,255,.5),transparent 55%),linear-gradient(160deg,var(--navy),var(--navy-2) 50%,#243a8c)}
-  .hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:52px 52px;mask-image:radial-gradient(120% 80% at 50% 0,#000,transparent 73%);opacity:.5}
-  .hero .wrap{position:relative}
-  .kick{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:.86rem;color:#cfe0ff;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);padding:8px 15px;border-radius:999px}
-  .kick .d{width:7px;height:7px;border-radius:50%;background:var(--cyan)}
-  .hero h1{font-size:clamp(1.9rem,4.6vw,3.3rem);color:#fff;margin:22px 0 0;max-width:20ch}
-  .hero h1 em{font-style:normal;color:var(--cyan)}
-  .lede{margin:22px 0 0;max-width:62ch;font-size:clamp(1.02rem,1.5vw,1.2rem);color:#dbe6ff;line-height:1.85}
-  .ns{margin-top:26px;padding:18px 20px;border-radius:var(--r-md);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);max-width:66ch}
-  .ns b{color:#fff}
+  .eye,.kick{font-family:var(--mono);font-weight:400;font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink);display:inline-flex;align-items:center;gap:8px}
+  .kick .d{width:7px;height:7px;border-radius:50%;background:var(--magenta)}
 
-  .sec{padding:clamp(50px,7vw,92px) 0}
-  .band{background:linear-gradient(180deg,var(--bg),var(--surface-2))}
-  .eye{font-weight:700;font-size:.95rem;color:var(--blue-600)}
-  .sec h2{font-size:clamp(1.6rem,3.3vw,2.4rem);margin-top:12px;line-height:1.3}
-  .sec .sub{margin-top:16px;color:var(--ink-s);font-size:clamp(1rem,1.3vw,1.13rem);max-width:64ch}
+  .hero{background:var(--canvas);color:var(--ink);padding:clamp(48px,8vw,96px) 0 clamp(30px,4vw,52px)}
+  .hero h1{font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.04;margin:22px 0 0;max-width:18ch}
+  .hero h1 em{font-style:normal;position:relative;white-space:nowrap}
+  .hero h1 em::after{content:"";position:absolute;left:-.05em;right:-.05em;bottom:.06em;height:.36em;background:var(--lime);z-index:-1;border-radius:3px}
+  .lede{margin:24px 0 0;max-width:62ch;font-size:clamp(1.05rem,1.5vw,1.3rem);color:var(--ink);line-height:1.5;font-weight:400}
+  .lede b{font-weight:700}
+  .ns{margin-top:28px;padding:22px 26px;border-radius:var(--r-lg);background:var(--lime);color:var(--ink);max-width:68ch}
+  .ns b{font-weight:700}
 
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:40px}
-  .c{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:26px 24px;box-shadow:var(--shadow);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
-  .c:hover{transform:translateY(-4px);box-shadow:var(--shadow-lift)}
-  .c .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px}
-  .c .ic svg{width:25px;height:25px}
-  .c h3{font-size:1.18rem;font-weight:700;line-height:1.34}
-  .c p{margin-top:10px;color:var(--ink-s);font-size:.98rem}
-  .c .impact{margin-top:14px;font-size:.9rem;font-weight:600;padding:8px 12px;border-radius:10px;display:inline-block}
-  .ic.amber{background:color-mix(in oklab,var(--amber) 16%,#fff);color:var(--amber-ink)}
-  .impact.amber{background:color-mix(in oklab,var(--amber) 11%,#fff);color:var(--amber-ink)}
+  .sec{padding:clamp(44px,6vw,84px) 0}
+  .band{background:var(--cream)}
+  .sec h2{font-size:clamp(1.6rem,3.2vw,2.5rem);margin-top:14px;line-height:1.12}
+  .sec .sub{margin-top:16px;color:var(--ink);font-size:clamp(1rem,1.3vw,1.15rem);max-width:64ch;font-weight:400}
 
-  .loop{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:42px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:36px}
+  .c{background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);padding:26px 24px;transition:transform .25s var(--ease)}
+  .c:hover{transform:translateY(-4px)}
+  .c .ic{width:46px;height:46px;border-radius:var(--r-md);display:grid;place-items:center;margin-bottom:16px;background:var(--soft);color:var(--ink)}
+  .c .ic svg{width:24px;height:24px}
+  .c h3{font-size:1.2rem;font-weight:700;line-height:1.3}
+  .c p{margin-top:10px;color:var(--ink);font-size:.98rem;font-weight:400}
+  .c .impact{margin-top:14px;font-size:.9rem;font-weight:600;padding:9px 13px;border-radius:var(--r-md);display:inline-block;background:var(--cream)}
+  .ic.amber{background:var(--coral);color:#000}
+  .impact.amber{background:var(--coral);color:#000}
+
+  .loop{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px}
   @media(max-width:820px){.loop{grid-template-columns:1fr 1fr}}
   @media(max-width:480px){.loop{grid-template-columns:1fr}}
-  .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:22px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-  .step .n{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-weight:700;font-family:"JetBrains Mono";font-size:.8rem;background:linear-gradient(135deg,var(--blue),var(--blue-600))}
-  .step h3{font-size:1.1rem;margin-top:13px;font-weight:700}
-  .step p{margin-top:7px;font-size:.92rem;color:var(--ink-s)}
-  .step .tag{display:inline-block;margin-top:13px;font-size:.78rem;font-weight:600;padding:4px 11px;border-radius:999px;background:color-mix(in oklab,var(--green) 15%,#fff);color:var(--green-ink)}
-  .step.fix{border-color:color-mix(in oklab,var(--green) 45%,var(--line))}
-  .step.fix .tag{background:color-mix(in oklab,var(--green) 18%,#fff);color:var(--green-ink)}
-  .arc{margin-top:18px;display:flex;align-items:center;gap:14px;padding:18px 22px;border-radius:var(--r-md);background:color-mix(in oklab,var(--green) 8%,var(--surface));border:1px solid color-mix(in oklab,var(--green) 35%,var(--line))}
-  .arc .ai{flex:0 0 auto;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:color-mix(in oklab,var(--green) 18%,#fff);color:var(--green-ink)}
+  .step{background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);padding:22px 20px;position:relative}
+  .step .n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#000;font-family:var(--mono);font-weight:600;font-size:.85rem;border:1.5px solid #000;background:transparent}
+  .step h3{font-size:1.08rem;margin-top:14px;font-weight:700}
+  .step p{margin-top:8px;font-size:.92rem;color:var(--ink);font-weight:400}
+  .step .tag{display:inline-block;margin-top:14px;font-size:.74rem;font-weight:600;font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:4px 11px;border-radius:var(--pill);background:var(--soft);color:#000}
+  .step.fix{background:var(--lime)}
+  .step.fix .tag{background:#000;color:#fff}
+  .arc{margin-top:18px;display:flex;align-items:center;gap:16px;padding:22px 24px;border-radius:var(--r-lg);background:var(--mint);color:#000}
+  .arc .ai{flex:0 0 auto;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#000;color:#fff}
   .arc .ai svg{width:24px;height:24px}
-  .arc b{color:var(--green-ink)}
-  .arc p{font-size:.97rem;color:var(--ink-s)}
+  .arc b{font-weight:700}
+  .arc p{font-size:.97rem;font-weight:400}
 
-  .tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:42px}
+  .tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
   @media(max-width:880px){.tracks{grid-template-columns:1fr}}
-  .tr{border-radius:var(--r-lg);padding:26px 24px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
-  .tr .badge{font-size:.8rem;font-weight:700;padding:5px 13px;border-radius:999px}
-  .tr h3{font-size:1.2rem;margin-top:10px;font-weight:800}
-  .tr .meta{font-size:.88rem;color:var(--muted);margin-top:3px}
+  .tr{border-radius:var(--r-lg);padding:26px 24px;border:1px solid var(--hair);background:var(--canvas);position:relative}
+  .tr .badge{font-family:var(--mono);font-size:.72rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:5px 12px;border-radius:var(--pill);background:var(--soft);color:#000}
+  .tr h3{font-size:1.25rem;margin-top:12px;font-weight:700}
+  .tr .meta{font-size:.86rem;color:#555;margin-top:4px;font-family:var(--mono)}
   .tr ul{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
-  .tr li{display:flex;gap:11px;font-size:.96rem;color:var(--ink-s);line-height:1.6}
-  .tr li svg{flex:0 0 auto;width:20px;height:20px;margin-top:3px}
-  .tr.have{border-top:4px solid var(--green)} .tr.have .badge{background:color-mix(in oklab,var(--green) 15%,#fff);color:var(--green-ink)} .tr.have li svg{color:var(--green)}
-  .tr.build{border-top:4px solid var(--blue);box-shadow:var(--shadow-lift);position:relative} .tr.build .badge{background:color-mix(in oklab,var(--blue) 16%,#fff);color:var(--blue-700)} .tr.build li svg{color:var(--blue-600)}
-  .tr.build .flag{position:absolute;top:-13px;right:18px;font-weight:700;font-size:.78rem;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-600));padding:5px 13px;border-radius:999px}
-  .tr.later{border-top:4px solid var(--line-strong);background:var(--surface-2)} .tr.later .badge{background:#e7ecf6;color:var(--muted)} .tr.later li svg{color:var(--muted)} .tr.later h3{color:var(--ink-s)}
+  .tr li{display:flex;gap:11px;font-size:.96rem;color:var(--ink);line-height:1.5;font-weight:400}
+  .tr li svg{flex:0 0 auto;width:20px;height:20px;margin-top:3px;color:#000}
+  .tr.have{background:var(--mint)} .tr.have .badge{background:#000;color:#fff}
+  .tr.build{background:var(--lilac)} .tr.build .badge{background:#000;color:#fff}
+  .tr.build .flag{position:absolute;top:-12px;right:18px;font-family:var(--mono);font-weight:600;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--magenta);padding:6px 13px;border-radius:var(--pill)}
+  .tr.later{background:var(--soft)} .tr.later .badge{background:var(--canvas);color:#555;border:1px solid var(--hair)} .tr.later h3{color:#555}
 
-  .done{margin-top:8px;background:linear-gradient(160deg,#0f7a52,var(--green));color:#fff;border-radius:var(--r-lg);padding:clamp(28px,4vw,40px);position:relative;overflow:hidden}
-  .done::after{content:"";position:absolute;inset:0;background:radial-gradient(80% 80% at 90% 0,rgba(255,255,255,.18),transparent 60%);pointer-events:none}
-  .done>*{position:relative}
-  .done .chip{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.84rem;background:rgba(255,255,255,.18);padding:6px 13px;border-radius:999px}
-  .done h3{color:#fff;font-size:clamp(1.3rem,2.4vw,1.7rem);margin-top:14px}
-  .done .items{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-  .done .it{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:13px;padding:15px 16px}
-  .done .it b{display:block;font-size:.98rem}
-  .done .it span{font-size:.88rem;color:#e6f6ee}
+  .done{margin-top:8px;background:var(--navy);color:var(--on-dark);border-radius:var(--r-lg);padding:clamp(30px,4vw,48px)}
+  .done .chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-weight:600;font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;background:rgba(255,255,255,.16);padding:6px 13px;border-radius:var(--pill);color:#fff}
+  .done h3{color:#fff;font-size:clamp(1.35rem,2.4vw,1.9rem);margin-top:16px}
+  .done .items{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .done .it{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:var(--r-md);padding:16px}
+  .done .it b{display:block;font-size:1rem;color:#fff;font-weight:700}
+  .done .it span{font-size:.88rem;color:#cfcde6}
 
-  .tl{margin-top:42px;display:flex;flex-direction:column;gap:15px}
-  .wk{display:grid;grid-template-columns:122px 1fr;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
-  .wk:hover{transform:translateX(4px);box-shadow:var(--shadow-lift)}
+  .tl{margin-top:40px;display:flex;flex-direction:column;gap:14px}
+  .wk{display:grid;grid-template-columns:120px 1fr;background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);overflow:hidden;transition:transform .25s var(--ease)}
+  .wk:hover{transform:translateX(4px)}
   @media(max-width:620px){.wk{grid-template-columns:1fr}}
-  .wk .l{background:linear-gradient(165deg,var(--blue),var(--blue-700));color:#fff;padding:22px;display:flex;flex-direction:column;justify-content:center;gap:3px}
+  .wk .l{background:var(--lime);color:#000;padding:22px;display:flex;flex-direction:column;justify-content:center;gap:3px}
   @media(max-width:620px){.wk .l{flex-direction:row;align-items:baseline;gap:10px;padding:15px 22px}}
-  .wk .l .wkt{font-weight:600;font-size:.84rem;opacity:.85} .wk .l .wkn{font-family:"JetBrains Mono";font-weight:600;font-size:2rem;line-height:1}
-  .wk.dn .l{background:linear-gradient(165deg,#0f7a52,var(--green))}
+  .wk .l .wkt{font-family:var(--mono);font-weight:500;font-size:.74rem;letter-spacing:.05em;text-transform:uppercase} .wk .l .wkn{font-family:var(--sans);font-weight:800;font-size:2.2rem;line-height:1;letter-spacing:-.02em}
+  .wk.dn .l{background:var(--mint)}
   .wk .b{padding:22px 26px;position:relative}
-  .wk .b h3{font-size:1.18rem;font-weight:800}
-  .wk .b p{margin-top:8px;color:var(--ink-s);font-size:1rem}
-  .wk .b .st{position:absolute;top:14px;right:16px;font-size:.76rem;font-weight:700;padding:4px 11px;border-radius:999px;background:color-mix(in oklab,var(--green) 16%,#fff);color:var(--green-ink)}
+  .wk .b h3{font-size:1.18rem;font-weight:700}
+  .wk .b p{margin-top:8px;color:var(--ink);font-size:1rem;font-weight:400}
+  .wk .b .st{position:absolute;top:14px;right:16px;font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:4px 11px;border-radius:var(--pill);background:var(--mint);color:#000}
 
-  .demos{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px}
-  @media(max-width:760px){.demos{grid-template-columns:1fr}}
-  .demo{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:26px 24px;box-shadow:var(--shadow)}
-  .demo .top{display:flex;align-items:center;gap:13px}
-  .demo .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:color-mix(in oklab,var(--blue) 13%,#fff);color:var(--blue-700)}
-  .demo .ic svg{width:24px;height:24px}
-  .demo h3{font-size:1.15rem;font-weight:700}
-  .demo .who{font-size:.86rem;color:var(--muted)}
-  .demo p{margin-top:13px;color:var(--ink-s);font-size:.96rem}
-  .demo .feat{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
-  .demo .feat li{font-size:.84rem;color:var(--blue-700);background:color-mix(in oklab,var(--blue) 9%,#fff);border:1px solid color-mix(in oklab,var(--blue) 22%,var(--line));padding:6px 12px;border-radius:999px}
+  .dec{margin-top:36px;display:flex;flex-direction:column;gap:14px}
+  .dr{display:grid;grid-template-columns:48px 1fr;gap:16px;align-items:start;background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);padding:22px 24px}
+  .dr .n{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-family:var(--mono);background:#000}
+  .dr .q{font-weight:700;font-size:1.05rem} .dr .q span{display:block;font-weight:400;color:var(--ink);font-size:.95rem;margin-top:6px}
 
-  .dec{margin-top:38px;display:flex;flex-direction:column;gap:14px}
-  .dr{display:grid;grid-template-columns:46px 1fr;gap:16px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:20px 22px;box-shadow:var(--shadow)}
-  .dr .n{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:#fff;font-weight:700;font-family:"JetBrains Mono";background:linear-gradient(135deg,var(--amber),var(--amber-ink))}
-  .dr .q{font-weight:700;font-size:1.04rem} .dr .q span{display:block;font-weight:400;color:var(--ink-s);font-size:.95rem;margin-top:5px}
+  .dod{margin-top:38px;display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+  .dg{background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);padding:24px}
+  .dg h3{font-size:1.08rem;font-weight:700;display:flex;align-items:center;gap:10px}
+  .dg h3 .gd{width:11px;height:11px;border-radius:3px;background:var(--magenta);flex:0 0 auto}
+  .dg ul{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:11px}
+  .dg li{display:flex;gap:10px;font-size:.95rem;color:var(--ink);font-weight:400} .dg li svg{flex:0 0 auto;width:19px;height:19px;color:var(--success);margin-top:3px}
 
-  .dod{margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
-  .dg{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:24px;box-shadow:var(--shadow)}
-  .dg h3{font-size:1.05rem;font-weight:800;display:flex;align-items:center;gap:10px}
-  .dg h3 .gd{width:11px;height:11px;border-radius:3px;background:var(--blue);flex:0 0 auto}
-  .dg ul{list-style:none;margin:15px 0 0;padding:0;display:flex;flex-direction:column;gap:11px}
-  .dg li{display:flex;gap:10px;font-size:.95rem;color:var(--ink-s)} .dg li svg{flex:0 0 auto;width:19px;height:19px;color:var(--green);margin-top:3px}
+  .out{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:38px}
+  .oc{background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);padding:24px}
+  .oc h3{font-size:1.12rem;font-weight:700}
+  .oc p{margin-top:12px;color:var(--ink);font-size:.95rem;font-weight:400} .oc p b{font-weight:700}
+  .oc .when{margin-top:14px;display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:#000;background:var(--cream);padding:6px 13px;border-radius:var(--pill)}
 
-  .out{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:40px}
-  .oc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:24px;box-shadow:var(--shadow)}
-  .oc h3{font-size:1.1rem;font-weight:700}
-  .oc p{margin-top:12px;color:var(--ink-s);font-size:.95rem} .oc p b{color:var(--ink)}
-  .oc .when{margin-top:14px;display:inline-block;font-size:.82rem;font-weight:600;color:var(--blue-700);background:color-mix(in oklab,var(--blue) 9%,#fff);padding:6px 13px;border-radius:999px}
+  .close{background:var(--ink);color:#fff;padding:clamp(54px,8vw,92px) 0}
+  .close h2{color:#fff;font-size:clamp(1.6rem,3vw,2.4rem);max-width:24ch}
+  .close p{margin-top:20px;color:#d6d6d6;max-width:64ch;font-size:1.08rem;line-height:1.6;font-weight:400}
 
-  .close{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff;padding:clamp(54px,8vw,92px) 0;position:relative;overflow:hidden}
-  .close::after{content:"";position:absolute;inset:0;background:radial-gradient(90% 70% at 80% 0,rgba(73,190,255,.32),transparent 60%);pointer-events:none}
-  .close .wrap{position:relative}
-  .close h2{color:#fff;font-size:clamp(1.5rem,3vw,2.2rem);max-width:22ch}
-  .close p{margin-top:18px;color:#dbe6ff;max-width:60ch;font-size:1.06rem;line-height:1.85}
-  .sched{margin-top:34px;display:flex;flex-direction:column;gap:18px}
-  .swk{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
-  .swk h4{font-size:1.06rem;font-weight:800}
-  .swk .wt{display:inline-block;font-family:"JetBrains Mono";font-size:.76rem;font-weight:600;color:var(--blue-700);background:color-mix(in oklab,var(--blue) 10%,#fff);padding:3px 11px;border-radius:999px;margin-left:8px;vertical-align:2px}
-  .sday{display:flex;gap:11px;align-items:flex-start;padding:9px 2px;border-top:1px solid var(--line);flex-wrap:wrap}
+  .sched{margin-top:38px;display:flex;flex-direction:column;gap:16px}
+  .swk{background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);padding:20px 22px}
+  .swk h4{font-size:1.1rem;font-weight:700}
+  .swk .wt{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.03em;text-transform:uppercase;color:#000;background:var(--lime);padding:4px 11px;border-radius:var(--pill);margin-left:8px;vertical-align:2px}
+  .sday{display:flex;gap:12px;align-items:flex-start;padding:11px 8px;border-top:1px solid var(--hair-soft);flex-wrap:wrap;border-radius:var(--r-md)}
   .swk .sday:first-of-type{border-top:0}
-  .sday .cb{flex:0 0 auto;width:17px;height:17px;border:2px solid var(--line-strong);border-radius:5px;margin-top:3px}
-  .sday .dn{flex:0 0 auto;white-space:nowrap;font-weight:700;color:var(--blue-700);font-size:.92rem;margin-top:1px}
-  .sday .dt{flex:1;min-width:210px;color:var(--ink-s);font-size:.95rem;line-height:1.56}
-  .sday .hr{flex:0 0 auto;font-family:"JetBrains Mono";font-size:.78rem;font-weight:600;color:var(--blue-700);margin-top:2px}
-  .note-est{margin-top:12px;font-size:.86rem;color:var(--muted);line-height:1.6}
-  footer{padding:28px 0;color:var(--muted);font-size:.85rem;text-align:center;background:var(--navy);line-height:1.8}
-  footer .w{color:#9aa8cc}
+  .sday .cb{flex:0 0 auto;width:18px;height:18px;border:2px solid #000;border-radius:var(--r-sm);margin-top:3px}
+  .sday .dn{flex:0 0 auto;white-space:nowrap;font-family:var(--mono);font-weight:600;color:#000;font-size:.86rem;margin-top:2px}
+  .sday .dt{flex:1;min-width:210px;color:var(--ink);font-size:.95rem;line-height:1.5;font-weight:400}
+  .sday .hr{flex:0 0 auto;font-family:var(--mono);font-size:.76rem;font-weight:500;color:#555;margin-top:2px}
+  .note-est{margin-top:14px;font-size:.86rem;color:#555;line-height:1.6;font-weight:400}
+  .note-est b{color:#000;font-weight:700}
+
+  footer{padding:clamp(40px,5vw,64px) 0 40px;color:#555;font-family:var(--mono);font-size:.82rem;letter-spacing:.03em;text-align:center;background:var(--canvas);border-top:1px solid var(--hair);line-height:1.8}
+  footer .w{color:#000}
 </style>
 </head>
 <body>
@@ -376,12 +363,12 @@
       <p class="sub">ແຕ່ລະອາທິດມີຜົນທີ່ຈັບຕ້ອງໄດ້ ໄລ່ຈາກພື້ນຖານ ໄປສູ່ການໃຊ້ຈິງເທິງແຜນທີ່</p>
     </div>
     <div class="tl">
-      <div class="wk" data-reveal data-d="1"><div class="l"><span class="wkt">ອາທິດ</span><span class="wkn">1</span></div><div class="b"><h3>ປິດຊ່ອງຄວາມຈຳ (ຮາກຖານ)</h3><p>ທຸກການສົ່ງເລີ່ມເກັບ ທີ່ຕັ້ງ+ຄົນສົ່ງ+ມື້ສົ່ງລ່າສຸດ ອັດຕະໂນມັດ ພ້ອມແກ້ໃຫ້ເງິນໄປຫາຄົນສົ່ງຈິງ</p></div></div>
-      <div class="wk" data-reveal data-d="2"><div class="l"><span class="wkt">ອາທິດ</span><span class="wkn">2</span></div><div class="b"><h3>ສະໝອງລູກຄ້າ + ໃຜຄວນໄປສົ່ງ</h3><p>ບັດລູກຄ້າສະແດງຄວາມງຽບຈິງ ແລະ ມີລາຍການ “ຄົນທີ່ຄວນໄປສົ່ງມື້ນີ້” ໃຫ້ຜູ້ວາງແຜນເບິ່ງກ່ອນແຕ້ມເສັ້ນ · ມືຖືເລີ່ມສົ່ງທີ່ຕັ້ງ</p></div></div>
-      <div class="wk" data-reveal data-d="3"><div class="l"><span class="wkt">ອາທິດ</span><span class="wkn">3</span></div><div class="b"><h3>ແຕ້ມເສັ້ນທາງໄດ້ຈິງ</h3><p>ສ້າງເສັ້ນທາງເທິງແຜນທີ່ ຕັ້ງຊື່ ເລືອກສີ ເລືອກມື້ ຜູກລົດ/ຄົນຂັບ ແລະ ບັນທຶກໄວ້ໃຊ້ຄືນໄດ້</p></div></div>
-      <div class="wk" data-reveal data-d="4"><div class="l"><span class="wkt">ອາທິດ</span><span class="wkn">4</span></div><div class="b"><h3>ກອງ + ເຜີຍລູກຄ້າໃກ້ເສັ້ນ + ວັດຜົນ</h3><p>ກອງແຜນທີ່ຕາມມື້/ເສັ້ນ · ເລືອກເສັ້ນແລ້ວເຫັນລູກຄ້າໃກ້ເສັ້ນທີ່ຄວນແວ່ · ມີລາຍງານວ່າເກັບທີ່ຕັ້ງໄດ້ຈັກເປີເຊັນ</p></div></div>
+      <div class="wk dn" data-reveal data-d="1"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">1</span></div><div class="b"><span class="st">✅ ເສັດແລ້ວ</span><h3>ປິດຊ່ອງຄວາມຈຳ (ຮາກຖານ) · ມື້ 1</h3><p>ທຸກການສົ່ງເກັບ ທີ່ຕັ້ງ+ຄົນສົ່ງ+ມື້ສົ່ງລ່າສຸດ ອັດຕະໂນມັດ ພ້ອມແກ້ໃຫ້ເງິນໄປຫາຄົນສົ່ງຈິງ — <b>ຂອງຈິງເຮັດໃນ 1 ມື້</b> (ແຜນເດີມ 5.5)</p></div></div>
+      <div class="wk" data-reveal data-d="2"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">2</span></div><div class="b"><h3>ສະໝອງລູກຄ້າ + ໃຜຄວນໄປສົ່ງ · ມື້ 2-5</h3><p>ບັດລູກຄ້າສະແດງຄວາມງຽບຈິງ ແລະ ມີລາຍການ “ຄົນທີ່ຄວນໄປສົ່ງມື້ນີ້” ໃຫ້ຜູ້ວາງແຜນເບິ່ງກ່ອນແຕ້ມເສັ້ນ · ມືຖືເລີ່ມສົ່ງທີ່ຕັ້ງ</p></div></div>
+      <div class="wk" data-reveal data-d="3"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">3</span></div><div class="b"><h3>ແຕ້ມເສັ້ນທາງໄດ້ຈິງ · ມື້ 6-9</h3><p>ສ້າງເສັ້ນທາງເທິງແຜນທີ່ ຕັ້ງຊື່ ເລືອກສີ ເລືອກມື້ ຜູກລົດ/ຄົນຂັບ ແລະ ບັນທຶກໄວ້ໃຊ້ຄືນໄດ້</p></div></div>
+      <div class="wk" data-reveal data-d="4"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">4</span></div><div class="b"><h3>ກອງ + ເຜີຍລູກຄ້າໃກ້ເສັ້ນ + ວັດຜົນ · ມື້ 10-13</h3><p>ກອງແຜນທີ່ຕາມມື້/ເສັ້ນ · ເລືອກເສັ້ນແລ້ວເຫັນລູກຄ້າໃກ້ເສັ້ນທີ່ຄວນແວ່ · ມີລາຍງານວ່າເກັບທີ່ຕັ້ງໄດ້ຈັກເປີເຊັນ</p></div></div>
     </div>
-    <div class="ns" data-reveal style="margin-top:22px"><p><b>ໝາຍເຫດສຳຄັນ (ຄວາມຊື່ສັດ):</b> ຕາຕະລາງ 4 ອາທິດນີ້ແມ່ນ <b>ວຽກສະໝອງລູກຄ້າ + ເສັ້ນທາງ</b> ຢ່າງດຽວ. ເມື່ອລວມ <b>ແອັບຄົນຂັບເຕັມຮູບແບບ</b> ເຂົ້າມານຳ ດ້ວຍທີມ 2 ຄົນ ປະເມີນຈິງ ≈ <b>~8 ອາທິດ</b>. ໃນ 1 ເດືອນ ຈະໄດ້ປະມານເຄິ່ງທາງ — ລາຍລະອຽດເບິ່ງຫົວຂໍ້ “ແອັບຄົນຂັບ” ດ້ານເທິງ</p></div>
+    <div class="ns" data-reveal style="margin-top:22px"><p><b>ໝາຍເຫດສຳຄັນ (ຄວາມຊື່ສັດ):</b> ຮາກຖານ (ໄລຍະ 1) <b>ຂອງຈິງເຮັດ 1 ມື້</b> (ແຜນເດີມ 5.5 ມື້) → <b>ນຳໜ້າແຜນ ~4 ມື້</b>. ໄລຍະ 2-4 (ສະໝອງລູກຄ້າ + ເສັ້ນທາງ) ປະເມີນຕາມຈິງ ~12 ມື້ ທີ່ເຫຼືອ (ບໍ່ບີບ). ເມື່ອລວມ <b>ແອັບຄົນຂັບເຕັມຮູບແບບ</b> (ເລີ່ມແລ້ວ ~25-30%) ດ້ວຍທີມ 2 ຄົນ ≈ <b>~7-8 ອາທິດ</b> ລວມ — ລາຍລະອຽດເບິ່ງຫົວຂໍ້ “ແອັບຄົນຂັບ” ດ້ານເທິງ</p></div>
   </div>
 </section>
 
@@ -392,47 +379,44 @@
       <p class="sub">ໄລ່ມື້ຕໍ່ມື້ ໃຫ້ເຫັນວ່າແຕ່ລະມື້ເຮັດຫຍັງ ແລະ ໃຊ້ເວລາປະມານເທົ່າໃດ</p>
     </div>
     <div class="sched">
-      <div class="swk" data-reveal data-d="1">
-        <h4>ອາທິດ 1 — ຮາກຖານ (ຄວາມຈຳຂອງລະບົບ) <span class="wt">5 ມື້ + ເຄິ່ງ</span></h4>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 1</span><span class="dt">ເພີ່ມ “ຊ່ອງເກັບ” ມື້ຮັບລ່າສຸດ / ຄົນສົ່ງ / ທີ່ຕັ້ງ ໃນຖານຂໍ້ມູນ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 2</span><span class="dt">ອັບເດດຖານຂໍ້ມູນ + ເຕີມຂໍ້ມູນເກົ່າຍ້ອນຫຼັງ + ກວດ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 3</span><span class="dt">ເຮັດໃຫ້ “ພິກັດ + ໃຜສົ່ງ” ບັນທຶກຕອນສົ່ງຈິງ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 4</span><span class="dt">ບັນທຶກ “ມື້ສົ່ງລ່າສຸດ + ນັບຄັ້ງ” + ແກ້ເງິນໃຫ້ໄປຫາຄົນສົ່ງຈິງ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 5</span><span class="dt">ຂຽນຊຸດທົດສອບ ກວດໃຫ້ໝັ້ນໃຈ (ກັນພລາດ)</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເຄິ່ງມື້</span><span class="dt">ກວດ + loo-check + ສ້າງ PR · ເກັບງານປະຈຳອາທິດ</span><span class="hr" style="color:var(--muted)">~½ ມື້</span></div>
+      <div class="swk" data-reveal data-d="1" style="background:var(--mint)">
+        <h4>ມື້ 1 — ຮາກຖານ (ຄວາມຈຳຂອງລະບົບ) <span style="display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#fff;background:var(--success);padding:4px 11px;border-radius:var(--pill);margin-left:8px;vertical-align:2px">✓ ເສັດແລ້ວ · ກວດແລ້ວ</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">①</span><span class="dt">ເພີ່ມ “ຊ່ອງເກັບ” ມື້ຮັບລ່າສຸດ / ຄົນສົ່ງ / ທີ່ຕັ້ງ ໃນຖານຂໍ້ມູນ</span><span class="hr">✓</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">②</span><span class="dt">ອັບເດດຖານຂໍ້ມູນ + ເຕີມຂໍ້ມູນເກົ່າຍ້ອນຫຼັງ + ກວດ</span><span class="hr">✓</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">③</span><span class="dt">ເຮັດໃຫ້ “ພິກັດ + ໃຜສົ່ງ” ບັນທຶກຕອນສົ່ງຈິງ</span><span class="hr">✓</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">④</span><span class="dt">ບັນທຶກ “ມື້ສົ່ງລ່າສຸດ + ນັບຄັ້ງ” + ແກ້ເງິນໃຫ້ໄປຫາຄົນສົ່ງຈິງ</span><span class="hr">✓</span></div>
+        <div class="sday"><span class="dn" style="color:var(--muted)">ໝາຍເຫດ</span><span class="dt"><b>ຂອງຈິງເຮັດໃນ 1 ມື້</b> (ແຜນເດີມ 5.5 ມື້) → ນຳໜ້າແຜນ ~4 ມື້ · ກວດໃນໂຄ້ດຈິງແລ້ວ</span><span class="hr" style="color:var(--muted)">—</span></div>
       </div>
       <div class="swk" data-reveal data-d="2">
-        <h4>ອາທິດ 2 — ສະໝອງລູກຄ້າ + ໃຜຄວນໄປສົ່ງ <span class="wt">5 ມື້ + ເຄິ່ງ</span></h4>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 6</span><span class="dt">ມືຖືເລີ່ມສົ່ງພິກັດຕອນກົດສົ່ງ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 7</span><span class="dt">ຈູນປຸ່ມເກັບພິກັດໃຫ້ນິ່ງ + ບັດລູກຄ້າສະແດງ “ງຽບໄປຈັກມື້”</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 8</span><span class="dt">ສ້າງສູດຄິດ “ຮອບສະເລ່ຍ” ຂອງລູກຄ້າແຕ່ລະຄົນ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 9–10</span><span class="dt">ສ້າງລາຍການ “ໃຜຄວນໄປສົ່ງມື້ນີ້” (ຮວມ 4 ສັນຍານ) + ເປີດໃຫ້ໃຊ້ + ຮວມລູກຄ້າທີ່ບໍ່ມີຮອບປະຈຳ</span><span class="hr">~2 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເຄິ່ງມື້</span><span class="dt">ທົດສອບລວມ + ກວດ + ສ້າງ PR</span><span class="hr" style="color:var(--muted)">~½ ມື້</span></div>
+        <h4>ມື້ 2 — ຊຸດທົດສອບຮາກຖານ + ເກັບງານ <span class="wt">ທີ່ຍັງເຫຼືອຈາກຮາກຖານ</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 2</span><span class="dt">ຂຽນຊຸດທົດສອບ ກວດໃຫ້ໝັ້ນໃຈ (ກັນພລາດ) — ພິກັດມີ/ບໍ່ມີ · ບັນທຶກຊ້ຳບໍ່ນັບເພີ່ມ · ກັນສົ່ງຊ້ຳ · ຂ້າມລູກຄ້າຍ່າງຊື້</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເຄິ່ງມື້</span><span class="dt">ກວດ + loo-check + ສ້າງ PR · ເກັບງານ</span><span class="hr" style="color:var(--muted)">~½ ມື້</span></div>
       </div>
       <div class="swk" data-reveal data-d="3">
-        <h4>ອາທິດ 3 — ເສັ້ນທາງ + ວາດເສັ້ນ <span class="wt">5 ມື້ + ເຄິ່ງ</span></h4>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 11</span><span class="dt">ສ້າງ “ບ່ອນເກັບເສັ້ນທາງ” ໃນຖານຂໍ້ມູນ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 12–13</span><span class="dt">ຫຼັງບ້ານ: ສ້າງ/ແກ້/ລຶບ/ເບິ່ງ ເສັ້ນທາງ + ຕໍ່ໜ້າເວັບໃຫ້ເອີ້ນໃຊ້ໄດ້</span><span class="hr">~2 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 14–15</span><span class="dt">ເຄື່ອງມືແຕ້ມເສັ້ນເທິງແຜນທີ່ (ກົດຈຸດ → ລາກ → ສີ/ມື້ → ບັນທຶກ) + ຕົວສະແດງເສັ້ນສີ</span><span class="hr">~2 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເຄິ່ງມື້</span><span class="dt">ທົດສອບແຕ້ມເສັ້ນເທິງຈໍຈິງ + ກວດ + PR</span><span class="hr" style="color:var(--muted)">~½ ມື້</span></div>
+        <h4>ມື້ 3-5 — ສະໝອງລູກຄ້າ + ໃຜຄວນໄປສົ່ງ <span class="wt">~3 ມື້</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 3</span><span class="dt">ມືຖືເລີ່ມສົ່ງພິກັດຕອນກົດສົ່ງ + ຈູນປຸ່ມເກັບພິກັດໃຫ້ນິ່ງ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 4</span><span class="dt">ບັດລູກຄ້າສະແດງ “ງຽບໄປຈັກມື້” + ສ້າງສູດຄິດ “ຮອບສະເລ່ຍ” ຂອງລູກຄ້າແຕ່ລະຄົນ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 5</span><span class="dt">ສ້າງລາຍການ “ໃຜຄວນໄປສົ່ງມື້ນີ້” (ຮວມ 4 ສັນຍານ) + ຮວມລູກຄ້າທີ່ບໍ່ມີຮອບປະຈຳ + ທົດສອບ/PR</span><span class="hr">~1 ມື້</span></div>
       </div>
       <div class="swk" data-reveal data-d="4">
-        <h4>ອາທິດ 4 — ກອງ + ເຜີຍລູກຄ້າໃກ້ເສັ້ນ + ວັດຜົນ <span class="wt">5 ມື້ + ເຄິ່ງ</span></h4>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 16–17</span><span class="dt">“ເຜີຍລູກຄ້າໃກ້ເສັ້ນ” (ຄິດໄລຍະ ໃນສາຂາຕົນເອງ) + ກອງຕາມມື້/ເສັ້ນ</span><span class="hr">~2 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 18</span><span class="dt">ໝຸດບອກ 2 ຢ່າງ (ສີ=ຄວາມງຽບ, ຂອບ=ເສັ້ນ) + ປ້າຍອະທິບາຍ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 19</span><span class="dt">ລາຍງານ “ເກັບພິກັດໄດ້ຈັກ %” (ວັດຄວາມພ້ອມ)</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 20</span><span class="dt">ລາຍງານ “ຄະແນນດິບລາຍຄົນຂັບ” (ຍັງບໍ່ໃຫ້ຄະແນນ) + ເກັບງານ/ກວດຮວມ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເຄິ່ງມື້</span><span class="dt">ເກັບງານລວມ + ກຽມສະແດງ demo + PR</span><span class="hr" style="color:var(--muted)">~½ ມື້</span></div>
+        <h4>ມື້ 6-9 — ເສັ້ນທາງ + ວາດເສັ້ນ <span class="wt">~4 ມື້</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 6</span><span class="dt">ສ້າງ “ບ່ອນເກັບເສັ້ນທາງ” ໃນຖານຂໍ້ມູນ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 7-8</span><span class="dt">ຫຼັງບ້ານ: ສ້າງ/ແກ້/ລຶບ/ເບິ່ງ ເສັ້ນທາງ + ຕໍ່ໜ້າເວັບໃຫ້ເອີ້ນໃຊ້ໄດ້</span><span class="hr">~2 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 9</span><span class="dt">ເຄື່ອງມືແຕ້ມເສັ້ນເທິງແຜນທີ່ (ກົດຈຸດ → ລາກ → ສີ/ມື້ → ບັນທຶກ) + ຕົວສະແດງເສັ້ນສີ + ທົດສອບ/PR</span><span class="hr">~1 ມື້</span></div>
       </div>
       <div class="swk" data-reveal data-d="5">
-        <h4>+ ແອັບຄົນຂັບ (ເພີ່ມຕາມການລວມວຽກ) — ປະມານ 4 ອາທິດ <span class="wt">ຕໍ່ທ້າຍ/ຂະໜານ</span></h4>
-        <div class="sday"><span class="cb"></span><span class="dn">ກຸ່ມ 1</span><span class="dt">ໂຄງແອັບເທິງມືຖື (Capacitor) + ເຂົ້າລະບົບ ລະຫັດ+PIN · <b>ສ່ວນນີ້ເຮັດແລ້ວ</b> · offline ຍ້າຍໄປເຟສຕໍ່ໄປ</span><span class="hr">~1 ອາທິດ</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ກຸ່ມ 2</span><span class="dt">ຕໍ່ໜ້າຈໍເຂົ້າຫຼັງບ້ານທີ່ມີ: ໜ້າວຽກມື້ນີ້ · ຈຸດສົ່ງ (ຈົບໃນຈໍດຽວ) · ໃບຮັບເງິນ · ແຜນທີ່ · ປິດກະ + ກ້ອງ ແລະ ທີ່ຕັ້ງ · <b>(ໜ້າວຽກ+ຈຸດສົ່ງ ເຮັດແລ້ວ · ເຫຼືອ ໃບຮັບເງິນ/ແຜນທີ່/ປິດກະ)</b></span><span class="hr">~1.5 ອາທິດ</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ກຸ່ມ 3</span><span class="dt">ສ້າງສ່ວນໃໝ່: ຍິງຂາຍໜ້າງານ · ບັນທຶກນ້ຳມັນ · ອັນດັບ/ແຕ້ມ · ລາຍຮັບຄົນຂັບ · SOS · ແຈ້ງລູກຄ້າ</span><span class="hr">~1.5 ອາທິດ</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ໝາຍເຫດ</span><span class="dt">ກຸ່ມ 1–2 = “ຕໍ່ຂອງທີ່ມີ” ໄວ · ກຸ່ມ 3 = “ສ້າງໃໝ່” ຊ້າ → ຖ້າຕ້ອງຈົບໃນ 1 ເດືອນ ໃຫ້ເລື່ອນ ກຸ່ມ 3 ໄປເຟສຕໍ່ໄປ</span><span class="hr" style="color:var(--muted)">—</span></div>
+        <h4>ມື້ 10-13 — ກອງ + ເຜີຍລູກຄ້າໃກ້ເສັ້ນ + ວັດຜົນ <span class="wt">~4 ມື້</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 10-11</span><span class="dt">“ເຜີຍລູກຄ້າໃກ້ເສັ້ນ” (ຄິດໄລຍະ ໃນສາຂາຕົນເອງ) + ກອງຕາມມື້/ເສັ້ນ</span><span class="hr">~2 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 12</span><span class="dt">ໝຸດບອກ 2 ຢ່າງ (ສີ=ຄວາມງຽບ, ຂອບ=ເສັ້ນ) + ປ້າຍອະທິບາຍ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 13</span><span class="dt">ລາຍງານ “ເກັບພິກັດໄດ້ຈັກ %” + “ຄະແນນດິບລາຍຄົນຂັບ” + ເກັບງານ/ກຽມ demo + PR</span><span class="hr">~1 ມື້</span></div>
+      </div>
+      <div class="swk" data-reveal data-d="5">
+        <h4>+ ແອັບຄົນຂັບ (Track B) <span class="wt">~4 ອາທິດ · ເລີ່ມແລ້ວ ~25-30%</span></h4>
+        <div class="sday" style="background:var(--mint);border-radius:var(--r-md)"><span class="dn">ເສັດແລ້ວ</span><span class="dt"><b>spine:</b> ໂຄງແອັບ (Capacitor) · ເຂົ້າລະບົບ PIN · ໜ້າວຽກມື້ນີ້ · ໜ້າຈຸດສົ່ງ (ຊຳລະ+ຖັງ+ຮູບ+GPS) — ຕໍ່ backend ຈິງແລ້ວ</span><span class="hr">✓</span></div>
+        <div class="sday"><span class="dn">ເຫຼືອ</span><span class="dt">map · ກະເປົ໋າເງິນ · ໃບຮັບເງິນ · ປິດກະ + ກຸ່ມໃໝ່ (ຍິງຂາຍ · ນ້ຳມັນ · ອັນດັບ · ລາຍຮັບ · offline · ແຈ້ງລູກຄ້າ)</span><span class="hr">~3 ອາທິດ</span></div>
       </div>
     </div>
-    <p class="note-est" data-reveal>ໝາຍເຫດ: ເຮັດວຽກ 6 ມື້/ອາທິດ (5 ມື້ເຕັມ + 1 ມື້ເຄິ່ງ) · ມື້ເຄິ່ງໄວ້ກວດ ແລະ ເກັບງານ · ຖ້າ 1 ຄົນ ໃຊ້ເວລາ ~2 ເທົ່າ · ເວລາເປັນປະມານ ອາດປ່ຽນຕາມໜ້າວຽກ. <b>ຕາຕະລາງ ມື້ 1–20 ແມ່ນ ສະໝອງລູກຄ້າ+ເສັ້ນທາງ ຢ່າງດຽວ</b> (~4 ອາທິດ ທີມ 2 ຄົນ) · ສ່ວນ “ແອັບຄົນຂັບ” ເພີ່ມອີກ ~4 ອາທິດ → 2 ວຽກເຕັມຮູບແບບ ≈ ~8 ອາທິດ</p>
+    <p class="note-est" data-reveal>ໝາຍເຫດ (ຊື່ສັດ): <b>ຮາກຖານ (Block A) ຂອງຈິງເຮັດ 1 ມື້</b> (ແຜນເດີມ 5.5) → ນຳໜ້າແຜນ ~4 ມື້. ງານທີ່ເຫຼືອ <b>ປະເມີນຕາມຈິງ ບໍ່ບີບ</b>: Track A ທີ່ເຫຼືອ ~13 ມື້ (≈ 2-3 ອາທິດ ທີມ 2 ຄົນ) · ແອັບຄົນຂັບ ~4 ອາທິດ (ເລີ່ມແລ້ວ ~25-30%) → 2 ງານເຕັມ ≈ <b>~7-8 ອາທິດ</b>. ມື້ 1 ກວດໃນໂຄ້ດຈິງແລ້ວວ່າເສັດ (commit <code>e2d9b7d3</code>) · ເຫຼືອພຽງຊຸດທົດສອບ (ມື້ 2).</p>
   </div>
 </section>
 

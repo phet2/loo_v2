@@ -4,190 +4,213 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LOO · ສະໝອງລູກຄ້າ + ຈັດເສັ້ນທາງ — ແຜນງານ</title>
-<meta name="description" content="ໜ້າລວມ: ເອກະສານອະທິບາຍສຳລັບທຸກຄົນ + ເອກະສານເຕັກນິກສຳລັບ dev · ມີ checklist ຕິກໄດ້ ແລະ ເຫັນຮ່ວມກັນ">
+<meta name="description" content="ໜ້າລວມ: ເອກະສານສຳລັບທຸກຄົນ + ເອກະສານເຕັກນິກສຳລັບ dev · checklist ຕິກໄດ້ ເຫັນຮ່ວມກັນ realtime">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=Noto+Sans+Lao:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --blue:#5d87ff; --blue-600:#4a6fe6; --blue-700:#3a57c4; --cyan:#49beff;
-    --navy:#101a40; --navy-2:#1c2a63;
-    --ink:#0e1626; --ink-s:#394561; --muted:#5b667f;
-    --bg:#f4f7fd; --surface:#fff; --surface-2:#eef3fc; --line:#e0e7f5; --line-strong:#cdd8ee;
-    --green:#10b981; --green-ink:#0a7a55; --amber:#f59e0b; --amber-ink:#a8690a;
-    --r-lg:22px; --r-md:16px; --r-sm:11px;
-    --shadow:0 1px 2px rgba(16,26,38,.04), 0 12px 34px -14px rgba(33,52,110,.28);
-    --shadow-lift:0 2px 4px rgba(16,26,38,.05), 0 26px 54px -18px rgba(33,52,110,.38);
-    --maxw:980px; --ease:cubic-bezier(.22,1,.36,1);
+    --ink:#000; --canvas:#fff; --on-dark:#fff;
+    --hairline:#e6e6e6; --hairline-soft:#f1f1f1; --surface-soft:#f7f7f5;
+    --lime:#dceeb1; --lilac:#c5b0f4; --cream:#f4ecd6; --pink:#efd4d4;
+    --mint:#c8e6cd; --coral:#f3c9b6; --navy:#1f1d3d; --magenta:#ff3d8b; --success:#1ea64a;
+    --r-sm:6px; --r-md:8px; --r-lg:24px; --r-xl:32px; --pill:50px;
+    --sans:'Inter','Noto Sans Lao',system-ui,sans-serif;
+    --lao:'Noto Sans Lao','Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --maxw:1180px; --ease:cubic-bezier(.16,1,.3,1);
   }
-  *{box-sizing:border-box}
+  *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Lao",system-ui,sans-serif;
-    font-size:clamp(15.5px,1.05vw,17px);line-height:1.85;-webkit-font-smoothing:antialiased}
-  h1,h2,h3{font-family:"Noto Sans Lao",sans-serif;margin:0;line-height:1.32;font-weight:800;text-wrap:balance}
-  p{margin:0;text-wrap:pretty}
-  a{color:inherit;text-decoration:none}
+  body{background:var(--canvas);color:var(--ink);font-family:var(--lao);
+    font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  svg{display:block}
+  ::selection{background:var(--ink);color:var(--canvas)}
   .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(20px,5vw,40px)}
+  .eyebrow{font-family:var(--mono);font-size:13px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .mono{font-family:var(--mono);font-feature-settings:"tnum"}
 
-  .no-js [data-reveal]{opacity:1;transform:none}
-  @media (prefers-reduced-motion:no-preference){
-    html:not(.no-js) [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
-    html:not(.no-js) [data-reveal].in{opacity:1;transform:none}
-    html:not(.no-js) [data-reveal][data-d="1"]{transition-delay:.08s}
-    html:not(.no-js) [data-reveal][data-d="2"]{transition-delay:.16s}
-    html:not(.no-js) [data-reveal][data-d="3"]{transition-delay:.24s}
+  /* ---------- top nav ---------- */
+  .nav{position:sticky;top:0;z-index:50;background:var(--canvas);border-bottom:1px solid var(--hairline)}
+  .nav .wrap{height:60px;display:flex;align-items:center;gap:16px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--sans);font-weight:800;font-size:22px;letter-spacing:-.02em}
+  .logo .dot{width:30px;height:30px;border-radius:9px;background:var(--ink);color:var(--canvas);display:grid;place-items:center;font-size:15px;font-weight:800}
+  .nav .right{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .nav .lbl{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#666}
+  @media(max-width:560px){.nav .lbl{display:none}}
+
+  /* ---------- marquee ---------- */
+  .marq{background:var(--ink);color:var(--canvas);height:38px;display:flex;align-items:center;overflow:hidden;white-space:nowrap}
+  .marq .track{display:inline-flex;gap:38px;padding-left:38px;font-family:var(--mono);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;animation:marq 26s linear infinite}
+  .marq .track span{display:inline-flex;gap:38px}
+  .marq .track span::after{content:"◆";opacity:.5}
+  @keyframes marq{to{transform:translateX(-50%)}}
+
+  /* ---------- hero ---------- */
+  .hero{padding:clamp(48px,8vw,104px) 0 clamp(40px,6vw,72px)}
+  .hero h1{font-family:var(--lao);font-weight:700;letter-spacing:-.01em;line-height:1.04;
+    font-size:clamp(2.6rem,7vw,5.2rem);max-width:15ch;text-wrap:balance}
+  .hero h1 .mk{position:relative;white-space:nowrap}
+  .hero h1 .mk::after{content:"";position:absolute;left:-.06em;right:-.06em;bottom:.08em;height:.42em;background:var(--lime);z-index:-1;border-radius:3px}
+  .hero .lead{margin-top:26px;max-width:60ch;font-size:clamp(1.05rem,1.6vw,1.35rem);font-weight:400;color:var(--ink);line-height:1.5}
+  .hero .lead b{font-weight:700}
+  .hero .meta{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+  .pill{display:inline-flex;align-items:center;gap:9px;font-family:var(--lao);font-weight:600;font-size:16px;
+    border-radius:var(--pill);padding:12px 22px;border:1px solid transparent;cursor:pointer;text-decoration:none;
+    transition:transform .18s var(--ease),background .18s,color .18s}
+  .pill svg{width:17px;height:17px}
+  .pill.dark{background:var(--ink);color:var(--canvas)}
+  .pill.dark:hover{transform:scale(1.035)}
+  .pill.ghost{background:var(--canvas);color:var(--ink);border-color:var(--ink)}
+  .pill.ghost:hover{background:var(--ink);color:var(--canvas)}
+  .pill.light{background:var(--canvas);color:var(--ink)}
+  .pill.light:hover{transform:scale(1.035)}
+
+  .tagpill{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;
+    padding:6px 12px;border-radius:var(--pill);border:1px solid var(--hairline);color:#444}
+  .tagpill.ok{border-color:transparent;background:rgba(30,166,74,.12);color:var(--success)}
+
+  /* ---------- chooser color blocks ---------- */
+  .pick{padding-bottom:clamp(36px,5vw,64px);display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media(max-width:760px){.pick{grid-template-columns:1fr}}
+  .block{position:relative;border-radius:var(--r-lg);padding:clamp(28px,3.4vw,44px);
+    display:flex;flex-direction:column;min-height:340px;text-decoration:none;color:var(--ink);
+    transition:transform .3s var(--ease)}
+  .block:hover{transform:translateY(-6px) rotate(-.4deg)}
+  .block.b-mint{background:var(--mint)}
+  .block.b-navy{background:var(--navy);color:var(--on-dark);transform-origin:center}
+  .block.b-navy:hover{transform:translateY(-6px) rotate(.4deg)}
+  .block .be{font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+  .block.b-navy .be{color:#c9c6e8}
+  .block .num{margin-left:auto;font-family:var(--mono);font-size:13px;opacity:.5}
+  .block h2{font-family:var(--lao);font-weight:700;font-size:clamp(1.7rem,2.8vw,2.5rem);line-height:1.12;margin-top:22px;letter-spacing:-.01em}
+  .block .who{margin-top:10px;font-size:15px;opacity:.82;font-weight:500}
+  .block p{margin-top:14px;font-size:16px;line-height:1.5;max-width:42ch;flex:1}
+  .block.b-navy p{color:#d8d6ee}
+  .block .nda{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+    padding:5px 11px;border-radius:var(--pill);background:rgba(255,255,255,.14);color:#fff;margin-top:4px;align-self:flex-start}
+
+  .prog{display:flex;align-items:center;gap:12px;margin-top:22px;font-family:var(--mono);font-size:13px;font-weight:500}
+  .prog .plabel{font-family:var(--lao);font-size:13px;font-weight:600;opacity:.7}
+  .prog .slot{display:flex;align-items:center;gap:11px;flex:1;max-width:240px}
+  .prog .bar{flex:1;height:8px;border-radius:var(--pill);background:rgba(0,0,0,.12);overflow:hidden}
+  .block.b-navy .prog .bar{background:rgba(255,255,255,.18)}
+  .prog .bar i{display:block;height:100%;width:0;border-radius:var(--pill);background:var(--ink);transition:width .6s var(--ease)}
+  .block.b-navy .prog .bar i{background:var(--on-dark)}
+  .prog .pct{font-family:var(--mono);font-size:13px;font-weight:500;opacity:.78;white-space:nowrap}
+  .block.b-navy .prog .pct{color:var(--on-dark)}
+  .block .cta{margin-top:24px;align-self:flex-start}
+
+  /* ---------- how / lime block ---------- */
+  .how{padding:clamp(20px,3vw,40px) 0 clamp(56px,7vw,96px)}
+  .howblock{background:var(--lime);border-radius:var(--r-lg);padding:clamp(30px,4vw,56px)}
+  .howblock .be{font-family:var(--mono);font-size:12px;letter-spacing:.07em;text-transform:uppercase}
+  .howblock h2{font-family:var(--lao);font-weight:700;font-size:clamp(1.5rem,2.4vw,2.1rem);line-height:1.18;margin-top:16px;max-width:24ch;letter-spacing:-.01em}
+  .steps{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:720px){.steps{grid-template-columns:1fr}}
+  .step{display:flex;flex-direction:column;gap:8px}
+  .step .n{font-family:var(--mono);font-size:13px;font-weight:600;width:32px;height:32px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center}
+  .step h3{font-family:var(--lao);font-weight:700;font-size:17px}
+  .step p{font-size:15px;line-height:1.5;max-width:34ch}
+  .step code{font-family:var(--mono);font-size:.85em;background:rgba(0,0,0,.07);border-radius:5px;padding:.08em .4em}
+  .howfoot{margin-top:28px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid rgba(0,0,0,.12);padding-top:22px}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--hairline);padding:clamp(44px,6vw,72px) 0 40px}
+  footer .big{font-family:var(--sans);font-weight:800;font-size:clamp(2.4rem,7vw,4.4rem);letter-spacing:-.03em;line-height:1}
+  footer .frow{margin-top:28px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-end}
+  footer .fcap{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:#555;line-height:1.7;text-transform:uppercase}
+
+  @media (prefers-reduced-motion:reduce){
+    .marq .track{animation:none}
+    *{transition-duration:.01ms!important}
   }
-
-  .hero{position:relative;color:#fff;padding:clamp(54px,9vw,104px) 0 clamp(46px,7vw,84px);overflow:hidden;
-    background:radial-gradient(120% 90% at 8% -10%,rgba(73,190,255,.4),transparent 55%),
-      radial-gradient(120% 120% at 112% 5%,rgba(93,135,255,.5),transparent 55%),
-      linear-gradient(160deg,var(--navy),var(--navy-2) 52%,#243a8c)}
-  .hero::after{content:"";position:absolute;inset:0;
-    background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
-    background-size:52px 52px;mask-image:radial-gradient(120% 80% at 50% 0,#000,transparent 72%);opacity:.5}
-  .hero .wrap{position:relative}
-  .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem}
-  .brand .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:#fff;font-size:.92rem}
-  .hero h1{font-size:clamp(2rem,5vw,3.2rem);color:#fff;margin:24px 0 0;max-width:18ch}
-  .hero h1 em{font-style:normal;color:var(--cyan)}
-  .hero .lede{margin:20px 0 0;max-width:60ch;font-size:clamp(1.02rem,1.4vw,1.18rem);color:#dbe6ff;line-height:1.8}
-  .meta{margin-top:26px;display:flex;flex-wrap:wrap;gap:9px;align-items:center}
-  .meta span{font-family:"JetBrains Mono",monospace;font-size:.76rem;color:#e7eeff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:6px 12px;border-radius:8px}
-  .meta .ok{background:rgba(45,163,114,.24);border-color:rgba(126,226,168,.45);color:#d9ffe9}
-
-  .sec{padding:clamp(40px,6vw,72px) 0}
-  .eye{font-weight:700;font-size:.95rem;color:var(--blue-600)}
-  .sec h2{font-size:clamp(1.5rem,3vw,2.1rem);margin-top:10px}
-  .sec .sub{margin-top:14px;color:var(--ink-s);max-width:60ch}
-
-  .docs{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:34px}
-  @media(max-width:720px){.docs{grid-template-columns:1fr}}
-  .doc{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
-    padding:28px 26px;box-shadow:var(--shadow);transition:transform .4s var(--ease),box-shadow .4s var(--ease);position:relative;overflow:hidden}
-  .doc:hover{transform:translateY(-5px);box-shadow:var(--shadow-lift)}
-  .doc::before{content:"";position:absolute;inset:0 0 auto;height:4px}
-  .doc.a::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}
-  .doc.b::before{background:linear-gradient(90deg,var(--blue-700),#6a3fc0)}
-  .doc .top{display:flex;align-items:center;gap:12px}
-  .doc .ic{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;flex:0 0 auto}
-  .doc.a .ic{background:color-mix(in oklab,var(--blue) 14%,#fff);color:var(--blue-700)}
-  .doc.b .ic{background:color-mix(in oklab,#6a3fc0 13%,#fff);color:#6a3fc0}
-  .doc .ic svg{width:26px;height:26px}
-  .doc .tag{font-size:.78rem;font-weight:700;padding:4px 11px;border-radius:99px}
-  .doc.a .tag{background:color-mix(in oklab,var(--blue) 13%,#fff);color:var(--blue-700)}
-  .doc.b .tag{background:color-mix(in oklab,var(--amber) 18%,#fff);color:var(--amber-ink)}
-  .doc h3{font-size:1.28rem;margin-top:18px}
-  .doc .who{margin-top:4px;font-size:.88rem;color:var(--muted)}
-  .doc p.d{margin-top:13px;color:var(--ink-s);font-size:.97rem;flex:1}
-
-  .prog{display:flex;align-items:center;gap:11px;margin-top:20px;font-family:"JetBrains Mono",monospace;font-size:.82rem;font-weight:600;color:var(--blue-700)}
-  .prog .bar{flex:1;height:8px;border-radius:99px;background:rgba(120,140,180,.18);overflow:hidden}
-  .prog .bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--blue),var(--green));transition:width .6s var(--ease)}
-  .prog .pct{min-width:48px;text-align:right}
-  .prog-label{margin-top:18px;font-size:.82rem;font-weight:600;color:var(--muted)}
-
-  .open{margin-top:20px;display:inline-flex;align-items:center;justify-content:center;gap:9px;
-    font-weight:700;font-size:.98rem;color:#fff;padding:13px 20px;border-radius:12px;
-    background:linear-gradient(135deg,var(--blue),var(--blue-600));transition:filter .25s,transform .15s}
-  .doc.b .open{background:linear-gradient(135deg,var(--blue-700),#6a3fc0)}
-  .open:hover{filter:brightness(1.06)} .open:active{transform:scale(.98)}
-  .open svg{width:18px;height:18px}
-
-  .how{margin-top:34px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);
-    padding:22px 24px;box-shadow:var(--shadow);display:flex;gap:15px;align-items:flex-start}
-  .how .hic{flex:0 0 auto;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
-    background:color-mix(in oklab,var(--green) 15%,#fff);color:var(--green-ink)}
-  .how .hic svg{width:23px;height:23px}
-  .how h3{font-size:1.05rem}
-  .how p{margin-top:7px;color:var(--ink-s);font-size:.94rem}
-  .how code{font-family:"JetBrains Mono",monospace;font-size:.85em;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:.06em .4em;color:var(--blue-700)}
-  .how .chip{display:inline-block;margin-top:10px;font-size:.74rem;font-weight:700;padding:3px 10px;border-radius:99px}
-  .how .chip.local{background:rgba(245,158,11,.18);color:var(--amber-ink)}
-  .how .chip.live{background:rgba(16,185,129,.16);color:var(--green-ink)}
-
-  footer{padding:30px 0;color:var(--muted);font-size:.84rem;text-align:center;background:var(--navy);line-height:1.8}
-  footer .w{color:#9aa8cc}
 </style>
 </head>
 <body>
 
+<header class="nav">
+  <div class="wrap">
+    <span class="logo"><span class="dot">L</span>LOO Delivery</span>
+    <span class="right"><span class="lbl">ແຜນງານ · Plan 2026</span></span>
+  </div>
+</header>
+
+<div class="marq" aria-hidden="true">
+  <div class="track">
+    <span>ສະໝອງລູກຄ້າ&nbsp;&nbsp;ຈັດເສັ້ນທາງ&nbsp;&nbsp;ບັນທຶກເທື່ອດຽວ&nbsp;&nbsp;ໃຜຄວນໄປສົ່ງມື້ນີ້&nbsp;&nbsp;Customer Brain&nbsp;&nbsp;Flexible Routing&nbsp;&nbsp;</span>
+    <span>ສະໝອງລູກຄ້າ&nbsp;&nbsp;ຈັດເສັ້ນທາງ&nbsp;&nbsp;ບັນທຶກເທື່ອດຽວ&nbsp;&nbsp;ໃຜຄວນໄປສົ່ງມື້ນີ້&nbsp;&nbsp;Customer Brain&nbsp;&nbsp;Flexible Routing&nbsp;&nbsp;</span>
+  </div>
+</div>
+
 <section class="hero">
   <div class="wrap">
-    <span class="brand"><span class="dot">L</span>LOO Delivery</span>
-    <h1>ສະໝອງລູກຄ້າ + <em>ຈັດເສັ້ນທາງ</em> — ແຜນງານ</h1>
-    <p class="lede">ໜ້າລວມ 2 ເອກະສານ: ສະບັບເຂົ້າໃຈງ່າຍສຳລັບທຸກຄົນ ແລະ ສະບັບເຕັກນິກສຳລັບທີມ dev. ໃນແຕ່ລະໜ້າມີ <b>checklist ທີ່ຕິກໄດ້</b> — ຕິກວຽກທີ່ສຳເລັດ ແລ້ວທຸກຄົນເຫັນຄວາມຄືບໜ້າຮ່ວມກັນ.</p>
+    <div class="eyebrow">LOO Delivery · Customer-Brain + Routing</div>
+    <h1 style="margin-top:20px">ເຮັດໃຫ້ລະບົບ <span class="mk">ຈື່ລູກຄ້າ</span> ແລ້ວວາງແຜນສົ່ງໃຫ້ແມ່ນຂຶ້ນທຸກຮອບ</h1>
+    <p class="lead">ໜ້າລວມ 2 ເອກະສານ: ສະບັບເຂົ້າໃຈງ່າຍສຳລັບທຸກຄົນ ແລະ ສະບັບເຕັກນິກສຳລັບທີມ dev. ແຕ່ລະໜ້າມີ <b>checklist ທີ່ຕິກໄດ້</b> — ຕິກວຽກທີ່ສຳເລັດ ແລ້ວທຸກຄົນເຫັນຄວາມຄືບໜ້າຮ່ວມກັນ.</p>
     <div class="meta">
-      <span>2026-06-22</span>
-      <span class="ok">✓ cross-checked vs live repo</span>
-      <span id="loo-chip">device only</span>
+      <span class="tagpill ok">✓ cross-checked vs live repo · 2026-06-22</span>
+      <span class="tagpill" id="loo-chip">device only</span>
     </div>
   </div>
 </section>
 
-<section class="sec">
+<section class="wrap pick">
+  <a class="block b-mint" href="LOO-Customer-Brain-Overview.html">
+    <div class="be">Overview <span class="num">01</span></div>
+    <h2>ສະບັບເຂົ້າໃຈງ່າຍ</h2>
+    <div class="who">ສຳລັບທຸກຄົນ · ບໍ່ຕ້ອງຮູ້ເລື່ອງເຕັກນິກ</div>
+    <p>ລະບົບກຳລັງເຮັດຫຍັງ ເພາະຫຍັງ ໄດ້ປະໂຫຍດຫຍັງ ແລະ ເຮັດເຖິງໃສແລ້ວ — ພ້ອມແຜນ 4 ອາທິດ, ຕາຕະລາງລາຍວັນ ແລະ ສິ່ງທີ່ Bou ຕ້ອງເຄາະ.</p>
+    <div class="prog"><span class="plabel">checklist</span><span class="slot" data-loo-doc="overview"></span></div>
+    <span class="pill dark cta">ເປີດອ່ານ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+
+  <a class="block b-navy" href="LOO-Customer-Brain-Plan.html">
+    <div class="be">Dev Reference <span class="num">02</span></div>
+    <h2>Dev Technical Reference</h2>
+    <div class="who">file:line · schema · migration · gap R1–R10 · Track B</div>
+    <p>ສະຖາปัດຕະຍະກຳ loop, data-model, Block A, ແຜນ build, demo-vs-real-code, landmines — ສຳລັບ dev ທີ່ຮັບໄປສ້າງຕໍ່.</p>
+    <span class="nda">● ພາຍໃນ / NDA</span>
+    <div class="prog"><span class="plabel">checklist</span><span class="slot" data-loo-doc="plan"></span></div>
+    <span class="pill light cta">ເປີດອ່ານ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+  </a>
+</section>
+
+<section class="how">
   <div class="wrap">
-    <div data-reveal><span class="eye">ເລືອກເອກະສານ</span>
-      <h2>ສອງສະບັບ · ຄົນລະຜູ້ອ່ານ</h2>
-      <p class="sub">ສະບັບເຂົ້າໃຈງ່າຍສຳລັບຜູ້ບໍລິຫານ/ທີມ · ສະບັບເຕັກນິກສຳລັບ dev ທີ່ຮັບໄປສ້າງຕໍ່</p>
-    </div>
-
-    <div class="docs">
-      <!-- Overview -->
-      <a class="doc a" href="LOO-Customer-Brain-Overview.html" data-reveal data-d="1">
-        <div class="top">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7c0 3 2 4 2 6h10c0-2 2-3 2-6a7 7 0 0 0-7-7Z"/><path d="M9 21h6"/></svg></div>
-          <span class="tag">ສຳລັບທຸກຄົນ</span>
-        </div>
-        <h3>ສະບັບເຂົ້າໃຈງ່າຍ</h3>
-        <div class="who">ບໍ່ຕ້ອງຮູ້ເລື່ອງເຕັກນິກ · ສຳລັບຜູ້ບໍລິຫານ ແລະ ທີມ</div>
-        <p class="d">ອະທິບາຍວ່າລະບົບກຳລັງເຮັດຫຍັງ ເພາະຫຍັງ ໄດ້ປະໂຫຍດຫຍັງ ແລະ ເຮັດເຖິງໃສແລ້ວ — ພ້ອມແຜນ 4 ອາທິດ, ຕາຕະລາງລາຍວັນ ແລະ ສິ່ງທີ່ Bou ຕ້ອງເຄາະ.</p>
-        <div class="prog-label">ຄວາມຄືບໜ້າ checklist</div>
-        <div class="prog" data-loo-doc="overview"></div>
-        <span class="open">ເປີດອ່ານ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-
-      <!-- Plan -->
-      <a class="doc b" href="LOO-Customer-Brain-Plan.html" data-reveal data-d="2">
-        <div class="top">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/><path d="M9 9h6M9 13h6"/></svg></div>
-          <span class="tag">Dev · ພາຍໃນ (NDA)</span>
-        </div>
-        <h3>Dev Technical Reference</h3>
-        <div class="who">file:line · schema · migration · gap R1–R10 · Track B</div>
-        <p class="d">ເອກະສານອ້າງອີງເຕັກນິກສຳລັບ dev: ສະຖາປັດຕະຍະກຳ loop, data-model, Block A, ແຜນ build, demo-vs-real-code, landmines. <b>ມີຂໍ້ມູນພາຍໃນ — ບໍ່ຄວນເປີດສາທາລະນະ.</b></p>
-        <div class="prog-label">ຄວາມຄືບໜ້າ checklist</div>
-        <div class="prog" data-loo-doc="plan"></div>
-        <span class="open">ເປີດອ່ານ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>
-    </div>
-
-    <div class="how" data-reveal data-d="3">
-      <div class="hic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
-      <div>
-        <h3>ວິທີໃຊ້ checklist (ຕິກ → ເຫັນຮ່ວມກັນ)</h3>
-        <p>ໃນຕາຕະລາງລາຍວັນຂອງແຕ່ລະໜ້າ ກົດທີ່ແຖວໃດກໍໄດ້ເພື່ອ <b>ຕິກວ່າສຳເລັດ</b> (ກົດຊ້ຳເພື່ອຍົກເລີກ). ຄ່າເລີ່ມຕົ້ນ: ບັນທຶກໄວ້ <b>ໃນເຄື່ອງນີ້</b>. ເພື່ອໃຫ້ <b>ທຸກຄົນເຫັນຕົງກັນແບບ realtime</b> ໃຫ້ຕັ້ງຄ່າ sync ໃນ <code>loo-checklist.js</code> (ມີຄຳແນະນຳ 4 ຂັ້ນໃນໄຟລ໌).</p>
-        <span class="chip local" id="loo-how-chip">device only · ຍັງບໍ່ໄດ້ຕັ້ງ sync</span>
+    <div class="howblock">
+      <div class="be">How it works</div>
+      <h2>ຕິກວຽກທີ່ສຳເລັດ → ທຸກຄົນເຫັນຕົງກັນ realtime</h2>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><h3>ກົດທີ່ແຖວ</h3><p>ໃນຕາຕະລາງລາຍວັນ ກົດແຖວໃດກໍໄດ້ເພື່ອຕິກວ່າສຳເລັດ (ກົດຊ້ຳເພື່ອຍົກເລີກ)</p></div>
+        <div class="step"><span class="n">2</span><h3>ບັນທຶກເອງ</h3><p>ສະຖານະຖືກບັນທຶກທັນທີ ບໍ່ຕ້ອງກົດ save · ເປີດໃໝ່ກໍຍັງຢູ່</p></div>
+        <div class="step"><span class="n">3</span><h3>ເຫັນຮ່ວມກັນ</h3><p>ຕັ້ງ sync ໃນ <code>loo-checklist.js</code> ແລ້ວ ໃຜຕິກ ທຸກຄົນເຫັນພ້ອມກັນ</p></div>
+      </div>
+      <div class="howfoot">
+        <span class="tagpill" id="loo-chip2">device only</span>
+        <span style="font-size:14px;opacity:.7">ສະຖານະ sync ປັດຈຸບັນ</span>
       </div>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="w">LOO Delivery · “ສະໝອງລູກຄ້າ + ຈັດເສັ້ນທາງ” · ໜ້າລວມແຜນງານ · 2026-06-22</div>
+  <div class="wrap">
+    <div class="big">LOO Delivery</div>
+    <div class="frow">
+      <div class="fcap">ສະໝອງລູກຄ້າ + ຈັດເສັ້ນທາງ · ໜ້າລວມແຜນງານ<br>ກວດສອບເນື້ອໃນທຽບກັບໂຄ້ດຈິງແລ້ວ · 2026-06-22</div>
+      <div class="fcap" style="text-align:right">Design: Figma editorial system<br>via getdesign + impeccable</div>
+    </div>
+  </div>
 </footer>
 
 <script>
   document.documentElement.classList.remove('no-js');
-  const items=document.querySelectorAll('[data-reveal]');
-  if('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches){
-    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{rootMargin:'0px 0px -6% 0px',threshold:.12});
-    items.forEach(el=>io.observe(el));
-  } else items.forEach(el=>el.classList.add('in'));
-  // keep the "how" chip in sync with the engine's chip state
-  new MutationObserver(()=>{
-    const c=document.getElementById('loo-chip'), h=document.getElementById('loo-how-chip');
-    if(c&&h){ h.className='chip '+(c.classList.contains('live')?'live':'local'); h.textContent=c.textContent; }
-  }).observe(document.getElementById('loo-chip'),{childList:true,attributes:true,subtree:true});
+  // mirror sync chip state into the second chip
+  const c=document.getElementById('loo-chip'), c2=document.getElementById('loo-chip2');
+  if(c&&c2){ new MutationObserver(()=>{ c2.className=c.className; c2.textContent=c.textContent; })
+    .observe(c,{childList:true,attributes:true,subtree:true}); }
 </script>
 <script src="loo-checklist.js"></script>
 </body>

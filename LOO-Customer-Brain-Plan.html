@@ -7,119 +7,123 @@
 <meta name="description" content="เอกสารอ้างอิงทางเทคนิคฉบับเต็มสำหรับ developer: สถาปัตยกรรม, data-model, gap R1-R10, Block A implementation, แผน 4 สัปดาห์, demo vs real code, landmines">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=Noto+Sans+Lao:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --blue:#5d87ff; --blue-600:#4a6fe6; --blue-700:#3a57c4; --cyan:#49beff;
-    --navy:#0c1430; --navy-2:#16204d;
-    --ink:#0e1626; --ink-soft:#36425d; --muted:#5b667f;
-    --bg:#f3f6fc; --surface:#ffffff; --surface-2:#eef3fc; --line:#dde6f4; --line-strong:#c9d6ec;
-    --green:#10b981; --green-ink:#0a7a55; --amber:#f59e0b; --amber-ink:#9a6206; --red:#e23b59; --red-ink:#b3243f;
-    --code-bg:#0e1730; --code-ink:#d7e2f7; --code-line:#22304f;
-    --r-lg:18px; --r-md:13px; --r-sm:9px;
-    --shadow:0 1px 2px rgba(16,26,38,.05), 0 10px 28px -14px rgba(33,52,110,.26);
-    --shadow-lift:0 2px 4px rgba(16,26,38,.06), 0 22px 46px -18px rgba(33,52,110,.34);
-    --maxw:1180px; --ease:cubic-bezier(.22,1,.36,1);
+    --ink:#000;--canvas:#fff;--on-dark:#fff;
+    --hair:#e6e6e6;--hair-soft:#f1f1f1;--soft:#f7f7f5;--surface-2:#f7f7f5;
+    --lime:#dceeb1;--lilac:#c5b0f4;--cream:#f4ecd6;--pink:#efd4d4;--mint:#c8e6cd;--coral:#f3c9b6;--navy:#1f1d3d;
+    --magenta:#ff3d8b;--success:#1ea64a;--green:#1ea64a;--blue:#000;
+    --green-ink:#0a5a2a;--amber-ink:#8a5a00;--red-ink:#b3243f;--purple-ink:#5b3fb0;
+    --code-bg:#181626;--code-ink:#dfe5f5;
+    --r-sm:6px;--r-md:8px;--r-lg:16px;--pill:50px;
+    --sans:'Inter','Noto Sans Lao',system-ui,sans-serif;
+    --lao:'Noto Sans Lao','Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --maxw:1180px;--ease:cubic-bezier(.16,1,.3,1);
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Lao",system-ui,sans-serif;
-    font-size:clamp(14.5px,1vw,16px);line-height:1.78;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  h1,h2,h3,h4{font-family:"Noto Sans Lao",sans-serif;line-height:1.3;margin:0;letter-spacing:0;color:var(--ink);text-wrap:balance;font-weight:800}
+  body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--lao);
+    font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  h1,h2,h3,h4{font-family:var(--lao);font-weight:700;margin:0;line-height:1.25;letter-spacing:-.01em;color:var(--ink);text-wrap:balance}
   p{margin:0;text-wrap:pretty}
-  a{color:var(--blue-700);text-decoration:none}
-  code,kbd,.mono{font-family:"JetBrains Mono",monospace;font-feature-settings:"tnum" 1}
-  :not(pre)>code{background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:.08em .4em;font-size:.86em;color:var(--blue-700);white-space:nowrap}
+  a{color:var(--ink);text-decoration:none}
+  code,kbd,.mono{font-family:var(--mono);font-feature-settings:"tnum" 1}
+  :not(pre)>code{background:var(--soft);border:1px solid var(--hair);border-radius:5px;padding:.08em .42em;font-size:.86em;color:#000;white-space:nowrap}
+  ::selection{background:var(--ink);color:var(--canvas)}
   .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(18px,4vw,38px)}
 
-  .shell{display:grid;grid-template-columns:248px 1fr;gap:0;max-width:1340px;margin-inline:auto}
+  .shell{display:grid;grid-template-columns:250px 1fr;gap:0;max-width:1380px;margin-inline:auto}
   @media(max-width:1000px){.shell{grid-template-columns:1fr}}
-  .toc{position:sticky;top:0;align-self:start;height:100dvh;overflow-y:auto;padding:22px 14px 40px 22px;border-right:1px solid var(--line);background:color-mix(in oklab,var(--bg) 70%,#fff)}
-  @media(max-width:1000px){.toc{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}}
-  .toc .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:1.05rem;margin-bottom:4px}
-  .toc .brand .dot{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:#fff;font-size:.8rem}
-  .toc .tag{font-family:"JetBrains Mono";font-size:.68rem;color:var(--muted);margin-bottom:16px;display:block}
+  .toc{position:sticky;top:0;align-self:start;height:100dvh;overflow-y:auto;padding:22px 14px 40px 22px;border-right:1px solid var(--hair);background:var(--canvas)}
+  @media(max-width:1000px){.toc{position:static;height:auto;border-right:0;border-bottom:1px solid var(--hair)}}
+  .toc .brand{display:flex;align-items:center;gap:10px;font-family:var(--sans);font-weight:800;font-size:18px;letter-spacing:-.02em;margin-bottom:4px}
+  .toc .brand .dot{width:28px;height:28px;border-radius:8px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800}
+  .toc .tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.04em;text-transform:uppercase;color:#666;margin-bottom:16px;display:block}
   .toc ol{list-style:none;margin:0;padding:0}
-  .toc a{display:block;color:var(--ink-soft);font-size:.84rem;padding:5px 9px;border-radius:7px;border-left:2px solid transparent;line-height:1.35;transition:background .2s,color .2s,border-color .2s}
-  .toc a:hover{background:var(--surface-2);color:var(--ink)}
-  .toc a.sub{padding-left:20px;font-size:.79rem;color:var(--muted)}
+  .toc a{display:block;color:#444;font-size:.84rem;padding:6px 10px;border-radius:var(--pill);border-left:2px solid transparent;line-height:1.35;transition:background .15s,color .15s;font-weight:500}
+  .toc a:hover{background:var(--soft);color:#000}
+  .toc a.sub{padding-left:20px;font-size:.79rem;color:#777;border-radius:var(--r-sm)}
   .content{min-width:0;padding:0 clamp(16px,3vw,34px) 80px}
 
-  .hero{margin:0 calc(-1*clamp(16px,3vw,34px)) 0;padding:clamp(40px,6vw,72px) clamp(20px,4vw,48px) clamp(34px,5vw,52px);color:#fff;position:relative;overflow:hidden;
-    background:radial-gradient(120% 120% at 100% 0%,rgba(73,190,255,.4),transparent 55%),linear-gradient(155deg,var(--navy),var(--navy-2) 60%,#243a8c)}
-  .hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(120% 80% at 50% 0,#000,transparent 72%);opacity:.5}
-  .hero>*{position:relative}
-  .hero .eyebrow{font-family:"JetBrains Mono";font-size:.78rem;color:#bcd2ff;letter-spacing:.04em}
-  .hero h1{font-size:clamp(1.6rem,3.6vw,2.6rem);color:#fff;margin:12px 0 0;max-width:26ch}
-  .hero p{margin-top:16px;color:#d7e2fb;max-width:74ch;font-size:clamp(.96rem,1.2vw,1.08rem)}
-  .hero .meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px}
-  .hero .meta span{font-family:"JetBrains Mono";font-size:.74rem;color:#e7eeff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:6px 11px;border-radius:7px}
+  .hero{margin:0 calc(-1*clamp(16px,3vw,34px)) 0;padding:clamp(40px,6vw,72px) clamp(20px,4vw,48px) clamp(34px,5vw,52px);
+    background:var(--canvas);color:var(--ink);border-bottom:1px solid var(--hair)}
+  .hero .eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:#000}
+  .hero h1{font-size:clamp(1.7rem,3.8vw,2.9rem);color:var(--ink);margin:14px 0 0;max-width:26ch;line-height:1.08}
+  .hero p{margin-top:18px;color:var(--ink);max-width:78ch;font-size:clamp(.98rem,1.2vw,1.12rem);font-weight:400;line-height:1.55}
+  .hero p b{font-weight:700}
+  .hero .meta{margin-top:24px;display:flex;flex-wrap:wrap;gap:8px}
+  .hero .meta span{font-family:var(--mono);font-size:.73rem;color:#000;background:var(--canvas);border:1px solid var(--hair);padding:6px 12px;border-radius:var(--pill)}
 
-  section.s{padding:clamp(30px,4vw,46px) 0;border-bottom:1px solid var(--line)}
-  section.s>h2{font-size:clamp(1.3rem,2.4vw,1.8rem);display:flex;align-items:baseline;gap:12px}
-  section.s>h2 .no{font-family:"JetBrains Mono";font-size:.9rem;color:var(--blue-600);font-weight:600}
-  section.s>.lead{margin-top:12px;color:var(--ink-soft);max-width:78ch}
-  h3.sub{font-size:1.08rem;margin-top:30px;padding-top:4px}
-  .lead-sm{color:var(--ink-soft);margin-top:8px}
+  section.s{padding:clamp(30px,4vw,46px) 0;border-bottom:1px solid var(--hair)}
+  section.s>h2{font-size:clamp(1.35rem,2.4vw,1.9rem);display:flex;align-items:baseline;gap:12px}
+  section.s>h2 .no{font-family:var(--mono);font-size:.9rem;color:#000;font-weight:600;background:var(--lime);padding:2px 9px;border-radius:var(--r-sm)}
+  section.s>.lead{margin-top:12px;color:var(--ink);max-width:80ch;font-weight:400}
+  h3.sub{font-size:1.12rem;margin-top:30px;padding-top:4px;font-weight:700}
+  .lead-sm{color:var(--ink);margin-top:8px;font-weight:400}
 
-  pre{background:var(--code-bg);color:var(--code-ink);border:1px solid var(--code-line);border-radius:var(--r-md);
-    padding:16px 18px;overflow-x:auto;font-family:"JetBrains Mono",monospace;font-size:.8rem;line-height:1.7;margin:16px 0;tab-size:2}
-  pre .cm{color:#6f86b8}
-  pre .kw{color:#7db4ff}
+  pre{background:var(--code-bg);color:var(--code-ink);border:1px solid #2a2740;border-radius:var(--r-md);
+    padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:.8rem;line-height:1.7;margin:16px 0;tab-size:2}
+  pre .cm{color:#7e8fc0}
+  pre .kw{color:#86bcff}
   pre .ty{color:#5bd6b0}
-  pre .st{color:#e0a878}
-  pre .add{color:#7ee2a8;display:block;background:rgba(46,160,90,.14)}
-  pre .del{color:#ff9bb0;display:block;background:rgba(220,60,90,.14)}
-  pre .fn{color:#c9a6ff}
-  .filemark{font-family:"JetBrains Mono";font-size:.74rem;color:var(--muted);margin:18px 0 -8px;display:flex;align-items:center;gap:7px}
-  .filemark::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--blue);flex:0 0 auto}
+  pre .st{color:#e8b07f}
+  pre .add{color:#86e2a8;display:block;background:rgba(46,160,90,.16)}
+  pre .del{color:#ff9bb0;display:block;background:rgba(220,60,90,.16)}
+  pre .fn{color:#cdacff}
+  .filemark{font-family:var(--mono);font-size:.74rem;color:#666;margin:18px 0 -8px;display:flex;align-items:center;gap:7px}
+  .filemark::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--magenta);flex:0 0 auto}
 
-  .scroll-x{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:var(--r-md)}
-  table{border-collapse:collapse;width:100%;font-size:.86rem;background:var(--surface)}
-  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{background:var(--surface-2);font-weight:700;color:var(--ink);white-space:nowrap;position:sticky;top:0}
+  .scroll-x{overflow-x:auto;margin:16px 0;border:1px solid var(--hair);border-radius:var(--r-md)}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;background:var(--canvas)}
+  th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--hair);vertical-align:top}
+  th{background:var(--soft);font-weight:700;color:#000;white-space:nowrap;position:sticky;top:0;font-family:var(--lao)}
   td code{font-size:.84em}
   tr:last-child td{border-bottom:0}
-  tbody tr:hover{background:color-mix(in oklab,var(--blue) 4%,#fff)}
+  tbody tr:hover{background:#fafafa}
 
-  .pill{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap;font-family:"JetBrains Mono"}
-  .pill.exists,.pill.done{background:color-mix(in oklab,var(--green) 16%,#fff);color:var(--green-ink)}
-  .pill.partial{background:color-mix(in oklab,var(--amber) 18%,#fff);color:var(--amber-ink)}
-  .pill.missing{background:color-mix(in oklab,var(--red) 14%,#fff);color:var(--red-ink)}
-  .pill.A{background:color-mix(in oklab,var(--blue) 15%,#fff);color:var(--blue-700)}
-  .pill.B{background:color-mix(in oklab,#9b6bff 16%,#fff);color:#6a3fc0}
-  .pill.C{background:#e9edf5;color:var(--muted)}
+  .pill{display:inline-block;font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.02em;text-transform:uppercase;padding:3px 9px;border-radius:var(--pill);white-space:nowrap}
+  .pill.exists,.pill.done{background:var(--mint);color:var(--green-ink)}
+  .pill.partial{background:var(--cream);color:var(--amber-ink)}
+  .pill.missing{background:var(--pink);color:var(--red-ink)}
+  .pill.A{background:var(--lilac);color:var(--purple-ink)}
+  .pill.B{background:#d9ccf7;color:var(--purple-ink)}
+  .pill.C{background:var(--soft);color:#666}
 
-  .note{border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px;margin:16px 0;background:var(--surface);display:flex;gap:12px}
-  .note .ic{flex:0 0 auto;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-weight:800;font-family:"JetBrains Mono";font-size:.8rem}
-  .note.warn{background:color-mix(in oklab,var(--amber) 7%,#fff);border-color:color-mix(in oklab,var(--amber) 30%,var(--line))}
-  .note.warn .ic{background:color-mix(in oklab,var(--amber) 20%,#fff);color:var(--amber-ink)}
-  .note.danger{background:color-mix(in oklab,var(--red) 6%,#fff);border-color:color-mix(in oklab,var(--red) 28%,var(--line))}
-  .note.danger .ic{background:color-mix(in oklab,var(--red) 16%,#fff);color:var(--red-ink)}
-  .note.ok{background:color-mix(in oklab,var(--green) 6%,#fff);border-color:color-mix(in oklab,var(--green) 26%,var(--line))}
-  .note.ok .ic{background:color-mix(in oklab,var(--green) 16%,#fff);color:var(--green-ink)}
-  .note b{color:var(--ink)}
+  .note{border:1px solid var(--hair);border-radius:var(--r-md);padding:15px 17px;margin:16px 0;background:var(--canvas);display:flex;gap:12px}
+  .note .ic{flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-family:var(--mono);font-size:.78rem}
+  .note.warn{background:var(--cream)}
+  .note.warn .ic{background:#000;color:var(--cream)}
+  .note.danger{background:var(--pink)}
+  .note.danger .ic{background:#000;color:var(--pink)}
+  .note.ok{background:var(--mint)}
+  .note.ok .ic{background:#000;color:var(--mint)}
+  .note b{color:#000;font-weight:700}
 
   ul.tight,ol.tight{margin:12px 0;padding-left:22px}
-  ul.tight li,ol.tight li{margin:5px 0;color:var(--ink-soft)}
-  ul.tight li b,ul.tight li strong,ol.tight li b{color:var(--ink)}
+  ul.tight li,ol.tight li{margin:6px 0;color:var(--ink);font-weight:400}
+  ul.tight li b,ul.tight li strong,ol.tight li b{color:#000;font-weight:700}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
   @media(max-width:760px){.grid2{grid-template-columns:1fr}}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;box-shadow:var(--shadow)}
-  .card h4{font-size:.96rem;margin-bottom:6px}
+  .card{background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-md);padding:17px 19px}
+  .card h4{font-size:.98rem;margin-bottom:6px;font-weight:700}
   .swatch{display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid rgba(0,0,0,.15);vertical-align:-1px;margin-right:5px}
+
   .sched{margin-top:22px;display:flex;flex-direction:column;gap:16px}
-  .swk{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:16px 18px;box-shadow:var(--shadow)}
-  .swk h4{font-size:1.02rem;font-weight:800}
-  .swk .wt{display:inline-block;font-family:"JetBrains Mono";font-size:.74rem;font-weight:600;color:var(--blue-700);background:color-mix(in oklab,var(--blue) 10%,#fff);padding:3px 10px;border-radius:999px;margin-left:8px;vertical-align:2px}
-  .sday{display:flex;gap:11px;align-items:flex-start;padding:8px 2px;border-top:1px solid var(--line);flex-wrap:wrap}
+  .swk{background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);padding:17px 19px}
+  .swk h4{font-size:1.04rem;font-weight:700}
+  .swk .wt{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:#000;background:var(--lime);padding:3px 10px;border-radius:var(--pill);margin-left:8px;vertical-align:2px}
+  .sday{display:flex;gap:11px;align-items:flex-start;padding:9px 6px;border-top:1px solid var(--hair-soft);flex-wrap:wrap;border-radius:var(--r-sm)}
   .swk .sday:first-of-type{border-top:0}
-  .sday .cb{flex:0 0 auto;width:16px;height:16px;border:2px solid var(--line-strong);border-radius:5px;margin-top:3px}
-  .sday .dn{flex:0 0 auto;white-space:nowrap;font-family:"JetBrains Mono";font-weight:600;color:var(--blue-700);font-size:.84rem;margin-top:2px}
-  .sday .dt{flex:1;min-width:230px;color:var(--ink-soft);font-size:.9rem;line-height:1.55}
-  .sday .hr{flex:0 0 auto;font-family:"JetBrains Mono";font-size:.76rem;font-weight:600;color:var(--blue-700);margin-top:2px}
-  .note-est{margin-top:12px;font-size:.84rem;color:var(--muted);line-height:1.6}
-  footer{padding:26px 0;color:var(--muted);font-size:.82rem;line-height:1.7}
+  .sday .cb{flex:0 0 auto;width:17px;height:17px;border:2px solid #000;border-radius:5px;margin-top:3px}
+  .sday .dn{flex:0 0 auto;white-space:nowrap;font-family:var(--mono);font-weight:600;color:#000;font-size:.84rem;margin-top:2px}
+  .sday .dt{flex:1;min-width:230px;color:var(--ink);font-size:.9rem;line-height:1.5;font-weight:400}
+  .sday .hr{flex:0 0 auto;font-family:var(--mono);font-size:.76rem;font-weight:500;color:#666;margin-top:2px}
+  .note-est{margin-top:12px;font-size:.84rem;color:#555;line-height:1.6;font-weight:400}
+  .note-est b{color:#000;font-weight:700}
+  footer{padding:30px 0;color:#666;font-family:var(--mono);font-size:.78rem;line-height:1.7;letter-spacing:.02em;border-top:1px solid var(--hair);margin-top:10px}
+  footer code{color:#000}
 </style>
 </head>
 <body>
@@ -161,7 +165,7 @@
   <h1>Customer-Brain + Flexible Routing — ເອກະສານເຕັກນິກສຳລັບ developer</h1>
   <p>ລວມທຸກຢ່າງໃນບ່ອນດຽວ: ສະຖາปัດຕະຍະກຳ loop 4 ຂັ້ນແມັບກັບໂມດູນຈິງ, data-model reality, gap analysis R1–R10, ການແກ້ Block A (schema/migration/diff + file:line), ແຜນ build, demo-vs-real-code + enum contract, snapshot delta, seed data, landmines, ແລະ decisions. <b>ສະບັບນີ້ລວມ Track B — ແອปຄนขับ mobile (V2) ເຂົ້າແຜนเดียวกัน ตามมติรวมงาน (§5c).</b> ສຳລັບ dev ທີ່ຮັບ branch ໄປສ້າງຕໍ່.</p>
   <div class="meta">
-    <span>NestJS 11</span><span>Prisma 7.8</span><span>Next.js 16</span><span>PostgreSQL</span><span>repo: loo-platform</span><span>migrations → 20260622100000_driver_pin_auth</span><span>+ Track B: driver app</span><span style="background:rgba(45,163,114,.22);border-color:rgba(126,226,168,.45);color:#d9ffe9">✓ cross-checked vs live repo · 2026-06-22</span>
+    <span>NestJS 11</span><span>Prisma 7.8</span><span>Next.js 16</span><span>PostgreSQL</span><span>repo: loo-platform</span><span>migrations → 20260622100000_driver_pin_auth</span><span>+ Track B: driver app</span><span style="background:#c8e6cd;color:#0a5a2a;border:1px solid transparent">✓ cross-checked vs live repo · 2026-06-22</span>
   </div>
 </header>
 
@@ -217,7 +221,7 @@
       <tr><td>R4</td><td>corridor reveal (incl cross-branch)</td><td><span class="pill missing">missing</span></td><td><code>Branch.boundary</code> (:462) · <code>ops-map.tsx</code></td><td>near-line query + multi-attr pin · cross-branch carve-out</td><td>L</td><td><span class="pill A">A</span>/<span class="pill B">B</span></td></tr>
       <tr><td>R5</td><td>plan-gen 5 steps (who's-due → seq)</td><td><span class="pill partial">partial</span></td><td><code>listEligibleCustomersForZone</code> · <code>isSubscriptionDueOnDate</code> (shared:675) · <code>autoGenerateForDate</code> (:866)</td><td>selection = calendar-only · step4 manual</td><td>L</td><td><span class="pill A">A</span>/<span class="pill C">C</span></td></tr>
       <tr><td>R6</td><td>cross-branch rescue ≠ poach</td><td><span class="pill partial">partial</span></td><td>overdue LATERAL orders.service.ts:664-755</td><td>ownership/release/claim model · 30-min auto-release</td><td>L</td><td><span class="pill B">B</span></td></tr>
-      <tr><td>R7</td><td>pay-follows-work</td><td><span class="pill partial">partial</span></td><td><code>PaymentCollection.driverId</code> (:2294) · <code>Settlement</code> (:2326) · <code>LoyaltyTransaction</code> (:2928)</td><td>credit collection-based · R7-2 driverId attribution · Settlement.create deleted</td><td>L</td><td><span class="pill B">B</span></td></tr>
+      <tr><td>R7</td><td>pay-follows-work</td><td><span class="pill partial">partial</span></td><td><code>PaymentCollection.driverId</code> (:2294) · <code>Settlement</code> (:2326) · <code>LoyaltyTransaction</code> (:2928)</td><td>credit collection-based · R7-2 driverId attribution · Settlement สร้างใน DriverDayService (standalone create ลบ)</td><td>L</td><td><span class="pill B">B</span></td></tr>
       <tr><td>R8</td><td>Service Score (computed + audited)</td><td><span class="pill missing">missing</span></td><td>ບໍ່ມี model · raw signals ກະຈາຍ</td><td>ທັງ engine · ບໍ່ມี SLA baseline · complaint ບໍ່ link driver</td><td>L</td><td><span class="pill B">B</span></td></tr>
       <tr><td>R9</td><td>record-once POD+GPS+ชำระ+ถัง + recency</td><td><span class="pill A">Block A</span></td><td><code>deliverOrder</code> (:1129-2176)</td><td>ขาด GPS+lastReceivedDate (Block A)</td><td>S–M</td><td><span class="pill A">A</span></td></tr>
       <tr><td>R10</td><td>optimizer (OR-Tools + OSRM + CVRP)</td><td><span class="pill missing">missing</span></td><td>ບໍ່ມี · <code>reorderStops</code> manual</td><td>ທັງ optimizer · OSRM <b>ບໍ່ມีใน repo</b> (Google Maps)</td><td>L</td><td><span class="pill C">C</span></td></tr>
@@ -228,7 +232,7 @@
 
 <section class="s" id="blockA">
   <h2><span class="no">04</span> Block A — ການແກ້ໂຄ້ດ (schema / migration / diff)</h2>
-  <p class="lead">ການແກ້ໃນ branch <code>feat/a0-customer-brain-capture</code> — files + migration + diff ດ້ານລຸ່ມ. (pre-existing dep errors <code>otplib</code>/<code>@sentry/node</code> ບໍ່ກ່ຽວ)</p>
+  <p class="lead">ການແກ້ໃນ branch <code>feat/a0-customer-brain-capture</code> — files + migration + diff ດ້ານລຸ່ມ. (<code>tsc --noEmit</code> ຜ່ານ 0 error · <code>otplib</code> 12 + <code>@sentry/node</code> 10 ຕິດຕັ້ງຄົບ ບໍ່ມີ type/peer conflict — ບໍ່ແມ່ນບັນຫາແລ້ວ)</p>
   <div class="scroll-x">
   <table>
     <thead><tr><th>file</th><th>Δ</th><th>ສິ່ງທີ່ทำ</th></tr></thead>
@@ -307,10 +311,11 @@
   <h2><span class="no">05</span> ແຜນ build 4 ອາທິດ (Block A end-to-end + B/C groundwork)</h2>
   <p class="lead">1 ເດືອນ ship Block A + ວາງ data-capture ໃຫ້ B/C. <b>OUT:</b> Service Score engine ເຕັມ, cross-branch rescue, OSRM/OR-Tools optimizer (gate: GPS≥80% + ≥8 verified rounds — ວັນนี้ວັດบ่ได้).</p>
   <div class="grid2">
-    <div class="card"><h4>W1 · keystone A0</h4><p class="lead-sm">schema + migration + GPS/actor write + lastReceivedDate/deliveryCount + R7-2 pay. (ดู §4)</p></div>
-    <div class="card"><h4>W2 · brain reads + who's-due</h4><p class="lead-sm">FE one-shot <code>getCurrentPosition</code> ໃນ <code>deliver-stop-modal.tsx</code> + <code>api.ts</code> · card อ่าน recency · <code>listDueCustomers</code> (CALENDAR∪OVERDUE∪LAPSED∪SUBLESS) + <code>GET /due-customers</code> · mount <code>customer-subscriptions</code></p></div>
-    <div class="card"><h4>W3 · Route entity + draw</h4><p class="lead-sm"><code>model Route</code> + <code>DeliveryRun.routeId?</code> · module <code>routes/</code> · route-LINE draw บน ops-map · <code>route-lines.tsx</code> (ROUTE_PALETTE)</p></div>
-    <div class="card"><h4>W4 · filter + pins + corridor + measure</h4><p class="lead-sm">day/route filter · pin (ring=route, fill=lapse) · <code>customersNearRoute</code> (bbox + point-near-line, within-branch) · <code>isVerifiedStop</code> + coverage report</p></div>
+    <div class="card" style="background:var(--mint)"><h4>ມື້ 1 · keystone A0 <span class="pill done">✅ DONE</span></h4><p class="lead-sm">schema + migration + GPS/actor write + lastReceivedDate/deliveryCount + R7-2 pay. (ดู §4) · <b>ของจริงทำใน 1 วัน</b> (แผนเดิม 5.5) → นำหน้า ~4 วัน</p></div>
+    <div class="card"><h4>ມື້ 2 · tests + PR</h4><p class="lead-sm"><code>A0-spec-extend</code> — jest: GPS present/absent · lastReceived/re-record · idempotency replay · walk-in skip + QC/<code>loo-check</code> + PR-A0/R7-2 <em>(ที่ยังเหลือจาก Block A)</em></p></div>
+    <div class="card"><h4>ມື້ 3-5 · brain reads + who's-due</h4><p class="lead-sm">FE one-shot <code>getCurrentPosition</code> · card อ่าน recency · <code>listDueCustomers</code> (CALENDAR∪OVERDUE∪LAPSED∪SUBLESS) + <code>GET /due-customers</code> · mount <code>customer-subscriptions</code></p></div>
+    <div class="card"><h4>ມື້ 6-9 · Route entity + draw</h4><p class="lead-sm"><code>model Route</code> + <code>DeliveryRun.routeId?</code> · module <code>routes/</code> · route-LINE draw บน ops-map · <code>route-lines.tsx</code> (ROUTE_PALETTE)</p></div>
+    <div class="card"><h4>ມື້ 10-13 · filter + pins + corridor + measure</h4><p class="lead-sm">day/route filter · pin (ring=route, fill=lapse) · <code>customersNearRoute</code> (bbox + point-near-line) · <code>isVerifiedStop</code> + coverage report</p></div>
   </div>
 
   <h3 class="sub" id="tasktable">5.1 · task table (master checklist)</h3>
@@ -345,6 +350,7 @@
     </tbody>
   </table>
   </div>
+  <div class="note ok"><div class="ic">✓</div><div><b>สถานะปัจจุบัน:</b> <code>A0-*</code> (schema/migration/backfill/GPS/lastReceived) + <code>R7-2-pay-attribution</code> = <span class="pill done">DONE</span> ทำใน <b>Day 1</b> (ตรวจในโค้ดจริง · commit <code>e2d9b7d3</code> · working tree สะอาด) · เหลือเฉพาะ <code>A0-spec-extend</code> (ชุดทดสอบ = Day 2). งาน W2-W4 (A1-A4/R5/R8) ยังไม่เริ่ม.</div></div>
   <p class="lead-sm">ເอกสารแผนเต็ม (migration plan, risk register 22 ข้อ, DoD): <code>docs/FLEXIBLE_ROUTING_BUILD_PLAN.md</code></p>
 </section>
 
@@ -352,42 +358,40 @@
   <h2><span class="no">5b</span> ตารางรายวัน + เวลา (day-by-day)</h2>
   <p class="lead">ประเมิน ~2 devs เต็มเวลา = ~4 สัปดาห์ (20 วันทำงาน) · 1 dev ≈ 8 สัปดาห์ · L=3–4 วัน · M=2 · S=1 · XS=0.5 · บางวันแยก 2 track (A/B) ขนาน · เวลาเป็นประมาณ</p>
   <div class="sched">
-    <div class="swk">
-      <h4>W1 · A0 keystone (รากฐาน) <span class="wt">5 วัน + ครึ่ง</span></h4>
-      <div class="sday"><span class="cb"></span><span class="dn">D1</span><span class="dt"><code>A0-schema-lrd</code> — schema +<code>lastReceivedDate</code>/<code>deliveryCount</code>/<code>deliveringUserId</code> + index + prisma generate</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D2</span><span class="dt"><code>A0-migration-backfill</code> — migrate + backfill <code>MAX(deliveredAt)</code> + verify บน DB</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D3</span><span class="dt"><code>A0-dto-controller</code> + <code>A0-svc-gps-write</code> — DTO lat/lng + เขียน GPS+<code>deliveringUserId</code> ใน deliverOrder tx</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D4</span><span class="dt"><code>A0-svc-lastreceived</code> + <code>R7-2-pay-attribution</code> — lastReceivedDate/deliveryCount (guard !isReRecord) + driverId=currentUser.sub</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D5</span><span class="dt"><code>A0-spec-extend</code> — jest: GPS present/absent · lastReceived/re-record · idempotency replay · walk-in skip</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ครึ่งวัน</span><span class="dt">QC + <code>/loo-check</code> + เปิด PR (PR-A0 / PR-R7-2)</span><span class="hr" style="color:var(--muted)">~½ วัน</span></div>
+    <div class="swk" style="background:var(--mint)">
+      <h4>ມື້ 1 · A0 keystone (รากฐาน) <span style="display:inline-block;font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#fff;background:var(--success);padding:3px 10px;border-radius:var(--pill);margin-left:8px;vertical-align:2px">✓ DONE · ตรวจแล้ว</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">A0·1</span><span class="dt"><code>A0-schema-lrd</code> — schema +<code>lastReceivedDate</code>/<code>deliveryCount</code>/<code>deliveringUserId</code> + index + prisma generate</span><span class="hr">✓</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">A0·2</span><span class="dt"><code>A0-migration-backfill</code> — migrate + backfill <code>MAX(deliveredAt)</code> + verify บน DB</span><span class="hr">✓</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">A0·3</span><span class="dt"><code>A0-dto-controller</code> + <code>A0-svc-gps-write</code> — DTO lat/lng + เขียน GPS+<code>deliveringUserId</code> ใน deliverOrder tx</span><span class="hr">✓</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">A0·4</span><span class="dt"><code>A0-svc-lastreceived</code> + <code>R7-2-pay-attribution</code> — lastReceivedDate/deliveryCount (guard <code>!isReRecord</code>) + driverId=currentUser.sub</span><span class="hr">✓</span></div>
+      <div class="sday"><span class="dn" style="color:var(--slate-2,#666)">หมายเหตุ</span><span class="dt"><b>ของจริงทำใน 1 วัน</b> (แผนเดิม 5.5 วัน) → นำหน้าแผน ~4 วัน · commit <code>e2d9b7d3</code></span><span class="hr" style="color:#666">—</span></div>
     </div>
     <div class="swk">
-      <h4>W2 · สมองลูกค้า + ใครถึงรอบ <span class="wt">5 วัน + ครึ่ง · 2 track</span></h4>
-      <div class="sday"><span class="cb"></span><span class="dn">D6</span><span class="dt">(A) <code>A1-api-payload</code> + เริ่ม <code>A1-modal-getposition</code> · (B) <code>A2-1-cadence-fn</code> (medianGapDays)</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D7</span><span class="dt">(A) <code>A1-modal-getposition</code> (จบ — best-effort GPS) · (B) เริ่ม <code>A2-2-due-query</code></span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D8</span><span class="dt">(A) <code>A1-brain-card</code> (card อ่าน recency) · (B) <code>A2-2-due-query</code> (CALENDAR∪OVERDUE∪LAPSED∪SUBLESS)</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D9</span><span class="dt">(A) <code>R5-1-mount-subs-list</code> · (B) <code>A2-2</code> (จบ) + <code>A2-3-endpoint</code> (GET /due-customers)</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D10</span><span class="dt"><code>R5-2-subless-feed</code> + integration + ตรวจ (tsc/loo-check)</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ครึ่งวัน</span><span class="dt">integration test + QC + PR (PR-A1 / PR-A2 / PR-R5)</span><span class="hr" style="color:var(--muted)">~½ วัน</span></div>
+      <h4>ມື້ 2 · ชุดทดสอบ A0 + PR <span class="wt">ที่ยังเหลือ</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 2</span><span class="dt"><code>A0-spec-extend</code> — jest: GPS present/absent · lastReceived/re-record · idempotency replay · walk-in skip</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn" style="color:#666">ครึ่งวัน</span><span class="dt">QC + <code>/loo-check</code> + เปิด PR (PR-A0 / PR-R7-2)</span><span class="hr" style="color:#666">~½ วัน</span></div>
     </div>
     <div class="swk">
-      <h4>W3 · Route entity + วาดเส้น <span class="wt">5 วัน + ครึ่ง · 2 track</span></h4>
-      <div class="sday"><span class="cb"></span><span class="dn">D11</span><span class="dt"><code>A3-route-schema</code> — <code>Route</code> entity + <code>DeliveryRun.routeId</code> + migration + generate</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D12</span><span class="dt"><code>A3-routes-module</code> (เริ่ม) — CRUD, whereWithBranch, broadcast ROUTE_UPDATED</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D13</span><span class="dt">(A) <code>A3-routes-module</code> (จบ) + <code>A3-routes-api-hooks</code> · (B) เริ่ม <code>A3-route-render-layer</code></span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D14–15</span><span class="dt">(A) <code>A3-route-draw-tool</code> (วาดเส้นบน Google Maps · single active tool) · (B) <code>A3-route-render-layer</code> (จบ · ROUTE_PALETTE)</span><span class="hr">~2 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ครึ่งวัน</span><span class="dt">ทดสอบ draw บนเครื่องจริง + QC + PR (PR-A3)</span><span class="hr" style="color:var(--muted)">~½ วัน</span></div>
+      <h4>ມື້ 3-5 · สมองลูกค้า + ใครถึงรอบ <span class="wt">~3 วัน · 2 track</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 3</span><span class="dt">(A) <code>A1-api-payload</code> + เริ่ม <code>A1-modal-getposition</code> · (B) <code>A2-1-cadence-fn</code> (medianGapDays)</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 4</span><span class="dt">(A) <code>A1-modal-getposition</code> (จบ) + <code>A1-brain-card</code> (อ่าน recency) · (B) <code>A2-2-due-query</code> (CALENDAR∪OVERDUE∪LAPSED∪SUBLESS)</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 5</span><span class="dt">(A) <code>R5-1-mount-subs-list</code> + <code>R5-2-subless-feed</code> · (B) <code>A2-2</code> (จบ) + <code>A2-3-endpoint</code> (GET /due-customers) + integration/PR</span><span class="hr">~1 วัน</span></div>
     </div>
     <div class="swk">
-      <h4>W4 · กรอง + corridor + วัดผล <span class="wt">5 วัน + ครึ่ง · 2 track</span></h4>
-      <div class="sday"><span class="cb"></span><span class="dn">D16–17</span><span class="dt">(A) <code>A4-corridor-near-query</code> (bbox + point-near-line · in-branch) · (B) <code>A4-day-color-filter</code></span><span class="hr">~2 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D18</span><span class="dt"><code>A4-route-pin-encoding</code> — ring=route, fill=lapse + legend + idsKey memo</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D19</span><span class="dt"><code>R8-1-verified-derivation</code> — isVerifiedStop + per-driver verifiedPct report</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">D20</span><span class="dt"><code>R8-2-signal-inventory</code> (เริ่ม · per-driver +/− no score) + /loo-check + PR · <em>L · อาจล้น +1–2 วัน</em></span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ครึ่งวัน</span><span class="dt">เก็บงานรวม + เตรียม demo + PR (PR-A4 / PR-R8)</span><span class="hr" style="color:var(--muted)">~½ วัน</span></div>
+      <h4>ມື້ 6-9 · Route entity + วาดเส้น <span class="wt">~4 วัน · 2 track</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">ມື้ 6</span><span class="dt"><code>A3-route-schema</code> — <code>Route</code> entity + <code>DeliveryRun.routeId</code> + migration + generate</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 7</span><span class="dt"><code>A3-routes-module</code> (เริ่ม) — CRUD, whereWithBranch, broadcast ROUTE_UPDATED</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 8</span><span class="dt">(A) <code>A3-routes-module</code> (จบ) + <code>A3-routes-api-hooks</code> · (B) เริ่ม <code>A3-route-render-layer</code></span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 9</span><span class="dt">(A) <code>A3-route-draw-tool</code> (Google Maps · single active tool) · (B) <code>A3-route-render-layer</code> (จบ · ROUTE_PALETTE) + ทดสอบ/PR-A3</span><span class="hr">~1 วัน</span></div>
+    </div>
+    <div class="swk">
+      <h4>ມื้ 10-13 · กรอง + corridor + วัดผล <span class="wt">~4 วัน · 2 track</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 10-11</span><span class="dt">(A) <code>A4-corridor-near-query</code> (bbox + point-near-line · in-branch) · (B) <code>A4-day-color-filter</code></span><span class="hr">~2 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 12</span><span class="dt"><code>A4-route-pin-encoding</code> — ring=route, fill=lapse + legend + idsKey memo</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 13</span><span class="dt"><code>R8-1-verified-derivation</code> (isVerifiedStop + verifiedPct) + <code>R8-2-signal-inventory</code> (เริ่ม) + /loo-check + PR-A4/R8 <em>· L · อาจล้น +1-2 วัน</em></span><span class="hr">~1 วัน</span></div>
     </div>
   </div>
-  <p class="note-est">เวลาเป็น "ประมาณ" · ทำงาน 6 วัน/สัปดาห์ (5 เต็ม + 1 ครึ่ง) · ครึ่งวัน = QC / review / PR · 26 task รวม ~41 person-days → 2 devs ≈ 4 สัปดาห์ · รายละเอียด/dependency ดูตาราง §5.1 · ทุก PR ผ่าน <code>/loo-check</code> + <code>loo-reviewer</code> + tsc ก่อน commit. <b>หมายเหตุ:</b> ตารางนี้คือ Track A ล้วน — Track B (แอปคนขับ) เพิ่มเข้ามาใน §5c.</p>
+  <p class="note-est"><b>นำหน้าแผน:</b> A0 keystone ของจริงทำ <b>1 วัน</b> (แผนเดิม 5.5) → นำหน้า ~4 วัน. งานที่เหลือ (มื้ 2-13) <b>ประเมินตามจริง ไม่บีบ</b> ≈ ~12-13 วัน (Track A 2 devs). เวลาเป็น "ประมาณ" · ทำงาน 6 วัน/สัปดาห์ · ทุก PR ผ่าน <code>/loo-check</code> + <code>tsc</code> (CI จริง = tsc+jest+e2e · <b>lint ยังไม่ gate</b>). <b>หมายเหตุ:</b> ตารางนี้ Track A · Track B (แอปคนขับ) ดู §5c (เริ่มแล้ว ~25-30%).</p>
 </section>
 
 <section class="s" id="trackB">
@@ -528,7 +532,7 @@
     <li>snapshot cut ≈ <b>2026-06-08</b> (last migration <code>20260608000000_subscription_product_optional</code>) — same project, additive subset.</li>
     <li>live <b>ahead 25 migrations</b> (<code>20260609</code> → <code>20260622100000_driver_pin_auth</code>) + 3 modules: <code>customer-departments</code>, <code>health</code>, <code>stock-counts</code> · zero snapshot-only items.</li>
     <li><b>Block A lands ONLY in live.</b> <code>deliveredLatitude/Longitude</code> ມีก่อน Block A ใน 4 snapshot files.</li>
-    <li>live + <code>@sentry/node</code> + <code>otplib</code> (MFA <code>20260617120000</code>) · schema 4,048 → 4,359 lines.</li>
+    <li>live + <code>@sentry/node</code> + <code>otplib</code> (MFA <code>20260617120000</code>) · schema 4,048 → 4,359 lines · <b>96 models · 153 migrations รวม (20260328→20260622) · 70 modules · 87 services</b> · <code>tsc --noEmit</code> ผ่าน 0 error.</li>
     <li><code>source_code/docs/*</code> ເກ່າກວ່າໂຄ້ดตัวเอง. <b>อ่าน snapshot ເพื่อ orientation · ຢ່າแก้ · build บน live repo.</b></li>
   </ul>
 </section>
@@ -551,7 +555,7 @@
     <li><b>GPS-at-delivery trap:</b> ຂຽນ GPS ໃນ <code>deliverOrder</code> ໂดยตรง · ຢ່าผ่าน <code>updateStopStatus</code> (reject DELIVERED on not-COMPLETED, :398-405).</li>
     <li><b>Order.status ບໍ່ມี DELIVERED</b> — DELIVERED อยู่บน <code>DeliveryRunOrder</code> (<code>/loo-check</code> สแกน).</li>
     <li><b>AuditInterceptor global</b> (<code>APP_INTERCEPTOR</code>) — ห้าม <code>@UseInterceptors(AuditInterceptor)</code> ต่อ method. path ที่มองไม่เห็น → <code>AuditService.record()</code>.</li>
-    <li><b>tenant+branch isolation</b> ทุก query (<code>TenantScope.whereWithBranch</code>) — R4/R6 cross-branch ต้อง carve-out + audit. เคารพ <code>isCustomerBranchScopeExempt</code>.</li>
+    <li><b>tenant+branch isolation</b> ทุก query (<code>TenantScope.whereWithBranch</code>) — R4/R6 cross-branch ต้อง carve-out + audit. เคารพ <code>isCustomerBranchScopeExempt</code>. <b>มี ESLint rule</b> (<code>no-restricted-syntax</code>) บังคับ <code>tenantId</code> ใน service where-clause กัน cross-tenant — แต่ <b>ยังไม่ถูกรันใน CI</b> · ค้าง migrate ~29 จุด (<code>eslint-disable</code>).</li>
     <li><b>Prisma 7 nested-create ห้าม scalar FK</b> — ใช้ <code>connect: { id }</code>. (update/top-level create ใส่ scalar ได้ — Block A ทำถูก).</li>
     <li><b>broadcastTenant</b> หลังทุก tenant mutation (หลัง $transaction commit).</li>
     <li><b>re-record double-count:</b> <code>deliveryCount</code>/<code>lastReceivedDate</code> guard <code>!isReRecord</code>. <code>totalPurchaseCount</code> นับซ้ำอยู่แล้ว (flag in PR).</li>
@@ -560,7 +564,8 @@
     <li><b>take:20000 cap</b> — corridor query bbox ก่อน take ไม่ใช่ JS-filter หลัง.</li>
     <li><b>3 color systems แยก:</b> semantic <code>colorCode</code> · <code>TERRITORY_PALETTE</code> · route palette · lapse ladder.</li>
     <li><b>run-creation uniqueness</b> app-enforced — path ใหม่ copy guard ครบ.</li>
-    <li><b>Settlement.create deleted (Phase 4.3)</b> — ตารางว่าง · R7 pay design ต้องรู้.</li>
+    <li><b>Settlement.create แบบ standalone ลบ (Phase 4.3)</b> — ไม่ใช่ "ตารางว่าง": settlement ตอนนี้สร้างใน <code>DriverDayService</code> (delivery-runs Phase 9.1) · <code>SettlementsController</code> ถูกลบ เหลือ read + approve/dispute (ปัจจุบันเรียกโดย test เท่านั้น) · R7 pay design ต้องรู้.</li>
+    <li><b>delivery-runs = god-service (โตกลับ)</b> — facade 2,033 LOC (เคยแยกเหลือ 729 ใน <code>SPLIT_PLAN.md</code> · ตอนนี้โตกลับ) · <code>delivery-operations.service.ts</code> 2,208 LOC · งาน Block A / Track B ใหม่ <b>ควรลงใน <code>services/</code> sub-services ไม่ใช่ facade</b> (อย่าซ้ำรอย regression). หมายเหตุ: <code>reports.service.ts</code> = 10,319 LOC คือก้อนใหญ่สุดของ repo.</li>
     <li><b>money Decimal</b> (18,2)/(18,4) · re-derive on reverse · 2 ledgers (<code>PaymentCollection</code> vs <code>CustomerPayment</code>) ต้อง union.</li>
     <li><b>Lao UI labels บังคับ</b> ผ่าน Xieng QC + <code>lao_corruption_scan.py</code> · mono SVG ห้าม emoji.</li>
     <li><b>no persisted recency = hot-path cost</b> — Block A persist + index แก้แล้ว (เดิม <code>getLastDelivered</code> MAX groupBy 3+ ที่).</li>
