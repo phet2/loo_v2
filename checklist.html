@@ -77,6 +77,12 @@
   @media(hover:none){.ictl{opacity:1}}
   .edit{flex:1;min-width:0;font-family:inherit;font-size:1rem;line-height:1.4;padding:7px 10px;border:1px solid var(--brand);border-radius:var(--r-sm);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
   .gedit{font-weight:700;font-size:1.08rem}
+  .it .dn,.it .hr{cursor:pointer;border-radius:6px;padding:2px 6px;margin-top:1px;transition:background .12s,color .12s}
+  .it .dn:hover,.it .hr:hover{background:rgba(37,99,235,.08);color:var(--brand)}
+  .it .dn.ph,.it .hr.ph{opacity:.45;font-style:italic;font-weight:400}
+  .it:hover .dn.ph,.it:hover .hr.ph{opacity:.85}
+  .edit.edn{flex:0 0 auto;width:108px;font-family:var(--mono);font-size:.82rem;padding:6px 8px}
+  .edit.ehr{flex:0 0 auto;width:96px;font-family:var(--mono);font-size:.82rem;padding:6px 8px}
 
   .additem{padding:4px 14px 14px}
   .addbtn{font-family:inherit;font-size:.88rem;font-weight:600;color:var(--brand);background:transparent;border:1px dashed rgba(37,99,235,.4);border-radius:var(--pill);padding:7px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
@@ -100,7 +106,7 @@
 <section class="head"><div class="wrap">
   <div class="eyebrow">Checklist Manager</div>
   <h1>ຈັດການ Checklist</h1>
-  <p>ເພີ່ມ · ແກ້ໄຂ · ລຶບ · ຕິກ ລາຍການງານ — ບັນທຶກອັດຕະໂນມັດ ແລະ <b>ທຸກຄົນເຫັນຮ່ວມກັນ realtime</b>. ກົດທີ່ຂໍ້ຄວາມເພື່ອແກ້ໄຂ · ກົດຊ່ອງ ✓ ເພື່ອຕິກ · <b>ແກ້ບ່ອນນີ້ → Overview ປ່ຽນຕາມທັນທີ</b></p>
+  <p>ເພີ່ມ · ແກ້ໄຂ · ລຶບ · ຕິກ ລາຍການງານ — ບັນທຶກອັດຕະໂນມັດ ແລະ <b>ທຸກຄົນເຫັນຮ່ວມກັນ realtime</b>. ກົດທີ່ <b>ປ້າຍມື້ · ຂໍ້ຄວາມ · ເວລາ</b> ເພື່ອແກ້ໄຂ · ກົດຊ່ອງ ✓ ເພື່ອຕິກ · <b>ແກ້ບ່ອນນີ້ → Overview ປ່ຽນຕາມທັນທີ</b></p>
   <div class="prog"><span>ຄວາມຄືບໜ້າ</span><span class="bar"><i id="pbar"></i></span><span id="ppct">0/0</span></div>
 </div></section>
 
@@ -135,15 +141,21 @@
         : '<div class="gt" data-act="editg" data-id="'+gid+'">'+(esc(g.title)||'(ບໍ່ມີຊື່)')+'</div>';
       var rows=its.map(function(ie){
         var iid=ie[0], it=ie[1];
-        var tx = editing&&editing.t==='i'&&editing.id===iid
+        var ef = (editing&&editing.t==='i'&&editing.id===iid) ? (editing.f||'text') : null;
+        var dn = ef==='dn'
+          ? '<input class="edit edn" id="ed" value="'+esc(it.dn)+'">'
+          : '<span class="dn'+(it.dn?'':' ph')+'" data-act="editdn" data-id="'+iid+'" title="ແກ້ປ້າຍມື້">'+(esc(it.dn)||'＋ມື້')+'</span>';
+        var tx = ef==='text'
           ? '<input class="edit" id="ed" value="'+esc(it.text)+'">'
           : '<div class="itx" data-act="editi" data-id="'+iid+'">'+(esc(it.text)||'(ວ່າງ)')+'</div>';
-        var ctl='<span class="ictl"><button class="iconbtn" data-act="editi" data-id="'+iid+'">'+PEN+'</button><button class="iconbtn danger" data-act="deli" data-id="'+iid+'">'+TRASH+'</button></span>';
-        if(it.note) return '<div class="it note">'+(it.dn?'<span class="dn">'+esc(it.dn)+'</span>':'')+tx+ctl+'</div>';
+        var hr = ef==='hr'
+          ? '<input class="edit ehr" id="ed" value="'+esc(it.hr)+'">'
+          : '<span class="hr'+(it.hr?'':' ph')+'" data-act="edithr" data-id="'+iid+'" title="ແກ້ເວລາ">'+(esc(it.hr)||'＋ເວລາ')+'</span>';
+        var ctl='<span class="ictl"><button class="iconbtn" data-act="editi" data-id="'+iid+'" title="ແກ້ຂໍ້ຄວາມ">'+PEN+'</button><button class="iconbtn danger" data-act="deli" data-id="'+iid+'" title="ລຶບ">'+TRASH+'</button></span>';
+        if(it.note) return '<div class="it note">'+dn+tx+hr+ctl+'</div>';
         return '<div class="it'+(it.done?' on':'')+'">'
           +'<span class="cb'+(it.done?' on':'')+'" data-act="toggle" data-id="'+iid+'" role="checkbox" aria-checked="'+it.done+'" tabindex="0"></span>'
-          +(it.dn?'<span class="dn">'+esc(it.dn)+'</span>':'')+tx
-          +(it.hr?'<span class="hr">'+esc(it.hr)+'</span>':'')+ctl+'</div>';
+          +dn+tx+hr+ctl+'</div>';
       }).join('');
       return '<div class="grp'+(allDone?' done':'')+'"><div class="gh">'+gtitle
         +'<span class="gcount">'+gd+'/'+gt+'</span>'+(allDone?'<span class="gbadge">✓ ເສັດ</span>':'')
@@ -159,27 +171,31 @@
 
   function commit(val){
     if(!editing) return; val=(val||'').trim(); var e=editing; editing=null;
-    if(e.t==='g'){ if(val) C.editGroup(e.id,val); else render(C.state,C.status()); }
-    else { var it=C.state.clist.items[e.id]; if(it){ if(val) C.editItem(e.id,{text:val}); else C.delItem(e.id); } else render(C.state,C.status()); }
+    if(e.t==='g'){ if(val) C.editGroup(e.id,val); else render(C.state,C.status()); return; }
+    var f=e.f||'text';
+    if(f==='text'){ if(val) C.editItem(e.id,{text:val}); else C.delItem(e.id); } // ข้อความว่าง = ลบรายการ
+    else { var p={}; p[f]=val; C.editItem(e.id,p); } // ป้ายมื้อ/เวลา : ปล่อยว่างได้ ไม่ลบ
   }
 
   document.addEventListener('click',function(ev){
     var el=ev.target.closest('[data-act]');
     if(!el){ if(editing&&!ev.target.closest('.edit')){var ed=document.getElementById('ed');commit(ed?ed.value:'');} return; }
     var act=el.getAttribute('data-act'), id=el.getAttribute('data-id');
-    if(editing){ var sameG=(act==='editg'&&editing.t==='g'&&id===editing.id), sameI=(act==='editi'&&editing.t==='i'&&id===editing.id); if(!sameG&&!sameI){var ed=document.getElementById('ed');commit(ed?ed.value:'');} }
+    if(editing){ var ed=document.getElementById('ed'); commit(ed?ed.value:''); } // กดที่อื่น = บันทึกช่องที่กำลังแก้ก่อน
     if(act==='toggle'){ C.toggleItem(id); }
-    else if(act==='editi'){ editing={t:'i',id:id}; render(C.state,C.status()); }
+    else if(act==='editi'){ editing={t:'i',id:id,f:'text'}; render(C.state,C.status()); }
+    else if(act==='editdn'){ editing={t:'i',id:id,f:'dn'}; render(C.state,C.status()); }
+    else if(act==='edithr'){ editing={t:'i',id:id,f:'hr'}; render(C.state,C.status()); }
     else if(act==='editg'){ editing={t:'g',id:id}; render(C.state,C.status()); }
     else if(act==='deli'){ if(confirm('ລຶບລາຍການນີ້?')) C.delItem(id); }
     else if(act==='delg'){ if(confirm('ລຶບກຸ່ມນີ້ ພ້ອມລາຍການທັງໝົດ?')) C.delGroup(id); }
-    else if(act==='additem'){ var iid=C.addItem(id); editing={t:'i',id:iid}; render(C.state,C.status()); }
+    else if(act==='additem'){ var iid=C.addItem(id); editing={t:'i',id:iid,f:'text'}; render(C.state,C.status()); }
     else if(act==='addgroup'){ var gid=C.addGroup(''); editing={t:'g',id:gid}; render(C.state,C.status()); }
   });
   document.addEventListener('keydown',function(ev){
     if(!editing) return;
     if(ev.key==='Enter'){ ev.preventDefault(); var ed=document.getElementById('ed'); commit(ed?ed.value:''); }
-    else if(ev.key==='Escape'){ ev.preventDefault(); var e=editing, it=C.state.clist.items[e.id]; editing=null; if(e.t==='i'&&it&&!it.text){ C.delItem(e.id); } else render(C.state,C.status()); }
+    else if(ev.key==='Escape'){ ev.preventDefault(); var e=editing, it=C.state.clist.items[e.id]; editing=null; if(e.t==='i'&&(e.f||'text')==='text'&&it&&!it.text){ C.delItem(e.id); } else render(C.state,C.status()); }
   });
 
   C.subscribe(render);
