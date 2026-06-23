@@ -72,7 +72,7 @@
   };
 
   // ---- state ----
-  var state = { checks: {}, meta: {} };
+  var state = { checks: {}, meta: {}, answers: {} };
   var remote = null;                 // { writeKey, writeMeta }
   var syncStatus = 'local';          // 'local' | 'connecting' | 'live'
   var rows = [];
@@ -80,8 +80,8 @@
   function loadLocal() {
     try {
       var s = JSON.parse(localStorage.getItem(LSKEY) || '{}');
-      return { checks: s.checks || {}, meta: s.meta || {} };
-    } catch (e) { return { checks: {}, meta: {} }; }
+      return { checks: s.checks || {}, meta: s.meta || {}, answers: s.answers || {} };
+    } catch (e) { return { checks: {}, meta: {}, answers: {} }; }
   }
   function saveLocal() { try { localStorage.setItem(LSKEY, JSON.stringify(state)); } catch (e) {} }
 
@@ -112,6 +112,22 @@
       '.loo-chip.local{background:rgba(245,158,11,.18);color:var(--amber-ink,#a8690a)}' +
       '.swk h4 .loo-wk{font-family:"JetBrains Mono",monospace;font-size:.74rem;font-weight:600;' +
         'color:var(--muted,#5b667f);margin-left:8px}' +
+      '.swk.loo-swk-done{background:var(--mint,#c8e6cd);transition:background .3s}' +
+      '.swk.loo-swk-done > h4::after{content:var(--loo-done-label,"\\2713 DONE");display:inline-block;' +
+        'font-family:var(--mono,monospace);font-size:.7rem;font-weight:600;letter-spacing:.03em;color:#fff;' +
+        'background:var(--success,#1ea64a);padding:3px 10px;border-radius:var(--pill,50px);margin-left:8px;vertical-align:2px}' +
+      '.loo-ans{margin-top:14px}' +
+      '.loo-ans textarea{width:100%;box-sizing:border-box;font-family:inherit;font-size:.95rem;line-height:1.5;' +
+        'color:var(--ink,#0b1220);background:var(--canvas,#fff);border:1px solid var(--hair,var(--hairline,#e0e7f5));' +
+        'border-radius:var(--r-md,8px);padding:10px 12px;resize:vertical;outline:none}' +
+      '.loo-ans textarea::placeholder{color:var(--muted,#94a3c2)}' +
+      '.loo-ans textarea:focus{border-color:var(--brand,#2563EB);box-shadow:0 0 0 3px rgba(37,99,235,.16)}' +
+      '.loo-ans .row{display:flex;align-items:center;gap:11px;margin-top:8px}' +
+      '.loo-ans .save{font-family:inherit;font-weight:700;font-size:.85rem;color:#fff;background:var(--brand,#2563EB);' +
+        'border:none;border-radius:var(--pill,50px);padding:8px 18px;cursor:pointer;transition:filter .2s,transform .1s}' +
+      '.loo-ans .save:hover{filter:brightness(1.08)}.loo-ans .save:active{transform:scale(.97)}' +
+      '.loo-ans .st{font-family:var(--mono,"JetBrains Mono",monospace);font-size:.74rem;font-weight:600}' +
+      '.loo-ans .st.ok{color:var(--success,#1ea64a)}.loo-ans .st.edit{color:var(--amber-ink,#a8690a)}' +
       '@media (prefers-reduced-motion:reduce){.loo-prog .bar i{transition:none}}';
     document.head.appendChild(css);
   }
@@ -174,7 +190,8 @@
       if (!label) return;
       var cbs = wk.querySelectorAll('.sday .cb'), d = 0;
       Array.prototype.slice.call(cbs).forEach(function (c) { if (c.classList.contains('on')) d++; });
-      label.textContent = '· ' + d + '/' + cbs.length;
+      label.textContent = cbs.length ? '· ' + d + '/' + cbs.length : '';
+      wk.classList.toggle('loo-swk-done', cbs.length > 0 && d === cbs.length); // ติ๊กครบ → เขียวทั้งใบ
     });
     state.meta[docId] = { total: total, title: document.title || DOC_TITLES[docId] || docId };
   }
@@ -185,6 +202,38 @@
     renderDocPage();
     saveLocal();
     if (remote) remote.writeKey(key, val); // เขียนเฉพาะ key นี้ (กันการติ๊กพร้อมกันทับกัน)
+  }
+
+  /* ----------------------- decisions (answer boxes) ----------------------- */
+  var answerBoxes = [];
+  function setupAnswers() {
+    answerBoxes = Array.prototype.slice.call(document.querySelectorAll('.loo-ans'));
+    answerBoxes.forEach(function (box) {
+      var ta = box.querySelector('textarea'); if (!ta) return;
+      var btn = box.querySelector('.save'); var st = box.querySelector('.st');
+      var key = docId + ':' + (ta.getAttribute('data-answer') || '');
+      ta.addEventListener('input', function () { if (st) { st.className = 'st edit'; st.textContent = 'ຍັງບໍ່ໄດ້ບັນທຶກ'; } });
+      if (btn) btn.addEventListener('click', function () {
+        saveAnswer(key, ta.value.trim());
+        if (st) { st.className = 'st ok'; st.textContent = '✓ ບັນທຶກແລ້ວ'; }
+      });
+    });
+    return answerBoxes.length > 0;
+  }
+  function renderAnswers() {
+    answerBoxes.forEach(function (box) {
+      var ta = box.querySelector('textarea'); if (!ta || document.activeElement === ta) return;
+      var key = docId + ':' + (ta.getAttribute('data-answer') || '');
+      var v = state.answers[key] || '';
+      if (ta.value !== v) ta.value = v;
+      var st = box.querySelector('.st');
+      if (st) { if (v) { st.className = 'st ok'; st.textContent = '✓ ບັນທຶກແລ້ວ'; } else { st.className = 'st'; st.textContent = ''; } }
+    });
+  }
+  function saveAnswer(key, val) {
+    if (val) state.answers[key] = val; else delete state.answers[key];
+    saveLocal();
+    if (remote) remote.writeAnswer(key, val);
   }
 
   /* --------------------------- hub (index) --------------------------- */
@@ -209,7 +258,7 @@
   }
 
   function renderAll() {
-    if (docId === 'index') renderHub(); else renderDocPage();
+    if (docId === 'index') renderHub(); else { renderDocPage(); renderAnswers(); }
     setChip();
   }
 
@@ -235,6 +284,10 @@
           if (docId === 'index') return;
           var u = {}; u['meta/' + docId] = state.meta[docId] || {};
           m[1].update(root, u);
+        },
+        writeAnswer: function (key, val) {
+          var u = {}; u['answers/' + key] = val ? val : null;
+          m[1].update(root, u);
         }
       };
 
@@ -248,12 +301,18 @@
           var diff = JSON.stringify(merged) !== JSON.stringify(rChecks);
           state.checks = merged;
           state.meta = Object.assign({}, state.meta, v.meta || {});
+          var rAns = v.answers || {};
+          var mergedAns = Object.assign({}, state.answers, rAns);
+          var diffAns = JSON.stringify(mergedAns) !== JSON.stringify(rAns);
+          state.answers = mergedAns;
           if (diff) m[1].update(root, { checks: merged });
+          if (diffAns) m[1].update(root, { answers: mergedAns });
           remote.writeMeta();
           syncStatus = 'live';
         } else {
           state.checks = rChecks;
           state.meta = Object.assign({}, state.meta, v.meta || {});
+          state.answers = v.answers || {};
         }
         saveLocal();
         renderAll();
@@ -272,8 +331,9 @@
   /* ------------------------------ init ------------------------------ */
   function init() {
     injectCSS();
+    if (docId !== 'index') document.documentElement.style.setProperty('--loo-done-label', docId === 'plan' ? '"✓ เสร็จ"' : '"✓ ເສັດແລ້ວ"');
     state = loadLocal();
-    if (docId !== 'index') setupDocPage();
+    if (docId !== 'index') { setupDocPage(); setupAnswers(); }
     renderAll();
     startRemote();
   }

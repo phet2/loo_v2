@@ -10,9 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=Noto+Sans+Lao:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#000;--canvas:#fff;--on-dark:#fff;
+    --ink:#0b1220;--brand:#2563EB;--brand-2:#1d4ed8;--cyan:#49beff;--canvas:#fff;--on-dark:#fff;
     --hair:#e6e6e6;--hair-soft:#f1f1f1;--soft:#f7f7f5;--surface-2:#f7f7f5;
-    --lime:#dceeb1;--lilac:#c5b0f4;--cream:#f4ecd6;--pink:#efd4d4;--mint:#c8e6cd;--coral:#f3c9b6;--navy:#1f1d3d;
+    --lime:#dbe8ff;--lilac:#bcd5ff;--cream:#eef4fd;--pink:#efd4d4;--mint:#c8e6cd;--coral:#f3c9b6;--navy:#0c1430;
     --magenta:#ff3d8b;--success:#1ea64a;--green:#1ea64a;--blue:#000;
     --green-ink:#0a5a2a;--amber-ink:#8a5a00;--red-ink:#b3243f;--purple-ink:#5b3fb0;
     --code-bg:#181626;--code-ink:#dfe5f5;
@@ -28,18 +28,18 @@
     font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   h1,h2,h3,h4{font-family:var(--lao);font-weight:700;margin:0;line-height:1.25;letter-spacing:-.01em;color:var(--ink);text-wrap:balance}
   p{margin:0;text-wrap:pretty}
-  a{color:var(--ink);text-decoration:none}
+  a{color:var(--brand);text-decoration:none}
   code,kbd,.mono{font-family:var(--mono);font-feature-settings:"tnum" 1}
-  :not(pre)>code{background:var(--soft);border:1px solid var(--hair);border-radius:5px;padding:.08em .42em;font-size:.86em;color:#000;white-space:nowrap}
-  ::selection{background:var(--ink);color:var(--canvas)}
+  :not(pre)>code{background:var(--soft);border:1px solid var(--hair);border-radius:5px;padding:.08em .42em;font-size:.86em;color:#000;overflow-wrap:anywhere;word-break:break-word}
+  ::selection{background:var(--brand);color:var(--canvas)}
   .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(18px,4vw,38px)}
 
   .shell{display:grid;grid-template-columns:250px 1fr;gap:0;max-width:1380px;margin-inline:auto}
   @media(max-width:1000px){.shell{grid-template-columns:1fr}}
   .toc{position:sticky;top:0;align-self:start;height:100dvh;overflow-y:auto;padding:22px 14px 40px 22px;border-right:1px solid var(--hair);background:var(--canvas)}
   @media(max-width:1000px){.toc{position:static;height:auto;border-right:0;border-bottom:1px solid var(--hair)}}
-  .toc .brand{display:flex;align-items:center;gap:10px;font-family:var(--sans);font-weight:800;font-size:18px;letter-spacing:-.02em;margin-bottom:4px}
-  .toc .brand .dot{width:28px;height:28px;border-radius:8px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800}
+  .toc .brand{display:flex;align-items:center;gap:10px;font-family:var(--sans);font-weight:800;font-size:18px;letter-spacing:-.02em;margin-bottom:4px;text-decoration:none;color:inherit;transition:opacity .2s}.toc .brand:hover{opacity:.72}
+  .toc .brand .dot{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--cyan));color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800}
   .toc .tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.04em;text-transform:uppercase;color:#666;margin-bottom:16px;display:block}
   .toc ol{list-style:none;margin:0;padding:0}
   .toc a{display:block;color:#444;font-size:.84rem;padding:6px 10px;border-radius:var(--pill);border-left:2px solid transparent;line-height:1.35;transition:background .15s,color .15s;font-weight:500}
@@ -73,7 +73,7 @@
   pre .del{color:#ff9bb0;display:block;background:rgba(220,60,90,.16)}
   pre .fn{color:#cdacff}
   .filemark{font-family:var(--mono);font-size:.74rem;color:#666;margin:18px 0 -8px;display:flex;align-items:center;gap:7px}
-  .filemark::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--magenta);flex:0 0 auto}
+  .filemark::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand);flex:0 0 auto}
 
   .scroll-x{overflow-x:auto;margin:16px 0;border:1px solid var(--hair);border-radius:var(--r-md)}
   table{border-collapse:collapse;width:100%;font-size:.86rem;background:var(--canvas)}
@@ -94,11 +94,11 @@
   .note{border:1px solid var(--hair);border-radius:var(--r-md);padding:15px 17px;margin:16px 0;background:var(--canvas);display:flex;gap:12px}
   .note .ic{flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-family:var(--mono);font-size:.78rem}
   .note.warn{background:var(--cream)}
-  .note.warn .ic{background:#000;color:var(--cream)}
+  .note.warn .ic{background:var(--brand);color:var(--cream)}
   .note.danger{background:var(--pink)}
-  .note.danger .ic{background:#000;color:var(--pink)}
+  .note.danger .ic{background:var(--brand);color:var(--pink)}
   .note.ok{background:var(--mint)}
-  .note.ok .ic{background:#000;color:var(--mint)}
+  .note.ok .ic{background:var(--brand);color:var(--mint)}
   .note b{color:#000;font-weight:700}
 
   ul.tight,ol.tight{margin:12px 0;padding-left:22px}
@@ -116,7 +116,7 @@
   .swk .wt{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:#000;background:var(--lime);padding:3px 10px;border-radius:var(--pill);margin-left:8px;vertical-align:2px}
   .sday{display:flex;gap:11px;align-items:flex-start;padding:9px 6px;border-top:1px solid var(--hair-soft);flex-wrap:wrap;border-radius:var(--r-sm)}
   .swk .sday:first-of-type{border-top:0}
-  .sday .cb{flex:0 0 auto;width:17px;height:17px;border:2px solid #000;border-radius:5px;margin-top:3px}
+  .sday .cb{flex:0 0 auto;width:17px;height:17px;border:2px solid var(--brand);border-radius:5px;margin-top:3px}
   .sday .dn{flex:0 0 auto;white-space:nowrap;font-family:var(--mono);font-weight:600;color:#000;font-size:.84rem;margin-top:2px}
   .sday .dt{flex:1;min-width:230px;color:var(--ink);font-size:.9rem;line-height:1.5;font-weight:400}
   .sday .hr{flex:0 0 auto;font-family:var(--mono);font-size:.76rem;font-weight:500;color:#666;margin-top:2px}
@@ -124,13 +124,16 @@
   .note-est b{color:#000;font-weight:700}
   footer{padding:30px 0;color:#666;font-family:var(--mono);font-size:.78rem;line-height:1.7;letter-spacing:.02em;border-top:1px solid var(--hair);margin-top:10px}
   footer code{color:#000}
+html,body{overflow-x:hidden;max-width:100%}.shell{max-width:100%}@media(max-width:1000px){.toc,.content{min-width:0;max-width:100%}.toc{height:auto;max-height:none}}pre,.scroll-x,table,img{max-width:100%}
+.loo-cta{display:inline-flex;align-items:center;gap:9px;font-family:inherit;font-weight:700;font-size:.95rem;text-decoration:none;color:#fff;background:var(--brand,#2563EB);border:none;border-radius:var(--pill,50px);padding:11px 20px;cursor:pointer;transition:filter .2s,transform .1s}.loo-cta:hover{filter:brightness(1.08)}.loo-cta:active{transform:scale(.97)}.loo-cta svg{width:18px;height:18px}#sched{scroll-margin-top:80px}
+.toctoggle{display:none;align-items:center;justify-content:center;width:42px;height:42px;border-radius:11px;border:1px solid var(--hair);background:var(--canvas);color:var(--ink);cursor:pointer}.toctoggle svg{width:22px;height:22px}@media(max-width:1000px){.toc{position:relative}.toctoggle{display:grid;position:absolute;top:16px;right:16px}.toc ol{display:none}.toc.open ol{display:block;margin-top:14px}}
 </style>
 </head>
 <body>
 <div class="shell">
 
-<nav class="toc">
-  <div class="brand"><span class="dot">L</span>LOO Dev Ref</div>
+<nav class="toc"><button class="toctoggle" aria-label="ສາລະບານ" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  <a class="brand" href="index.html"><span class="dot">L</span>LOO Dev Ref</a>
   <span class="tag">Customer-Brain + Routing · Block A</span>
   <ol>
     <li><a href="#arch">1 · ສະຖາປັດຕະຍະກຳ: loop 4 ຂັ້ນ</a></li>
@@ -167,6 +170,7 @@
   <div class="meta">
     <span>NestJS 11</span><span>Prisma 7.8</span><span>Next.js 16</span><span>PostgreSQL</span><span>repo: loo-platform</span><span>migrations → 20260622100000_driver_pin_auth</span><span>+ Track B: driver app</span><span style="background:#c8e6cd;color:#0a5a2a;border:1px solid transparent">✓ cross-checked vs live repo · 2026-06-22</span>
   </div>
+<div style="margin:22px 0 0"><a class="loo-cta" href="#sched"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6"/><path d="m9 11 3 3L22 4"/></svg> ไปที่ Checklist (ตารางงาน) ↓</a></div>
 </header>
 
 <section class="s" id="arch">
@@ -311,11 +315,11 @@
   <h2><span class="no">05</span> ແຜນ build 4 ອາທິດ (Block A end-to-end + B/C groundwork)</h2>
   <p class="lead">1 ເດືອນ ship Block A + ວາງ data-capture ໃຫ້ B/C. <b>OUT:</b> Service Score engine ເຕັມ, cross-branch rescue, OSRM/OR-Tools optimizer (gate: GPS≥80% + ≥8 verified rounds — ວັນนี้ວັດบ่ได้).</p>
   <div class="grid2">
-    <div class="card" style="background:var(--mint)"><h4>ມື້ 1 · keystone A0 <span class="pill done">✅ DONE</span></h4><p class="lead-sm">schema + migration + GPS/actor write + lastReceivedDate/deliveryCount + R7-2 pay. (ดู §4) · <b>ของจริงทำใน 1 วัน</b> (แผนเดิม 5.5) → นำหน้า ~4 วัน</p></div>
-    <div class="card"><h4>ມື້ 2 · tests + PR</h4><p class="lead-sm"><code>A0-spec-extend</code> — jest: GPS present/absent · lastReceived/re-record · idempotency replay · walk-in skip + QC/<code>loo-check</code> + PR-A0/R7-2 <em>(ที่ยังเหลือจาก Block A)</em></p></div>
-    <div class="card"><h4>ມື້ 3-5 · brain reads + who's-due</h4><p class="lead-sm">FE one-shot <code>getCurrentPosition</code> · card อ่าน recency · <code>listDueCustomers</code> (CALENDAR∪OVERDUE∪LAPSED∪SUBLESS) + <code>GET /due-customers</code> · mount <code>customer-subscriptions</code></p></div>
-    <div class="card"><h4>ມື້ 6-9 · Route entity + draw</h4><p class="lead-sm"><code>model Route</code> + <code>DeliveryRun.routeId?</code> · module <code>routes/</code> · route-LINE draw บน ops-map · <code>route-lines.tsx</code> (ROUTE_PALETTE)</p></div>
-    <div class="card"><h4>ມື້ 10-13 · filter + pins + corridor + measure</h4><p class="lead-sm">day/route filter · pin (ring=route, fill=lapse) · <code>customersNearRoute</code> (bbox + point-near-line) · <code>isVerifiedStop</code> + coverage report</p></div>
+    <div class="card"><h4>ມື້ 1 · 22/06 · keystone A0 <span class="pill done">✅ DONE</span></h4><p class="lead-sm"><b>วางแผน/ออกแบบระบบ</b> + schema + migration + GPS/actor write + lastReceivedDate/deliveryCount + R7-2 pay. (ดู §4) · <b>ของจริง 1 วัน</b> (แผน 5.5)</p></div>
+    <div class="card"><h4>ມື້ 2 · 23/06 · tests + PR</h4><p class="lead-sm"><code>A0-spec-extend</code> — jest: GPS present/absent · lastReceived/re-record · idempotency replay · walk-in skip + QC/<code>loo-check</code> + PR-A0/R7-2</p></div>
+    <div class="card"><h4>ມື້ 3-5 · 24-26/06 · brain reads + who's-due</h4><p class="lead-sm">FE one-shot <code>getCurrentPosition</code> · card อ่าน recency · <code>listDueCustomers</code> (CALENDAR∪OVERDUE∪LAPSED∪SUBLESS) + <code>GET /due-customers</code> · mount <code>customer-subscriptions</code></p></div>
+    <div class="card"><h4>ມື້ 6-9 · 27-30/06 · Route entity + draw</h4><p class="lead-sm"><code>model Route</code> + <code>DeliveryRun.routeId?</code> · module <code>routes/</code> · route-LINE draw บน ops-map · <code>route-lines.tsx</code> (ROUTE_PALETTE)</p></div>
+    <div class="card"><h4>ມື້ 10-13 · 01-04/07 · filter + pins + corridor + measure</h4><p class="lead-sm">day/route filter · pin (ring=route, fill=lapse) · <code>customersNearRoute</code> (bbox + point-near-line) · <code>isVerifiedStop</code> + coverage report</p></div>
   </div>
 
   <h3 class="sub" id="tasktable">5.1 · task table (master checklist)</h3>
@@ -358,46 +362,47 @@
   <h2><span class="no">5b</span> ตารางรายวัน + เวลา (day-by-day)</h2>
   <p class="lead">ประเมิน ~2 devs เต็มเวลา = ~4 สัปดาห์ (20 วันทำงาน) · 1 dev ≈ 8 สัปดาห์ · L=3–4 วัน · M=2 · S=1 · XS=0.5 · บางวันแยก 2 track (A/B) ขนาน · เวลาเป็นประมาณ</p>
   <div class="sched">
-    <div class="swk" style="background:var(--mint)">
-      <h4>ມື້ 1 · A0 keystone (รากฐาน) <span style="display:inline-block;font-family:var(--mono);font-size:.7rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#fff;background:var(--success);padding:3px 10px;border-radius:var(--pill);margin-left:8px;vertical-align:2px">✓ DONE · ตรวจแล้ว</span></h4>
+    <div class="swk">
+      <h4>ມື້ 1 · 22/06/2026 · A0 keystone (รากฐาน)</h4>
+      <div class="sday"><span class="cb"></span><span class="dn">A0·0</span><span class="dt"><b>วางแผน + ออกแบบระบบ</b> (architecture · data-model · loop stage4→1 · ก่อนลงมือเขียนโค้ด)</span><span class="hr">✓</span></div>
       <div class="sday"><span class="cb"></span><span class="dn">A0·1</span><span class="dt"><code>A0-schema-lrd</code> — schema +<code>lastReceivedDate</code>/<code>deliveryCount</code>/<code>deliveringUserId</code> + index + prisma generate</span><span class="hr">✓</span></div>
       <div class="sday"><span class="cb"></span><span class="dn">A0·2</span><span class="dt"><code>A0-migration-backfill</code> — migrate + backfill <code>MAX(deliveredAt)</code> + verify บน DB</span><span class="hr">✓</span></div>
       <div class="sday"><span class="cb"></span><span class="dn">A0·3</span><span class="dt"><code>A0-dto-controller</code> + <code>A0-svc-gps-write</code> — DTO lat/lng + เขียน GPS+<code>deliveringUserId</code> ใน deliverOrder tx</span><span class="hr">✓</span></div>
       <div class="sday"><span class="cb"></span><span class="dn">A0·4</span><span class="dt"><code>A0-svc-lastreceived</code> + <code>R7-2-pay-attribution</code> — lastReceivedDate/deliveryCount (guard <code>!isReRecord</code>) + driverId=currentUser.sub</span><span class="hr">✓</span></div>
-      <div class="sday"><span class="dn" style="color:var(--slate-2,#666)">หมายเหตุ</span><span class="dt"><b>ของจริงทำใน 1 วัน</b> (แผนเดิม 5.5 วัน) → นำหน้าแผน ~4 วัน · commit <code>e2d9b7d3</code></span><span class="hr" style="color:#666">—</span></div>
+      <div class="sday"><span class="dn" style="color:#666">หมายเหตุ</span><span class="dt"><b>ของจริงทำใน 1 วัน</b> (แผนเดิม 5.5 วัน) → นำหน้าแผน ~4 วัน · commit <code>e2d9b7d3</code></span><span class="hr" style="color:#666">—</span></div>
     </div>
     <div class="swk">
-      <h4>ມື້ 2 · ชุดทดสอบ A0 + PR <span class="wt">ที่ยังเหลือ</span></h4>
+      <h4>ມື້ 2 · 23/06 · ชุดทดสอบ A0 + PR <span class="wt">ที่ยังเหลือ</span></h4>
       <div class="sday"><span class="cb"></span><span class="dn">ມื้ 2</span><span class="dt"><code>A0-spec-extend</code> — jest: GPS present/absent · lastReceived/re-record · idempotency replay · walk-in skip</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn" style="color:#666">ครึ่งวัน</span><span class="dt">QC + <code>/loo-check</code> + เปิด PR (PR-A0 / PR-R7-2)</span><span class="hr" style="color:#666">~½ วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn" style="color:#666">เก็บงาน</span><span class="dt">QC + <code>/loo-check</code> + เปิด PR (PR-A0 / PR-R7-2)</span><span class="hr" style="color:#666">½ วัน</span></div>
     </div>
     <div class="swk">
-      <h4>ມື້ 3-5 · สมองลูกค้า + ใครถึงรอบ <span class="wt">~3 วัน · 2 track</span></h4>
-      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 3</span><span class="dt">(A) <code>A1-api-payload</code> + เริ่ม <code>A1-modal-getposition</code> · (B) <code>A2-1-cadence-fn</code> (medianGapDays)</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 4</span><span class="dt">(A) <code>A1-modal-getposition</code> (จบ) + <code>A1-brain-card</code> (อ่าน recency) · (B) <code>A2-2-due-query</code> (CALENDAR∪OVERDUE∪LAPSED∪SUBLESS)</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 5</span><span class="dt">(A) <code>R5-1-mount-subs-list</code> + <code>R5-2-subless-feed</code> · (B) <code>A2-2</code> (จบ) + <code>A2-3-endpoint</code> (GET /due-customers) + integration/PR</span><span class="hr">~1 วัน</span></div>
+      <h4>ມື້ 3-5 · 24-26/06 · สมองลูกค้า + ใครถึงรอบ <span class="wt">~3 วัน · 2 track</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 3 · 24/06</span><span class="dt">(A) <code>A1-api-payload</code> + เริ่ม <code>A1-modal-getposition</code> · (B) <code>A2-1-cadence-fn</code> (medianGapDays)</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 4 · 25/06</span><span class="dt">(A) <code>A1-modal-getposition</code> (จบ) + <code>A1-brain-card</code> (อ่าน recency) · (B) <code>A2-2-due-query</code> (CALENDAR∪OVERDUE∪LAPSED∪SUBLESS)</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 5 · 26/06</span><span class="dt">(A) <code>R5-1-mount-subs-list</code> + <code>R5-2-subless-feed</code> · (B) <code>A2-2</code> (จบ) + <code>A2-3-endpoint</code> (GET /due-customers) + integration/PR</span><span class="hr">~1 วัน</span></div>
     </div>
     <div class="swk">
-      <h4>ມື້ 6-9 · Route entity + วาดเส้น <span class="wt">~4 วัน · 2 track</span></h4>
-      <div class="sday"><span class="cb"></span><span class="dn">ມື้ 6</span><span class="dt"><code>A3-route-schema</code> — <code>Route</code> entity + <code>DeliveryRun.routeId</code> + migration + generate</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 7</span><span class="dt"><code>A3-routes-module</code> (เริ่ม) — CRUD, whereWithBranch, broadcast ROUTE_UPDATED</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 8</span><span class="dt">(A) <code>A3-routes-module</code> (จบ) + <code>A3-routes-api-hooks</code> · (B) เริ่ม <code>A3-route-render-layer</code></span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 9</span><span class="dt">(A) <code>A3-route-draw-tool</code> (Google Maps · single active tool) · (B) <code>A3-route-render-layer</code> (จบ · ROUTE_PALETTE) + ทดสอบ/PR-A3</span><span class="hr">~1 วัน</span></div>
+      <h4>ມื้ 6-9 · 27-30/06 · Route entity + วาดเส้น <span class="wt">~4 วัน · 2 track</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 6 · 27/06</span><span class="dt"><code>A3-route-schema</code> — <code>Route</code> entity + <code>DeliveryRun.routeId</code> + migration + generate</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 7 · 28/06</span><span class="dt"><code>A3-routes-module</code> (เริ่ม) — CRUD, whereWithBranch, broadcast ROUTE_UPDATED</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 8 · 29/06</span><span class="dt">(A) <code>A3-routes-module</code> (จบ) + <code>A3-routes-api-hooks</code> · (B) เริ่ม <code>A3-route-render-layer</code></span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມື้ 9 · 30/06</span><span class="dt">(A) <code>A3-route-draw-tool</code> (Google Maps · single active tool) · (B) <code>A3-route-render-layer</code> (จบ · ROUTE_PALETTE) + ทดสอบ/PR-A3</span><span class="hr">~1 วัน</span></div>
     </div>
     <div class="swk">
-      <h4>ມื้ 10-13 · กรอง + corridor + วัดผล <span class="wt">~4 วัน · 2 track</span></h4>
-      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 10-11</span><span class="dt">(A) <code>A4-corridor-near-query</code> (bbox + point-near-line · in-branch) · (B) <code>A4-day-color-filter</code></span><span class="hr">~2 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 12</span><span class="dt"><code>A4-route-pin-encoding</code> — ring=route, fill=lapse + legend + idsKey memo</span><span class="hr">~1 วัน</span></div>
-      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 13</span><span class="dt"><code>R8-1-verified-derivation</code> (isVerifiedStop + verifiedPct) + <code>R8-2-signal-inventory</code> (เริ่ม) + /loo-check + PR-A4/R8 <em>· L · อาจล้น +1-2 วัน</em></span><span class="hr">~1 วัน</span></div>
+      <h4>ມื้ 10-13 · 01-04/07 · กรอง + corridor + วัดผล <span class="wt">~4 วัน · 2 track</span></h4>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 10-11 · 01-02/07</span><span class="dt">(A) <code>A4-corridor-near-query</code> (bbox + point-near-line · in-branch) · (B) <code>A4-day-color-filter</code></span><span class="hr">~2 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມື้ 12 · 03/07</span><span class="dt"><code>A4-route-pin-encoding</code> — ring=route, fill=lapse + legend + idsKey memo</span><span class="hr">~1 วัน</span></div>
+      <div class="sday"><span class="cb"></span><span class="dn">ມื้ 13 · 04/07</span><span class="dt"><code>R8-1-verified-derivation</code> + <code>R8-2-signal-inventory</code> (เริ่ม) + /loo-check + PR-A4/R8 <em>· L · อาจล้น +1-2 วัน</em></span><span class="hr">~1 วัน</span></div>
     </div>
   </div>
-  <p class="note-est"><b>นำหน้าแผน:</b> A0 keystone ของจริงทำ <b>1 วัน</b> (แผนเดิม 5.5) → นำหน้า ~4 วัน. งานที่เหลือ (มื้ 2-13) <b>ประเมินตามจริง ไม่บีบ</b> ≈ ~12-13 วัน (Track A 2 devs). เวลาเป็น "ประมาณ" · ทำงาน 6 วัน/สัปดาห์ · ทุก PR ผ่าน <code>/loo-check</code> + <code>tsc</code> (CI จริง = tsc+jest+e2e · <b>lint ยังไม่ gate</b>). <b>หมายเหตุ:</b> ตารางนี้ Track A · Track B (แอปคนขับ) ดู §5c (เริ่มแล้ว ~25-30%).</p>
+  <p class="note-est">เริ่ม <b>22/06/2026</b> · ทำ <b>7 วัน/สัปดาห์ ไม่มีวันพัก</b> (วันที่ไล่ติดกัน). <b>A0 keystone ของจริงทำ 1 วัน</b> (แผนเดิม 5.5) → นำหน้า ~4 วัน. Track A (มื้ 1-13) จบ ~<b>04/07/2026</b> · ประเมินตามจริง ไม่บีบ. ทุก PR ผ่าน <code>/loo-check</code> + <code>tsc</code> (CI = tsc+jest+e2e · lint ยังไม่ gate). <b>แอปคนขับ = ทำใหม่ทั้งหมดด้วย Flutter</b> (§5c · เฟสถัดไป).</p>
 </section>
 
 <section class="s" id="trackB">
   <h2><span class="no">5c</span> Track B — Driver Mobile App (V2) · ລວມຕາมมติรวมงาน</h2>
-  <p class="lead"><b>มติหัวหน้า:</b> รวมแอปคนขับ (เดโม <code>V2_DRIVER_APP/app.html</code> v0.22) เข้ากับงานสมองลูกค้า/routing → ตั้งเป้าส่งทั้งคู่ ~1 เดือน · scope = <b>เต็มตามเดโมทุกฟีเจอร์</b> · ทีม 2 คนเท่าเดิม (ยอมรับว่าอาจล้น — ดู §5c.3).</p>
-  <div class="note ok"><div class="ic">OK</div><div><b>อัปเดตสถานะ build (2026-06-22 · ตรวจ repo จริง):</b> แอปคนขับ <b>เริ่มสร้างแล้วจริง</b> ไม่ใช่ของใหม่ทั้งหมด · มี Vite + React 19 + <b>Capacitor (Android)</b> app (<code>loo-platform/driver/</code>) ที่ spine หลัก <b>เสร็จและต่อ backend จริงแล้ว</b>: <code>B0-mobile-shell</code> · <code>B0-pin-auth</code> · <code>B1-run-screen</code> · <code>B1-stop-screen</code> (ชำระ CASH/QR/BANK + ถังคืน + รูป POD + GPS + confirm) <span class="pill done">DONE</span> · <code>B1-pretrip</code> truck-load <span class="pill partial">partial</span>. เหลือ = map · wallet · close-shift · pod-receipt + ทั้ง B2/B3 · <b>~25-30% ของ Track B เสร็จแล้ว</b> (ส่วนเสี่ยงสุด = delivery spine ทำก่อน) · <b>กลยุทธ์เปลี่ยน: Capacitor-native ตั้งแต่ต้น ไม่ใช่ PWA-first.</b></div></div>
+  <p class="lead"><b>มติ:</b> <b>ทำแอปคนขับใหม่ทั้งหมดด้วย Flutter</b> (ทิ้งเดโม/โค้ดเก่า Capacitor+React · <code>V2_DRIVER_APP/app.html</code> v0.22 = UX reference เท่านั้น) → scope = <b>เต็มตามเดโมทุกฟีเจอร์</b> · backend loop ของคนขับมีแล้ว (reuse ได้) · ดู capacity §5c.3.</p>
+  <div class="note warn"><div class="ic">!</div><div><b>การตัดสินใจ (framework):</b> แอปคนขับ <b>ทำใหม่ทั้งหมดด้วย Flutter</b> — เดโม/โค้ดเก่า (Vite + React + Capacitor ใน <code>loo-platform/driver/</code>) <b>ไม่นับเป็นความคืบหน้า</b> ใช้เป็นแบบ UX/flow อ้างอิงเท่านั้น. ข้อดี: <b>backend loop ของคนขับมีอยู่แล้ว</b> (GPS · POD · deliver/fail · payment · ถังคืน · truck-load · settlement · <code>/auth/driver/login</code> · <code>/today/me</code>) → Flutter ต่อ endpoint ที่มีได้เลย ไม่ต้องสร้าง backend ใหม่.</div></div>
   <div class="note ok"><div class="ic">!</div><div><b>การค้นพบที่เปลี่ยนภาพทั้งหมด:</b> เอกสาร <code>01_BACKEND_LINK_AUDIT.md</code> ของเดโม (gap B1–B10 = "🔧 backend") เทียบกับ <b>mock loop ในเดโม</b> ไม่ใช่ repo จริง. ตรวจ repo จริงแล้ว — <b>data-loop ของคนขับมีอยู่เกือบครบใน backend จริง</b> (GPS report · POD พิกัด+รูป · deliver/fail/skip · PaymentCollection · AssetMovement/Balance ถังคืน · TruckLoad+close-variance · Settlement). งานที่เหลือจริงส่วนใหญ่ = <b>frontend mobile shell + ต่อ endpoint ที่มีอยู่</b> + โมดูลใหม่ไม่กี่ตัว (PIN auth · fuel · leaderboard · POS-on-delivery · offline-queue · notify).</div></div>
 
   <h3 class="sub" id="trackB-recon">5c.1 · Reconciliation — เดโมคนขับ ↔ โค้ดจริง (EXISTS / net-new)</h3>
@@ -406,14 +411,14 @@
     <thead><tr><th>ความสามารถ</th><th>เดโมแสดง (app.html)</th><th>โค้ดจริง backend</th><th>งานที่เหลือจริง</th></tr></thead>
     <tbody>
       <tr><td>GPS live คนขับ</td><td><code>gps_pings</code> ทุก 20วิ</td><td><span class="pill exists">มี</span> <code>POST /delivery-runs/me/location</code> · <code>DriverLocation</code>+<code>DriverLocationHistory</code> · hook <code>use-driver-location-reporter.ts</code></td><td>FE: live pin บนแผนที่ + staleness display</td></tr>
-      <tr><td>POD พิกัด+รูป</td><td><code>snap()</code>+<code>confirmDeliver()</code></td><td><span class="pill exists">มี</span> <code>deliveredLatitude/Longitude</code> · <code>podPhotoUrl/podSignatureUrl</code> · <code>deliveringUserId</code> (Block A)</td><td><span class="pill done">DONE</span> FE กล้อง+GPS+confirm ใน <code>StopScreen</code></td></tr>
+      <tr><td>POD พิกัด+รูป</td><td><code>snap()</code>+<code>confirmDeliver()</code></td><td><span class="pill exists">มี</span> <code>deliveredLatitude/Longitude</code> · <code>podPhotoUrl/podSignatureUrl</code> · <code>deliveringUserId</code> (Block A)</td><td><span class="pill missing">Flutter</span> FE กล้อง+GPS+confirm (ทำใหม่)</td></tr>
       <tr><td>ส่ง / ส่งไม่ได้ / ข้าม</td><td><code>done/failSave/driveSkip</code></td><td><span class="pill exists">มี</span> status <code>PENDING/DELIVERED/FAILED/SKIPPED</code> · enum <code>DeliveryFailureCategory</code> 8 เหตุ · <code>/fail</code> endpoint</td><td>FE: ผูกปุ่ม + เหตุผล dropdown</td></tr>
-      <tr><td>ชำระหน้างาน 4 แบบ</td><td><code>PAYMETA</code> canonical</td><td><span class="pill exists">มี</span> <code>PaymentCollection</code> · method <code>CASH/QR_CODE/BANK_TRANSFER/CREDIT</code> · <code>driverId</code>=actor (R7-2)</td><td><span class="pill done">DONE</span> FE picker ใน StopScreen · <span class="pill partial">QR flow ยัง</span></td></tr>
+      <tr><td>ชำระหน้างาน 4 แบบ</td><td><code>PAYMETA</code> canonical</td><td><span class="pill exists">มี</span> <code>PaymentCollection</code> · method <code>CASH/QR_CODE/BANK_TRANSFER/CREDIT</code> · <code>driverId</code>=actor (R7-2)</td><td><span class="pill missing">Flutter</span> FE picker CASH/QR/BANK (ทำใหม่)</td></tr>
       <tr><td>ถังคืนแยกประเภท + มัดจำ</td><td><code>ret{barrel,crate}</code> · deposit</td><td><span class="pill exists">มี</span> <code>AssetMovement/AssetBalance</code> · <code>emptyCollected</code> · <code>collect-empties</code>/<code>add-bottles</code></td><td>FE: ผูก UI · deposit=liability แยก</td></tr>
       <tr><td>โหลดน้ำขึ้นรถ + เสียหาย</td><td><code>LOAD</code>+<code>SRC</code>+<code>DMGR</code></td><td><span class="pill exists">มี</span> <code>TruckLoad</code>+<code>TruckLoadItem</code> · <code>close-variance</code> · <code>TRUCK_LOAD/UNLOAD</code></td><td>FE: ผูก UI + damage capture</td></tr>
       <tr><td>ปิดกะ + รายงานรายวัน</td><td><code>dailyReport</code> mock</td><td><span class="pill exists">มี</span> run close + <code>Settlement</code> · <code>close-summary</code> · <code>close-variance</code></td><td>FE: driver close UI</td></tr>
-      <tr><td>สมองลูกค้า (lapse บนจอจุดส่ง)</td><td><code>drvLapse</code> 7/14/20/30</td><td><span class="pill exists">มี</span> <code>lastReceivedDate</code>+<code>deliveryCount</code> (Block A) · <code>GET /customer-card</code></td><td><span class="pill done">DONE</span> FE brain chip ใน <code>StopScreen</code></td></tr>
-      <tr><td>login รหัส+PIN</td><td>mock PIN 4 หลัก</td><td><span class="pill exists">มี</span> <code>POST /auth/driver/login</code> · module <code>driver-auth</code> · <code>User.employeeCode/driverPinHash</code> (mig <code>20260622100000</code>)</td><td><span class="pill done">DONE</span> BE+FE keypad (<code>driver/LoginScreen.tsx</code>) · เหลือ PIN reset flow</td></tr>
+      <tr><td>สมองลูกค้า (lapse บนจอจุดส่ง)</td><td><code>drvLapse</code> 7/14/20/30</td><td><span class="pill exists">มี</span> <code>lastReceivedDate</code>+<code>deliveryCount</code> (Block A) · <code>GET /customer-card</code></td><td><span class="pill missing">Flutter</span> FE brain chip (ทำใหม่)</td></tr>
+      <tr><td>login รหัส+PIN</td><td>mock PIN 4 หลัก</td><td><span class="pill exists">มี</span> <code>POST /auth/driver/login</code> · module <code>driver-auth</code> · <code>User.employeeCode/driverPinHash</code> (mig <code>20260622100000</code>)</td><td><span class="pill exists">BE มี</span> · <span class="pill missing">FE keypad = Flutter</span></td></tr>
       <tr><td>POS ยิงขายหน้างาน</td><td><code>openSell</code>/<code>SaleOnSite</code></td><td><span class="pill partial">บางส่วน</span> <code>sell-water</code> (web) แยก · มี <code>add-order-items</code></td><td><span class="pill missing">net-new</span> POS-on-delivery</td></tr>
       <tr><td>แจ้งลูกค้า (กำลังไป/ส่งแล้ว/เลื่อน)</td><td><code>notifyCust</code> mock</td><td><span class="pill missing">ไม่มี</span> integration WhatsApp/SMS</td><td><span class="pill missing">net-new</span> notify service</td></tr>
       <tr><td>Leaderboard / แต้ม / แลกของ</td><td>gamification strip</td><td><span class="pill missing">ไม่มี</span> (<code>LoyaltyTransaction</code> = ฝั่งลูกค้า)</td><td><span class="pill missing">net-new</span> driver leaderboard+points</td></tr>
@@ -433,14 +438,14 @@
   <table>
     <thead><tr><th>id</th><th>title</th><th>kind</th><th>eff</th></tr></thead>
     <tbody>
-      <tr><td><code>B0-mobile-shell</code></td><td>driver mobile route + bottom-nav 4 แท็บ + phone frame</td><td><span class="pill done">DONE</span></td><td>L</td></tr>
+      <tr><td><code>B0-mobile-shell</code></td><td>Flutter app shell + bottom-nav 4 แท็บ + routing</td><td><span class="pill missing">Flutter</span></td><td>L</td></tr>
       <tr><td><code>B0-pwa</code></td><td>manifest + service worker + offline shell · <b>strategy → Capacitor-native</b> · re-scope</td><td>net-new</td><td>M</td></tr>
-      <tr><td><code>B0-pin-auth</code></td><td>emp-code + PIN login: BE <code>/auth/driver/login</code> + FE keypad <b>เสร็จ</b> · เหลือ reset flow</td><td><span class="pill done">DONE</span></td><td>S</td></tr>
-      <tr><td><code>B1-run-screen</code></td><td><code>GET /today/me</code> → run (stops + progress)</td><td><span class="pill done">DONE</span></td><td>M</td></tr>
-      <tr><td><code>B1-stop-screen</code></td><td>stop "จบในจอเดียว": brain+pay(CASH/QR/BANK)+bottle+photo POD+GPS+confirm(idempotency)</td><td><span class="pill done">DONE</span></td><td>L</td></tr>
+      <tr><td><code>B0-pin-auth</code></td><td>emp-code + PIN login — <span class="pill exists">BE มี</span> <code>/auth/driver/login</code> · FE keypad = Flutter</td><td><span class="pill missing">Flutter</span></td><td>M</td></tr>
+      <tr><td><code>B1-run-screen</code></td><td><code>GET /today/me</code> → run (stops + progress)</td><td><span class="pill missing">Flutter</span></td><td>M</td></tr>
+      <tr><td><code>B1-stop-screen</code></td><td>stop "จบในจอเดียว": brain+pay(CASH/QR/BANK)+bottle+photo POD+GPS+confirm(idempotency)</td><td><span class="pill missing">Flutter</span></td><td>L</td></tr>
       <tr><td><code>B1-pod-receipt</code></td><td>POD recap + ใบเสร็จ (logo+QR) · <em>รูป POD เก็บใน stop แล้ว · เหลือหน้าใบเสร็จ</em></td><td>wire</td><td>M</td></tr>
       <tr><td><code>B1-driver-map</code></td><td>driver map บน Google Maps (route + live pin + จุดต่อไป)</td><td>rebuild</td><td>M</td></tr>
-      <tr><td><code>B1-pretrip</code></td><td>โหลดน้ำ check (<code>/pre-trip-check</code>) <b>เสร็จ</b> · เหลือ check-in + ตรวจรถ 7 จุด + crew</td><td><span class="pill partial">partial</span></td><td>L</td></tr>
+      <tr><td><code>B1-pretrip</code></td><td>check-in + crew + ตรวจรถ 7 จุด + โหลดน้ำ (<code>/pre-trip-check</code> BE มี)</td><td><span class="pill missing">Flutter</span></td><td>L</td></tr>
       <tr><td><code>B1-money-wallet</code></td><td>4 ก้อน (cash/QR/transfer/ค้าง) drill-down</td><td>wire</td><td>S</td></tr>
       <tr><td><code>B1-close-shift</code></td><td>close run + settlement summary + ปิดกะ</td><td>wire</td><td>M</td></tr>
       <tr><td><code>B2-pos-ondelivery</code></td><td>ยิงขายหน้างาน → <code>SaleOnSite</code> (เชื่อม sell-water)</td><td>net-new</td><td>L</td></tr>
@@ -454,7 +459,7 @@
     </tbody>
   </table>
   </div>
-  <p class="lead-sm">18 task · L=3.5 / M=2 / S=1 person-days → Track B เต็ม ≈ <b>~45 person-days</b>. <b>อัปเดต:</b> spine (B0-shell/pin + B1-run/stop) <b>เสร็จแล้ว ~25-30%</b> → เหลือจริง ≈ <b>~32 pd</b> (map · wallet · close-shift · pod-receipt + B2/B3). <b>wire</b>=ต่อ backend ที่มี (เร็ว) · <b>net-new</b>=สร้างโมดูลใหม่ (ช้า). ถ้าต้องตัดเพื่อ 1 เดือน → net-new (POS/fuel/leaderboard/mypay/offline/notify) คือกลุ่มที่เลื่อนได้.</p>
+  <p class="lead-sm">18 task · L=3.5 / M=2 / S=1 person-days → Track B (<b>Flutter ทำใหม่ทั้งหมด</b>) ≈ <b>~45 person-days</b>. โค้ด Capacitor/React เดิมไม่นับ · <b>wire</b>=ต่อ backend ที่มี (เร็ว) · <b>net-new</b>=สร้างโมดูลใหม่ (ช้า). ถ้าต้องตัดเพื่อเฟสแรก → net-new (POS/fuel/leaderboard/mypay/offline/notify) คือกลุ่มที่เลื่อนได้.</p>
 
   <h3 class="sub" id="trackB-capacity">5c.3 · capacity reality — 2 track เต็ม / 2 dev / 1 เดือน พอไหม?</h3>
   <div class="scroll-x">
@@ -462,14 +467,14 @@
     <thead><tr><th>scope</th><th>person-days</th><th>2 devs (44 pd/เดือน)</th></tr></thead>
     <tbody>
       <tr><td>Track A เต็ม (สมองลูกค้า + routing + corridor + R8)</td><td>~41 pd</td><td>~4 สัปดาห์</td></tr>
-      <tr><td>Track B เต็ม (แอปคนขับ ทุกฟีเจอร์) · <b>spine done ~25-30%</b></td><td>~45 pd <em>(เหลือ ~32)</em></td><td>~4 สัปดาห์ <em>(เหลือ ~3)</em></td></tr>
+      <tr><td>Track B (แอปคนขับ · <b>Flutter ทำใหม่ทั้งหมด</b>)</td><td>~45 pd</td><td>~4 สัปดาห์</td></tr>
       <tr><td><b>รวม 2 track เต็ม</b></td><td><b>~86 pd</b></td><td><b>≈ 8 สัปดาห์ (~2 เดือน)</b></td></tr>
     </tbody>
   </table>
   </div>
-  <div class="note danger"><div class="ic">!</div><div><b>flag ตรงๆ (ตามที่หัวหน้าขอ):</b> 2 track <u>เต็มสเปก</u> + ทีม 2 คน ≈ <b>~8 สัปดาห์</b> ไม่ใช่ 4. ใน 1 เดือนแรก 2 devs ส่งได้ ~ครึ่งทาง. ปัจจัยที่ช่วย = backend loop ของคนขับมีแล้ว (งาน wire เร็วกว่าสร้างใหม่) <b>+ Track B spine ~25-30% สร้างเสร็จแล้ว</b> (login/run/stop/deliver wired).</div></div>
+  <div class="note danger"><div class="ic">!</div><div><b>flag ตรงๆ (ตามที่หัวหน้าขอ):</b> 2 track <u>เต็มสเปก</u> + ทีม 2 คน ≈ <b>~8 สัปดาห์</b> ไม่ใช่ 4. ใน 1 เดือนแรก 2 devs ส่งได้ ~ครึ่งทาง. ปัจจัยที่ช่วย = backend loop ของคนขับมีแล้ว (งาน wire เร็วกว่าสร้างใหม่) · <b>FE ทำใหม่ด้วย Flutter</b> (backend reuse ได้ · FE เริ่มศูนย์).</div></div>
   <div class="note ok"><div class="ic">OK</div><div><b>ถ้าต้องจบใน 1 เดือนจริง — เส้น MVP cut (แนะนำเป็นทางเลือก):</b> <b>ส่งใน 1 เดือน:</b> Track A core (A0–A2 สมองลูกค้า + who's-due) + Track B MVP (<code>B0-shell/pwa/pin</code> + <code>B1-*</code> wire run/stop/pod/map/close + กล้อง/GPS). <b>เลื่อนเฟสถัดไป:</b> routing W3–4 (multi-route/corridor/optimizer) + Track B net-new (POS/fuel/leaderboard/myPay/offline-queue/notify). MVP นี้ = แอปคนขับใช้งานได้จริง pilot 2–3 คัน + สมองลูกค้าเริ่มเก็บ data.</div></div>
-  <p class="note-est">GPS ตลอดกะ (จอดับ/ในกระเป๋า) = ต้อง native. <b>อัปเดต:</b> แอป driver ตั้งเป็น <b>Capacitor (Android)</b> แล้ว (<code>capacitor.config.ts</code> · <code>@capacitor/android</code>) แต่ยังไม่ generate native project (<code>driver/android/</code>) และยังไม่มี offline queue/SW. เหลือ ~3–5 วัน setup + background-GPS plugin.</p>
+  <p class="note-est">GPS ตลอดกะ (จอดับ/ในกระเป๋า) = ต้อง native → <b>Flutter</b> ได้ background-GPS + Bluetooth printer/scanner ดีกว่า PWA. แอปทำใหม่ทั้งหมดด้วย Flutter · backend loop ของคนขับมีแล้ว (reuse endpoint ได้เลย).</p>
 </section>
 
 <section class="s" id="demo">
@@ -646,6 +651,7 @@
 
 <script>
   document.documentElement.classList.remove('no-js');
+  (function(){var toc=document.querySelector('.toc');var tt=document.querySelector('.toctoggle');if(toc&&tt){tt.addEventListener('click',function(){var o=toc.classList.toggle('open');tt.setAttribute('aria-expanded',o);});toc.querySelectorAll('ol a').forEach(function(a){a.addEventListener('click',function(){toc.classList.remove('open');});});}})();
   const links=[...document.querySelectorAll('.toc a')];
   const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
   const obs=new IntersectionObserver((es)=>{

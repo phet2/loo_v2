@@ -10,9 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&family=Noto+Sans+Lao:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#000;--canvas:#fff;--on-dark:#fff;
+    --ink:#0b1220;--brand:#2563EB;--brand-2:#1d4ed8;--cyan:#49beff;--canvas:#fff;--on-dark:#fff;
     --hair:#e6e6e6;--hair-soft:#f1f1f1;--soft:#f7f7f5;
-    --lime:#dceeb1;--lilac:#c5b0f4;--cream:#f4ecd6;--pink:#efd4d4;--mint:#c8e6cd;--coral:#f3c9b6;--navy:#1f1d3d;
+    --lime:#dbe8ff;--lilac:#bcd5ff;--cream:#eef4fd;--pink:#efd4d4;--mint:#c8e6cd;--coral:#f3c9b6;--navy:#0c1430;
     --magenta:#ff3d8b;--success:#1ea64a;--green:#1ea64a;
     --r-sm:6px;--r-md:8px;--r-lg:24px;--r-xl:32px;--pill:50px;
     --sans:'Inter','Noto Sans Lao',system-ui,sans-serif;
@@ -27,7 +27,7 @@
   h1,h2,h3,h4{font-family:var(--lao);font-weight:700;margin:0;line-height:1.18;letter-spacing:-.01em;text-wrap:balance;color:var(--ink)}
   p{margin:0;text-wrap:pretty}
   svg{display:block}
-  ::selection{background:var(--ink);color:var(--canvas)}
+  ::selection{background:var(--brand);color:var(--canvas)}
   .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(20px,5vw,40px)}
 
   .no-js [data-reveal]{opacity:1;transform:none}
@@ -42,20 +42,20 @@
 
   .nav{position:sticky;top:0;z-index:50;background:var(--canvas);border-bottom:1px solid var(--hair)}
   .nav .wrap{display:flex;align-items:center;gap:14px;height:60px}
-  .brand{display:flex;align-items:center;gap:10px;font-family:var(--sans);font-weight:800;font-size:21px;letter-spacing:-.02em}
-  .brand .dot{width:30px;height:30px;border-radius:9px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:800}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--sans);font-weight:800;font-size:21px;letter-spacing:-.02em;text-decoration:none;color:inherit;transition:opacity .2s}.brand:hover{opacity:.72}
+  .brand .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--cyan));color:#fff;display:grid;place-items:center;font-size:14px;font-weight:800}
   .nav nav{margin-left:auto;display:flex;gap:2px;align-items:center;flex-wrap:wrap}
   .nav nav a{font-size:14px;color:var(--ink);text-decoration:none;padding:8px 13px;border-radius:var(--pill);font-weight:500}
   .nav nav a:hover{background:var(--soft)}
-  @media(max-width:880px){.nav nav .nl{display:none}}
+  .navtoggle{display:none;align-items:center;justify-content:center;width:42px;height:42px;border-radius:11px;border:1px solid var(--hair);background:var(--canvas);color:var(--ink);cursor:pointer;margin-left:auto;flex:0 0 auto}.navtoggle svg{width:22px;height:22px}.navtoggle:active{transform:scale(.95)}@media(max-width:880px){.nav .wrap{position:relative}.navtoggle{display:grid}.nav nav{position:absolute;top:60px;left:0;right:0;flex-direction:column;align-items:stretch;gap:2px;background:var(--canvas);border-bottom:1px solid var(--hair);box-shadow:0 14px 30px rgba(11,18,32,.12);padding:10px 16px 16px;display:none;z-index:60}.nav.open nav{display:flex}.nav nav .nl{display:block}.nav nav a{font-size:15px;padding:12px 14px;border-radius:10px}}
 
   .eye,.kick{font-family:var(--mono);font-weight:400;font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink);display:inline-flex;align-items:center;gap:8px}
-  .kick .d{width:7px;height:7px;border-radius:50%;background:var(--magenta)}
+  .kick .d{width:7px;height:7px;border-radius:50%;background:var(--brand)}
 
   .hero{background:var(--canvas);color:var(--ink);padding:clamp(48px,8vw,96px) 0 clamp(30px,4vw,52px)}
   .hero h1{font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.04;margin:22px 0 0;max-width:18ch}
-  .hero h1 em{font-style:normal;position:relative;white-space:nowrap}
-  .hero h1 em::after{content:"";position:absolute;left:-.05em;right:-.05em;bottom:.06em;height:.36em;background:var(--lime);z-index:-1;border-radius:3px}
+  .hero h1 em{font-style:normal;background:linear-gradient(transparent 56%,var(--cyan) 56%,var(--cyan) 90%,transparent 90%);border-radius:2px}
+  
   .lede{margin:24px 0 0;max-width:62ch;font-size:clamp(1.05rem,1.5vw,1.3rem);color:var(--ink);line-height:1.5;font-weight:400}
   .lede b{font-weight:700}
   .ns{margin-top:28px;padding:22px 26px;border-radius:var(--r-lg);background:var(--lime);color:var(--ink);max-width:68ch}
@@ -81,14 +81,14 @@
   @media(max-width:820px){.loop{grid-template-columns:1fr 1fr}}
   @media(max-width:480px){.loop{grid-template-columns:1fr}}
   .step{background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);padding:22px 20px;position:relative}
-  .step .n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#000;font-family:var(--mono);font-weight:600;font-size:.85rem;border:1.5px solid #000;background:transparent}
+  .step .n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#000;font-family:var(--mono);font-weight:600;font-size:.85rem;border:1.5px solid var(--brand);background:transparent}
   .step h3{font-size:1.08rem;margin-top:14px;font-weight:700}
   .step p{margin-top:8px;font-size:.92rem;color:var(--ink);font-weight:400}
   .step .tag{display:inline-block;margin-top:14px;font-size:.74rem;font-weight:600;font-family:var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:4px 11px;border-radius:var(--pill);background:var(--soft);color:#000}
   .step.fix{background:var(--lime)}
-  .step.fix .tag{background:#000;color:#fff}
+  .step.fix .tag{background:var(--brand);color:#fff}
   .arc{margin-top:18px;display:flex;align-items:center;gap:16px;padding:22px 24px;border-radius:var(--r-lg);background:var(--mint);color:#000}
-  .arc .ai{flex:0 0 auto;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#000;color:#fff}
+  .arc .ai{flex:0 0 auto;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:#fff}
   .arc .ai svg{width:24px;height:24px}
   .arc b{font-weight:700}
   .arc p{font-size:.97rem;font-weight:400}
@@ -102,8 +102,8 @@
   .tr ul{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
   .tr li{display:flex;gap:11px;font-size:.96rem;color:var(--ink);line-height:1.5;font-weight:400}
   .tr li svg{flex:0 0 auto;width:20px;height:20px;margin-top:3px;color:#000}
-  .tr.have{background:var(--mint)} .tr.have .badge{background:#000;color:#fff}
-  .tr.build{background:var(--lilac)} .tr.build .badge{background:#000;color:#fff}
+  .tr.have{background:var(--mint)} .tr.have .badge{background:var(--brand);color:#fff}
+  .tr.build{background:var(--lilac)} .tr.build .badge{background:var(--brand);color:#fff}
   .tr.build .flag{position:absolute;top:-12px;right:18px;font-family:var(--mono);font-weight:600;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--magenta);padding:6px 13px;border-radius:var(--pill)}
   .tr.later{background:var(--soft)} .tr.later .badge{background:var(--canvas);color:#555;border:1px solid var(--hair)} .tr.later h3{color:#555}
 
@@ -130,13 +130,13 @@
 
   .dec{margin-top:36px;display:flex;flex-direction:column;gap:14px}
   .dr{display:grid;grid-template-columns:48px 1fr;gap:16px;align-items:start;background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);padding:22px 24px}
-  .dr .n{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-family:var(--mono);background:#000}
+  .dr .n{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-family:var(--mono);background:var(--brand)}
   .dr .q{font-weight:700;font-size:1.05rem} .dr .q span{display:block;font-weight:400;color:var(--ink);font-size:.95rem;margin-top:6px}
 
   .dod{margin-top:38px;display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
   .dg{background:var(--canvas);border:1px solid var(--hair);border-radius:var(--r-lg);padding:24px}
   .dg h3{font-size:1.08rem;font-weight:700;display:flex;align-items:center;gap:10px}
-  .dg h3 .gd{width:11px;height:11px;border-radius:3px;background:var(--magenta);flex:0 0 auto}
+  .dg h3 .gd{width:11px;height:11px;border-radius:3px;background:var(--brand);flex:0 0 auto}
   .dg ul{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:11px}
   .dg li{display:flex;gap:10px;font-size:.95rem;color:var(--ink);font-weight:400} .dg li svg{flex:0 0 auto;width:19px;height:19px;color:var(--success);margin-top:3px}
 
@@ -156,7 +156,7 @@
   .swk .wt{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.03em;text-transform:uppercase;color:#000;background:var(--lime);padding:4px 11px;border-radius:var(--pill);margin-left:8px;vertical-align:2px}
   .sday{display:flex;gap:12px;align-items:flex-start;padding:11px 8px;border-top:1px solid var(--hair-soft);flex-wrap:wrap;border-radius:var(--r-md)}
   .swk .sday:first-of-type{border-top:0}
-  .sday .cb{flex:0 0 auto;width:18px;height:18px;border:2px solid #000;border-radius:var(--r-sm);margin-top:3px}
+  .sday .cb{flex:0 0 auto;width:18px;height:18px;border:2px solid var(--brand);border-radius:var(--r-sm);margin-top:3px}
   .sday .dn{flex:0 0 auto;white-space:nowrap;font-family:var(--mono);font-weight:600;color:#000;font-size:.86rem;margin-top:2px}
   .sday .dt{flex:1;min-width:210px;color:var(--ink);font-size:.95rem;line-height:1.5;font-weight:400}
   .sday .hr{flex:0 0 auto;font-family:var(--mono);font-size:.76rem;font-weight:500;color:#555;margin-top:2px}
@@ -165,13 +165,14 @@
 
   footer{padding:clamp(40px,5vw,64px) 0 40px;color:#555;font-family:var(--mono);font-size:.82rem;letter-spacing:.03em;text-align:center;background:var(--canvas);border-top:1px solid var(--hair);line-height:1.8}
   footer .w{color:#000}
+.loo-cta{display:inline-flex;align-items:center;gap:9px;font-family:inherit;font-weight:700;font-size:.95rem;text-decoration:none;color:#fff;background:var(--brand,#2563EB);border:none;border-radius:var(--pill,50px);padding:11px 20px;cursor:pointer;transition:filter .2s,transform .1s}.loo-cta:hover{filter:brightness(1.08)}.loo-cta:active{transform:scale(.97)}.loo-cta svg{width:18px;height:18px}#sched{scroll-margin-top:80px}
 </style>
 </head>
 <body>
 
 <header class="nav" id="nav">
   <div class="wrap">
-    <div class="brand"><span class="dot">L</span>LOO Delivery</div>
+    <a class="brand" href="index.html"><span class="dot">L</span>LOO Delivery</a>
     <nav>
       <a class="nl" href="#why">ບັນຫາ</a>
       <a class="nl" href="#brain">ສະໝອງລູກຄ້າ</a>
@@ -181,7 +182,7 @@
       <a class="nl" href="#plan">ແຜນ</a>
       <a class="nl" href="#sched">ຕາຕະລາງ</a>
       <a class="nl" href="#demo">ເດໂມ</a>
-    </nav>
+    </nav><button class="navtoggle" aria-label="ເມນູ" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
   </div>
 </header>
 
@@ -190,6 +191,7 @@
     <span class="kick"><span class="d"></span>ສຳລັບທຸກຄົນ · ບໍ່ຕ້ອງຮູ້ເລື່ອງເຕັກນິກ · ອະທິບາຍລະອຽດ</span>
     <h1>ເຮັດໃຫ້ລະບົບ <em>ຈື່ລູກຄ້າໄດ້ເອງ</em> ແລ້ວວາງແຜນສົ່ງໃຫ້ແມ່ນຂຶ້ນທຸກຮອບ</h1>
     <p class="lede">ເອກະສານນີ້ອະທິບາຍ <b>ແບບລະອຽດ</b> ວ່າເຮົາກຳລັງເຮັດຫຍັງ, ເພາະຫຍັງ, ໄດ້ປະໂຫຍດຫຍັງ ແລະ ເຮັດໄປເຖິງໃສແລ້ວ — ໂດຍບໍ່ມີຄຳສັບເຕັກນິກ. ອ່ານຈົບແລ້ວເຫັນພາບທັງໝົດ. <b>ສະບັບນີ້ລວມ “ແອັບຄົນຂັບ” ເຂົ້າມາໃນແຜນເດືອນນີ້ນຳ</b> ຕາມການຕັດສິນໃຈໃຫ້ລວມວຽກ.</p>
+    <div style="margin:26px 0 0"><a class="loo-cta" href="#sched"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6"/><path d="m9 11 3 3L22 4"/></svg> ໄປທີ່ Checklist ↓</a></div>
     <div class="ns"><p>ຫຼັກການດຽວທີ່ຍຶດ: <b>ຄົນຂັບບັນທຶກເທື່ອດຽວຕອນເຮັດວຽກ</b> → ຫຼັງບ້ານເຫັນຄວາມຈິງທັນທີ → ຮອບຕໍ່ໄປ ລະບົບແນະນຳແຜນໄດ້ແມ່ນຂຶ້ນເອງ ໂດຍບໍ່ມີໃຜຕ້ອງເຮັດເອກະສານເພີ່ມ</p></div>
   </div>
 </section>
@@ -363,12 +365,12 @@
       <p class="sub">ແຕ່ລະອາທິດມີຜົນທີ່ຈັບຕ້ອງໄດ້ ໄລ່ຈາກພື້ນຖານ ໄປສູ່ການໃຊ້ຈິງເທິງແຜນທີ່</p>
     </div>
     <div class="tl">
-      <div class="wk dn" data-reveal data-d="1"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">1</span></div><div class="b"><span class="st">✅ ເສັດແລ້ວ</span><h3>ປິດຊ່ອງຄວາມຈຳ (ຮາກຖານ) · ມື້ 1</h3><p>ທຸກການສົ່ງເກັບ ທີ່ຕັ້ງ+ຄົນສົ່ງ+ມື້ສົ່ງລ່າສຸດ ອັດຕະໂນມັດ ພ້ອມແກ້ໃຫ້ເງິນໄປຫາຄົນສົ່ງຈິງ — <b>ຂອງຈິງເຮັດໃນ 1 ມື້</b> (ແຜນເດີມ 5.5)</p></div></div>
-      <div class="wk" data-reveal data-d="2"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">2</span></div><div class="b"><h3>ສະໝອງລູກຄ້າ + ໃຜຄວນໄປສົ່ງ · ມື້ 2-5</h3><p>ບັດລູກຄ້າສະແດງຄວາມງຽບຈິງ ແລະ ມີລາຍການ “ຄົນທີ່ຄວນໄປສົ່ງມື້ນີ້” ໃຫ້ຜູ້ວາງແຜນເບິ່ງກ່ອນແຕ້ມເສັ້ນ · ມືຖືເລີ່ມສົ່ງທີ່ຕັ້ງ</p></div></div>
-      <div class="wk" data-reveal data-d="3"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">3</span></div><div class="b"><h3>ແຕ້ມເສັ້ນທາງໄດ້ຈິງ · ມື້ 6-9</h3><p>ສ້າງເສັ້ນທາງເທິງແຜນທີ່ ຕັ້ງຊື່ ເລືອກສີ ເລືອກມື້ ຜູກລົດ/ຄົນຂັບ ແລະ ບັນທຶກໄວ້ໃຊ້ຄືນໄດ້</p></div></div>
-      <div class="wk" data-reveal data-d="4"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">4</span></div><div class="b"><h3>ກອງ + ເຜີຍລູກຄ້າໃກ້ເສັ້ນ + ວັດຜົນ · ມື້ 10-13</h3><p>ກອງແຜນທີ່ຕາມມື້/ເສັ້ນ · ເລືອກເສັ້ນແລ້ວເຫັນລູກຄ້າໃກ້ເສັ້ນທີ່ຄວນແວ່ · ມີລາຍງານວ່າເກັບທີ່ຕັ້ງໄດ້ຈັກເປີເຊັນ</p></div></div>
+      <div class="wk dn" data-reveal data-d="1"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">1</span></div><div class="b"><span class="st">✅ ເສັດແລ້ວ</span><h3>ປິດຊ່ອງຄວາມຈຳ (ຮາກຖານ) · ມື້ 1 · 22/06/2026</h3><p>ທຸກການສົ່ງເກັບ ທີ່ຕັ້ງ+ຄົນສົ່ງ+ມື້ສົ່ງລ່າສຸດ ອັດຕະໂນມັດ ພ້ອມເງິນໄປຫາຄົນສົ່ງຈິງ — <b>ຂອງຈິງເຮັດໃນ 1 ມື້</b> (ແຜນເດີມ 5.5)</p></div></div>
+      <div class="wk" data-reveal data-d="2"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">2</span></div><div class="b"><h3>ສະໝອງລູກຄ້າ + ໃຜຄວນໄປສົ່ງ · ມື້ 2-5 · 23-26/06</h3><p>ບັດລູກຄ້າສະແດງຄວາມງຽບຈິງ ແລະ ມີລາຍການ “ຄົນທີ່ຄວນໄປສົ່ງມື້ນີ້” ໃຫ້ຜູ້ວາງແຜນເບິ່ງກ່ອນແຕ້ມເສັ້ນ · ມືຖືເລີ່ມສົ່ງທີ່ຕັ້ງ</p></div></div>
+      <div class="wk" data-reveal data-d="3"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">3</span></div><div class="b"><h3>ແຕ້ມເສັ້ນທາງໄດ້ຈິງ · ມື້ 6-9 · 27-30/06</h3><p>ສ້າງເສັ້ນທາງເທິງແຜນທີ່ ຕັ້ງຊື່ ເລືອກສີ ເລືອກມື້ ຜູກລົດ/ຄົນຂັບ ແລະ ບັນທຶກໄວ້ໃຊ້ຄືນໄດ້</p></div></div>
+      <div class="wk" data-reveal data-d="4"><div class="l"><span class="wkt">ໄລຍະ</span><span class="wkn">4</span></div><div class="b"><h3>ກອງ + ເຜີຍລູກຄ້າໃກ້ເສັ້ນ + ວັດຜົນ · ມື້ 10-13 · 01-04/07</h3><p>ກອງແຜນທີ່ຕາມມື້/ເສັ້ນ · ເລືອກເສັ້ນແລ້ວເຫັນລູກຄ້າໃກ້ເສັ້ນທີ່ຄວນແວ່ · ມີລາຍງານວ່າເກັບທີ່ຕັ້ງໄດ້ຈັກເປີເຊັນ</p></div></div>
     </div>
-    <div class="ns" data-reveal style="margin-top:22px"><p><b>ໝາຍເຫດສຳຄັນ (ຄວາມຊື່ສັດ):</b> ຮາກຖານ (ໄລຍະ 1) <b>ຂອງຈິງເຮັດ 1 ມື້</b> (ແຜນເດີມ 5.5 ມື້) → <b>ນຳໜ້າແຜນ ~4 ມື້</b>. ໄລຍະ 2-4 (ສະໝອງລູກຄ້າ + ເສັ້ນທາງ) ປະເມີນຕາມຈິງ ~12 ມື້ ທີ່ເຫຼືອ (ບໍ່ບີບ). ເມື່ອລວມ <b>ແອັບຄົນຂັບເຕັມຮູບແບບ</b> (ເລີ່ມແລ້ວ ~25-30%) ດ້ວຍທີມ 2 ຄົນ ≈ <b>~7-8 ອາທິດ</b> ລວມ — ລາຍລະອຽດເບິ່ງຫົວຂໍ້ “ແອັບຄົນຂັບ” ດ້ານເທິງ</p></div>
+    <div class="ns" data-reveal style="margin-top:22px"><p><b>ໝາຍເຫດສຳຄັນ (ຄວາມຊື່ສັດ):</b> ເລີ່ມ <b>22/06/2026</b> · ເຮັດ <b>7 ມື້/ອາທິດ ບໍ່ມີວັນພັກ</b>. ຮາກຖານ (ໄລຍະ 1) <b>ຂອງຈິງເຮັດ 1 ມື້</b> (ແຜນເດີມ 5.5) → ນຳໜ້າ ~4 ມື້. Track A (ສະໝອງລູກຄ້າ + ເສັ້ນທາງ) ຈົບ ~<b>04/07/2026</b>. <b>ແອັບຄົນຂັບ</b> = ທຳໃໝ່ທັງໝົດດ້ວຍ <b>Flutter</b> (ເຟສຕໍ່ໄປ · ບໍ່ນັບໃນ 13 ມື້ນີ້)</p></div>
   </div>
 </section>
 
@@ -379,44 +381,45 @@
       <p class="sub">ໄລ່ມື້ຕໍ່ມື້ ໃຫ້ເຫັນວ່າແຕ່ລະມື້ເຮັດຫຍັງ ແລະ ໃຊ້ເວລາປະມານເທົ່າໃດ</p>
     </div>
     <div class="sched">
-      <div class="swk" data-reveal data-d="1" style="background:var(--mint)">
-        <h4>ມື້ 1 — ຮາກຖານ (ຄວາມຈຳຂອງລະບົບ) <span style="display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:#fff;background:var(--success);padding:4px 11px;border-radius:var(--pill);margin-left:8px;vertical-align:2px">✓ ເສັດແລ້ວ · ກວດແລ້ວ</span></h4>
-        <div class="sday"><span class="cb"></span><span class="dn">①</span><span class="dt">ເພີ່ມ “ຊ່ອງເກັບ” ມື້ຮັບລ່າສຸດ / ຄົນສົ່ງ / ທີ່ຕັ້ງ ໃນຖານຂໍ້ມູນ</span><span class="hr">✓</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">②</span><span class="dt">ອັບເດດຖານຂໍ້ມູນ + ເຕີມຂໍ້ມູນເກົ່າຍ້ອນຫຼັງ + ກວດ</span><span class="hr">✓</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">③</span><span class="dt">ເຮັດໃຫ້ “ພິກັດ + ໃຜສົ່ງ” ບັນທຶກຕອນສົ່ງຈິງ</span><span class="hr">✓</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">④</span><span class="dt">ບັນທຶກ “ມື້ສົ່ງລ່າສຸດ + ນັບຄັ້ງ” + ແກ້ເງິນໃຫ້ໄປຫາຄົນສົ່ງຈິງ</span><span class="hr">✓</span></div>
+      <div class="swk" data-reveal data-d="1">
+        <h4>ມື້ 1 · 22/06/2026 — ຮາກຖານ (ຄວາມຈຳຂອງລະບົບ)</h4>
+        <div class="sday"><span class="cb"></span><span class="dn">①</span><span class="dt">ວາງແຜນ ແລະ ອອກແບບລະບົບ (architecture · ກ່ອນລົງມືຂຽนโค้ด)</span><span class="hr">✓</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">②</span><span class="dt">ເພີ່ມ “ຊ່ອງເກັບ” ມື້ຮັບລ່າສຸດ / ຄົນສົ່ງ / ທີ່ຕັ້ງ ໃນຖານຂໍ້ມູນ</span><span class="hr">✓</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">③</span><span class="dt">ອັບເດດຖານຂໍ້ມູນ + ເຕີມຂໍ້ມູນເກົ່າຍ້ອນຫຼັງ + ກວດ</span><span class="hr">✓</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">④</span><span class="dt">ເຮັດໃຫ້ “ພິກັດ + ໃຜສົ່ງ” ບັນທຶກຕອນສົ່ງຈິງ</span><span class="hr">✓</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">⑤</span><span class="dt">ບັນທຶກ “ມື້ສົ່ງລ່າສຸດ + ນັບຄັ້ງ” + ແກ້ເງິນໃຫ້ໄປຫາຄົນສົ່ງຈິງ</span><span class="hr">✓</span></div>
         <div class="sday"><span class="dn" style="color:var(--muted)">ໝາຍເຫດ</span><span class="dt"><b>ຂອງຈິງເຮັດໃນ 1 ມື້</b> (ແຜນເດີມ 5.5 ມື້) → ນຳໜ້າແຜນ ~4 ມື້ · ກວດໃນໂຄ້ດຈິງແລ້ວ</span><span class="hr" style="color:var(--muted)">—</span></div>
       </div>
       <div class="swk" data-reveal data-d="2">
-        <h4>ມື້ 2 — ຊຸດທົດສອບຮາກຖານ + ເກັບງານ <span class="wt">ທີ່ຍັງເຫຼືອຈາກຮາກຖານ</span></h4>
+        <h4>ມື້ 2 · 23/06 — ຊຸດທົດສອບຮາກຖານ + ເກັບງານ <span class="wt">ທີ່ຍັງເຫຼືອ</span></h4>
         <div class="sday"><span class="cb"></span><span class="dn">ມື້ 2</span><span class="dt">ຂຽນຊຸດທົດສອບ ກວດໃຫ້ໝັ້ນໃຈ (ກັນພລາດ) — ພິກັດມີ/ບໍ່ມີ · ບັນທຶກຊ້ຳບໍ່ນັບເພີ່ມ · ກັນສົ່ງຊ້ຳ · ຂ້າມລູກຄ້າຍ່າງຊື້</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເຄິ່ງມື້</span><span class="dt">ກວດ + loo-check + ສ້າງ PR · ເກັບງານ</span><span class="hr" style="color:var(--muted)">~½ ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn" style="color:var(--muted)">ເກັບງານ</span><span class="dt">ກວດ + loo-check + ສ້າງ PR</span><span class="hr" style="color:var(--muted)">½ ມື້</span></div>
       </div>
       <div class="swk" data-reveal data-d="3">
-        <h4>ມື້ 3-5 — ສະໝອງລູກຄ້າ + ໃຜຄວນໄປສົ່ງ <span class="wt">~3 ມື້</span></h4>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 3</span><span class="dt">ມືຖືເລີ່ມສົ່ງພິກັດຕອນກົດສົ່ງ + ຈູນປຸ່ມເກັບພິກັດໃຫ້ນິ່ງ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 4</span><span class="dt">ບັດລູກຄ້າສະແດງ “ງຽບໄປຈັກມື້” + ສ້າງສູດຄິດ “ຮອບສະເລ່ຍ” ຂອງລູກຄ້າແຕ່ລະຄົນ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 5</span><span class="dt">ສ້າງລາຍການ “ໃຜຄວນໄປສົ່ງມື້ນີ້” (ຮວມ 4 ສັນຍານ) + ຮວມລູກຄ້າທີ່ບໍ່ມີຮອບປະຈຳ + ທົດສອບ/PR</span><span class="hr">~1 ມື້</span></div>
+        <h4>ມື້ 3-5 · 24-26/06 — ສະໝອງລູກຄ້າ + ໃຜຄວນໄປສົ່ງ <span class="wt">~3 ມື້</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 3 · 24/06</span><span class="dt">ມືຖືເລີ່ມສົ່ງພິກັດຕອນກົດສົ່ງ + ຈູນປຸ່ມເກັບພິກັດໃຫ້ນິ່ງ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 4 · 25/06</span><span class="dt">ບັດລູກຄ້າສະແດງ “ງຽບໄປຈັກມື້” + ສ້າງສູດຄິດ “ຮອບສະເລ່ຍ” ຂອງລູກຄ້າແຕ່ລະຄົນ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 5 · 26/06</span><span class="dt">ສ້າງລາຍການ “ໃຜຄວນໄປສົ່ງມື້ນີ້” (ຮວມ 4 ສັນຍານ) + ຮວມລູກຄ້າທີ່ບໍ່ມີຮອບປະຈຳ + ທົດສອບ/PR</span><span class="hr">~1 ມື້</span></div>
       </div>
       <div class="swk" data-reveal data-d="4">
-        <h4>ມື້ 6-9 — ເສັ້ນທາງ + ວາດເສັ້ນ <span class="wt">~4 ມື້</span></h4>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 6</span><span class="dt">ສ້າງ “ບ່ອນເກັບເສັ້ນທາງ” ໃນຖານຂໍ້ມູນ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 7-8</span><span class="dt">ຫຼັງບ້ານ: ສ້າງ/ແກ້/ລຶບ/ເບິ່ງ ເສັ້ນທາງ + ຕໍ່ໜ້າເວັບໃຫ້ເອີ້ນໃຊ້ໄດ້</span><span class="hr">~2 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 9</span><span class="dt">ເຄື່ອງມືແຕ້ມເສັ້ນເທິງແຜນທີ່ (ກົດຈຸດ → ລາກ → ສີ/ມື້ → ບັນທຶກ) + ຕົວສະແດງເສັ້ນສີ + ທົດສອບ/PR</span><span class="hr">~1 ມື້</span></div>
+        <h4>ມື້ 6-9 · 27-30/06 — ເສັ້ນທາງ + ວາດເສັ້ນ <span class="wt">~4 ມື້</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 6 · 27/06</span><span class="dt">ສ້າງ “ບ່ອນເກັບເສັ້ນທາງ” ໃນຖານຂໍ້ມູນ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 7-8 · 28-29/06</span><span class="dt">ຫຼັງບ້ານ: ສ້າງ/ແກ້/ລຶບ/ເບິ່ງ ເສັ້ນທາງ + ຕໍ່ໜ້າເວັບໃຫ້ເອີ້ນໃຊ້ໄດ້</span><span class="hr">~2 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 9 · 30/06</span><span class="dt">ເຄື່ອງມືແຕ້ມເສັ້ນເທິງແຜນທີ່ (ກົດຈຸດ → ລາກ → ສີ/ມື້ → ບັນທຶກ) + ຕົວສະແດງເສັ້ນສີ + ທົດສອບ/PR</span><span class="hr">~1 ມື້</span></div>
       </div>
       <div class="swk" data-reveal data-d="5">
-        <h4>ມື້ 10-13 — ກອງ + ເຜີຍລູກຄ້າໃກ້ເສັ້ນ + ວັດຜົນ <span class="wt">~4 ມື້</span></h4>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 10-11</span><span class="dt">“ເຜີຍລູກຄ້າໃກ້ເສັ້ນ” (ຄິດໄລຍະ ໃນສາຂາຕົນເອງ) + ກອງຕາມມື້/ເສັ້ນ</span><span class="hr">~2 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 12</span><span class="dt">ໝຸດບອກ 2 ຢ່າງ (ສີ=ຄວາມງຽບ, ຂອບ=ເສັ້ນ) + ປ້າຍອະທິບາຍ</span><span class="hr">~1 ມື້</span></div>
-        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 13</span><span class="dt">ລາຍງານ “ເກັບພິກັດໄດ້ຈັກ %” + “ຄະແນນດິບລາຍຄົນຂັບ” + ເກັບງານ/ກຽມ demo + PR</span><span class="hr">~1 ມື້</span></div>
+        <h4>ມື້ 10-13 · 01-04/07 — ກອງ + ເຜີຍລູກຄ້າໃກ້ເສັ້ນ + ວັດຜົນ <span class="wt">~4 ມື້</span></h4>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 10-11 · 01-02/07</span><span class="dt">“ເຜີຍລູກຄ້າໃກ້ເສັ້ນ” (ຄິດໄລຍະ ໃນສາຂາຕົນເອງ) + ກອງຕາມມື້/ເສັ້ນ</span><span class="hr">~2 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 12 · 03/07</span><span class="dt">ໝຸດບອກ 2 ຢ່າງ (ສີ=ຄວາມງຽບ, ຂອບ=ເສັ້ນ) + ປ້າຍອະທິບາຍ</span><span class="hr">~1 ມື້</span></div>
+        <div class="sday"><span class="cb"></span><span class="dn">ມື້ 13 · 04/07</span><span class="dt">ລາຍງານ “ເກັບພິກັດໄດ້ຈັກ %” + “ຄະແນນດິບລາຍຄົນຂັບ” + ເກັບງານ/ກຽມ demo + PR</span><span class="hr">~1 ມື້</span></div>
       </div>
       <div class="swk" data-reveal data-d="5">
-        <h4>+ ແອັບຄົນຂັບ (Track B) <span class="wt">~4 ອາທິດ · ເລີ່ມແລ້ວ ~25-30%</span></h4>
-        <div class="sday" style="background:var(--mint);border-radius:var(--r-md)"><span class="dn">ເສັດແລ້ວ</span><span class="dt"><b>spine:</b> ໂຄງແອັບ (Capacitor) · ເຂົ້າລະບົບ PIN · ໜ້າວຽກມື້ນີ້ · ໜ້າຈຸດສົ່ງ (ຊຳລະ+ຖັງ+ຮູບ+GPS) — ຕໍ່ backend ຈິງແລ້ວ</span><span class="hr">✓</span></div>
-        <div class="sday"><span class="dn">ເຫຼືອ</span><span class="dt">map · ກະເປົ໋າເງິນ · ໃບຮັບເງິນ · ປິດກະ + ກຸ່ມໃໝ່ (ຍິງຂາຍ · ນ້ຳມັນ · ອັນດັບ · ລາຍຮັບ · offline · ແຈ້ງລູກຄ້າ)</span><span class="hr">~3 ອາທິດ</span></div>
+        <h4>+ ແອັບຄົນຂັບ — <b>ທຳໃໝ່ທັງໝົດດ້ວຍ Flutter</b> <span class="wt">ເຟສຕໍ່ໄປ · ບໍ່ນັບໃນ 13 ມື້</span></h4>
+        <div class="sday"><span class="dn" style="color:var(--muted)">ການຕັດສິນ</span><span class="dt"><b>ສ້າງແອັບຄົນຂັບໃໝ່ໝົດດ້ວຍ Flutter</b> (ບໍ່ໃຊ້ເດໂມ/ໂຄ້ດເກົ່າ Capacitor/React). ຫຼັງບ້ານ (loop ຄົນຂັບ) ມີຢູ່ແລ້ວ → reuse ໄດ້</span><span class="hr" style="color:var(--muted)">Flutter</span></div>
+        <div class="sday"><span class="dn" style="color:var(--muted)">ຂອບເຂດ</span><span class="dt">login PIN · ໜ້າວຽກມື້ນີ້ · ໜ້າຈຸດສົ່ງ (ຊຳລະ+ຖັງ+ຮູບ+GPS) · map · ກະເປົ໋າເງິນ · ໃບຮັບເງິນ · ປິດກະ + ຍິງຂາຍ/ນ້ຳມັນ/ອັນດັບ/ລາຍຮັບ/offline</span><span class="hr" style="color:var(--muted)">~ໃໝ່</span></div>
       </div>
     </div>
-    <p class="note-est" data-reveal>ໝາຍເຫດ (ຊື່ສັດ): <b>ຮາກຖານ (Block A) ຂອງຈິງເຮັດ 1 ມື້</b> (ແຜນເດີມ 5.5) → ນຳໜ້າແຜນ ~4 ມື້. ງານທີ່ເຫຼືອ <b>ປະເມີນຕາມຈິງ ບໍ່ບີບ</b>: Track A ທີ່ເຫຼືອ ~13 ມື້ (≈ 2-3 ອາທິດ ທີມ 2 ຄົນ) · ແອັບຄົນຂັບ ~4 ອາທິດ (ເລີ່ມແລ້ວ ~25-30%) → 2 ງານເຕັມ ≈ <b>~7-8 ອາທິດ</b>. ມື້ 1 ກວດໃນໂຄ້ດຈິງແລ້ວວ່າເສັດ (commit <code>e2d9b7d3</code>) · ເຫຼືອພຽງຊຸດທົດສອບ (ມື້ 2).</p>
+    <p class="note-est" data-reveal>ໝາຍເຫດ: ເລີ່ມ <b>22/06/2026</b> · ເຮັດ <b>7 ມື້/ອາທິດ ບໍ່ມີວັນພັກ</b> (ວັນທີໄລ່ຕິດກັນ). <b>ຮາກຖານ ຂອງຈິງເຮັດ 1 ມື້</b> (ແຜนเดิม 5.5) → ນຳໜ້າ ~4 ມື້. Track A (ມື້ 1-13) ຈົບ ~<b>04/07/2026</b> · ປະເມີນຕາມຈິງ ບໍ່ບີບ. <b>ແອັບຄົນຂັບ = ທຳໃໝ່ Flutter</b> (ເຟສຕໍ່ໄປ). ມື້ 1 ກວດໃນໂຄ້ດແລ້ວ (commit <code>e2d9b7d3</code>).</p>
   </div>
 </section>
 
@@ -441,10 +444,10 @@
       <p class="sub">ມີບໍ່ຫຼາຍ — ສ່ວນໃຫຍ່ມີຄຳແນະນຳພ້ອມແລ້ວ</p>
     </div>
     <div class="dec">
-      <div class="dr" data-reveal data-d="1"><div class="n">1</div><div class="q">ເກັບທີ່ຕັ້ງ (GPS) ຕອນສົ່ງ ໄດ້ບໍ?<span>ຕ້ອງໝັ້ນໃຈວ່າເກັບຕຳແໜ່ງໜ້າວຽກເໝາະສົມຕາມກົດໝາຍລາວ ຄວາມສ່ຽງຕ່ຳ ແຕ່ຢາກໄດ້ການຕົກລົງກ່ອນ</span></div></div>
-      <div class="dr" data-reveal data-d="2"><div class="n">2</div><div class="q">ຊື່ວິທີຈ່າຍເງິນ ໃຫ້ກົງກັນທັງລະບົບ<span>ຕ້ອງໃຫ້ຄຳວ່າ ເງິນສົດ / QR / ໂອນ ກົງກັນໝົດ ບໍ່ດັ່ງນັ້ນເງິນອາດບັນທຶກຜິດຊ່ອງ</span></div></div>
-      <div class="dr" data-reveal data-d="3"><div class="n">3</div><div class="q">ແອັບຄົນຂັບ: ຢືນຢັນທິດທາງ Capacitor (native)?<span>ຕອນນີ້ເລີ່ມເຮັດເປັນ Capacitor (Android) ແລ້ວ · ໄດ້ GPS ແລະ ຕໍ່ເຄື່ອງພິມ Bluetooth/ສະແກນ ໄດ້ດີກວ່າ PWA · ຂໍຢືນຢັນ</span></div></div>
-      <div class="dr" data-reveal data-d="4"><div class="n">4</div><div class="q">ປ່ອຍ optimizer ເມື່ອໃດ<span>ໃຫ້ລະບົບຈັດເສັ້ນທາງເອງ ຕໍ່ເມື່ອມີທີ່ຕັ້ງລູກຄ້າຄົບ 80% + ປະຫວັດສົ່ງພໍ</span></div></div>
+      <div class="dr" data-reveal data-d="1"><div class="n">1</div><div class="q">ເກັບທີ່ຕັ້ງ (GPS) ຕອນສົ່ງ ໄດ້ບໍ?<span>ຕ້ອງໝັ້ນໃຈວ່າເກັບຕຳແໜ່ງໜ້າວຽກເໝາະສົມຕາມກົດໝາຍລາວ ຄວາມສ່ຽງຕ່ຳ ແຕ່ຢາກໄດ້ການຕົກລົງກ່ອນ</span><div class="loo-ans"><textarea data-answer="d1" rows="2" placeholder="ຄຳຕັດສິນ / ບັນທຶກ ຂອງ Bou..."></textarea><div class="row"><button class="save" type="button">ບັນທຶກ</button><span class="st"></span></div></div></div></div>
+      <div class="dr" data-reveal data-d="2"><div class="n">2</div><div class="q">ຊື່ວິທີຈ່າຍເງິນ ໃຫ້ກົງກັນທັງລະບົບ<span>ຕ້ອງໃຫ້ຄຳວ່າ ເງິນສົດ / QR / ໂອນ ກົງກັນໝົດ ບໍ່ດັ່ງນັ້ນເງິນອາດບັນທຶກຜິດຊ່ອງ</span><div class="loo-ans"><textarea data-answer="d2" rows="2" placeholder="ຄຳຕັດສິນ / ບັນທຶກ ຂອງ Bou..."></textarea><div class="row"><button class="save" type="button">ບັນທຶກ</button><span class="st"></span></div></div></div></div>
+      <div class="dr" data-reveal data-d="3"><div class="n">3</div><div class="q">ແອັບຄົນຂັບ: ຢືນຢັນໃຊ້ Flutter?<span>ທຳໃໝ່ທັງໝົດດ້ວຍ Flutter (native · ໄດ້ background-GPS + ຕໍ່ເຄື່ອງພິມ Bluetooth/ສະແກນ ດີກວ່າ PWA) · backend ມີຢູ່ແລ້ວ reuse ໄດ້ · ຂໍຢືນຢັນ</span><div class="loo-ans"><textarea data-answer="d3" rows="2" placeholder="ຄຳຕັດສິນ / ບັນທຶກ ຂອງ Bou..."></textarea><div class="row"><button class="save" type="button">ບັນທຶກ</button><span class="st"></span></div></div></div></div>
+      <div class="dr" data-reveal data-d="4"><div class="n">4</div><div class="q">ປ່ອຍ optimizer ເມື່ອໃດ<span>ໃຫ້ລະບົບຈັດເສັ້ນທາງເອງ ຕໍ່ເມື່ອມີທີ່ຕັ້ງລູກຄ້າຄົບ 80% + ປະຫວັດສົ່ງພໍ</span><div class="loo-ans"><textarea data-answer="d4" rows="2" placeholder="ຄຳຕັດສິນ / ບັນທຶກ ຂອງ Bou..."></textarea><div class="row"><button class="save" type="button">ບັນທຶກ</button><span class="st"></span></div></div></div></div>
     </div>
   </div>
 </section>
@@ -486,6 +489,7 @@
 <script>
   document.documentElement.classList.remove('no-js');
   const nav=document.getElementById('nav');
+  (function(){var tg=document.querySelector('.navtoggle');if(tg){tg.addEventListener('click',function(){var o=nav.classList.toggle('open');tg.setAttribute('aria-expanded',o);});nav.querySelectorAll('nav a').forEach(function(a){a.addEventListener('click',function(){nav.classList.remove('open');tg.setAttribute('aria-expanded','false');});});}})();
   const sc=()=>nav.classList.toggle('sc',scrollY>8); sc(); addEventListener('scroll',sc,{passive:true});
   const items=document.querySelectorAll('[data-reveal]');
   if('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches){
