@@ -35,6 +35,20 @@ window.LOO_CLIST = (function () {
   function editItem(iid, patch) { var it = state.clist.items[iid]; if (!it) return; Object.assign(it, patch); saveLocal(); wPath('clist/items/' + iid, it); writeMeta(); emit(); }
   function delItem(iid) { delete state.clist.items[iid]; saveLocal(); wPath('clist/items/' + iid, null); writeMeta(); emit(); }
   function toggleItem(iid) { var it = state.clist.items[iid]; if (!it || it.note) return; it.done = !it.done; saveLocal(); wPath('clist/items/' + iid, it); writeMeta(); emit(); }
+  // ลาก/จัดเรียง : เขียนเฉพาะ order (+ gid ตอนย้ายข้ามกลุ่ม) — ไม่แตะ done/text/hr/title
+  function applyLayout(layout) {
+    var o = {};
+    layout.forEach(function (grp, gi) {
+      var g = state.clist.groups[grp.gid]; if (g) g.order = gi + 1;
+      o['clist/groups/' + grp.gid + '/order'] = gi + 1;
+      (grp.items || []).forEach(function (iid, ii) {
+        var it = state.clist.items[iid]; if (it) { it.order = ii + 1; it.gid = grp.gid; }
+        o['clist/items/' + iid + '/order'] = ii + 1;
+        o['clist/items/' + iid + '/gid'] = grp.gid;
+      });
+    });
+    saveLocal(); if (remote) m.update(root, o); emit();
+  }
 
   function seedIfEmpty() {
     if (Object.keys(state.clist.groups).length) return false;
@@ -135,6 +149,6 @@ window.LOO_CLIST = (function () {
     subscribe: function (cb) { subs.push(cb); cb(state, status); },
     state: state, groupsSorted: groupsSorted, itemsOf: itemsOf, counts: counts, status: function () { return status; },
     addGroup: addGroup, editGroup: editGroup, delGroup: delGroup,
-    addItem: addItem, editItem: editItem, delItem: delItem, toggleItem: toggleItem
+    addItem: addItem, editItem: editItem, delItem: delItem, toggleItem: toggleItem, applyLayout: applyLayout
   };
 })();

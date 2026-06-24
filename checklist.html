@@ -83,6 +83,20 @@
   .it:hover .dn.ph,.it:hover .hr.ph{opacity:.85}
   .edit.edn{flex:0 0 auto;width:108px;font-family:var(--mono);font-size:.82rem;padding:6px 8px}
   .edit.ehr{flex:0 0 auto;width:96px;font-family:var(--mono);font-size:.82rem;padding:6px 8px}
+  /* มือจับลาก (drag handle) */
+  .ghandle,.ihandle{flex:0 0 auto;display:grid;place-items:center;color:var(--muted);cursor:grab;opacity:.32;transition:opacity .15s,color .15s;touch-action:none;-webkit-user-select:none;user-select:none}
+  .ghandle{width:26px;height:30px;margin-left:-4px}
+  .ihandle{width:22px;height:24px;margin:1px 0 0 -2px}
+  .ghandle svg{width:17px;height:17px}.ihandle svg{width:15px;height:15px}
+  .gh:hover .ghandle,.it:hover .ihandle{opacity:.7}
+  .ghandle:hover,.ihandle:hover{color:var(--brand);opacity:1}
+  .ghandle:active,.ihandle:active{cursor:grabbing}
+  @media(hover:none){.ghandle,.ihandle{opacity:.55}}
+  .sortable-ghost{opacity:.35}
+  .sortable-chosen{background:rgba(37,99,235,.05)}
+  .grp.sortable-chosen{box-shadow:0 0 0 2px var(--brand)}
+  .sortable-drag{box-shadow:0 12px 30px rgba(12,20,48,.22);border-radius:var(--r-md);opacity:1!important}
+  .sortable-drag .ictl{opacity:0}
 
   .additem{padding:4px 14px 14px}
   .addbtn{font-family:inherit;font-size:.88rem;font-weight:600;color:var(--brand);background:transparent;border:1px dashed rgba(37,99,235,.4);border-radius:var(--pill);padding:7px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
@@ -116,17 +130,20 @@
 </div>
 <footer><div class="wrap">LOO Delivery · Checklist Manager · ຂໍ້ມູນຊຸດດຽວກັບ Overview (sync realtime)</div></footer>
 
+<script src="Sortable.min.js"></script>
 <script src="loo-data.js"></script>
 <script src="loo-clist.js"></script>
 <script>
 (function(){
-  var C=window.LOO_CLIST, groupsEl=document.getElementById('groups'), editing=null;
+  var C=window.LOO_CLIST, groupsEl=document.getElementById('groups'), editing=null, dragging=false, sortables=[];
   var esc=function(s){return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
   var PEN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
   var TRASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>';
+  var GRIP='<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="5" r="1.7"/><circle cx="15" cy="5" r="1.7"/><circle cx="9" cy="12" r="1.7"/><circle cx="15" cy="12" r="1.7"/><circle cx="9" cy="19" r="1.7"/><circle cx="15" cy="19" r="1.7"/></svg>';
   function setChip(st){var c=document.getElementById('chip');c.className='chip '+st;c.textContent=st==='live'?'live sync · ທຸກຄົນເຫັນຮ່ວມກັນ':st==='connecting'?'ກຳລັງເຊື່ອມ…':'device only';}
 
   function render(state,status){
+    if(dragging) return;            // กำลังลากอยู่ — อย่า re-render (กันลากหลุด)
     setChip(status);
     var cur = editing && document.getElementById('ed') ? document.getElementById('ed').value : null;
     var gs=C.groupsSorted(), done=0,total=0;
@@ -152,12 +169,14 @@
           ? '<input class="edit ehr" id="ed" value="'+esc(it.hr)+'">'
           : '<span class="hr'+(it.hr?'':' ph')+'" data-act="edithr" data-id="'+iid+'" title="ແກ້ເວລາ">'+(esc(it.hr)||'＋ເວລາ')+'</span>';
         var ctl='<span class="ictl"><button class="iconbtn" data-act="editi" data-id="'+iid+'" title="ແກ້ຂໍ້ຄວາມ">'+PEN+'</button><button class="iconbtn danger" data-act="deli" data-id="'+iid+'" title="ລຶບ">'+TRASH+'</button></span>';
-        if(it.note) return '<div class="it note">'+dn+tx+hr+ctl+'</div>';
-        return '<div class="it'+(it.done?' on':'')+'">'
+        var ihandle='<span class="ihandle" title="ລາກຍ້າຍ">'+GRIP+'</span>';
+        if(it.note) return '<div class="it note" data-iid="'+iid+'">'+ihandle+dn+tx+hr+ctl+'</div>';
+        return '<div class="it'+(it.done?' on':'')+'" data-iid="'+iid+'">'+ihandle
           +'<span class="cb'+(it.done?' on':'')+'" data-act="toggle" data-id="'+iid+'" role="checkbox" aria-checked="'+it.done+'" tabindex="0"></span>'
           +dn+tx+hr+ctl+'</div>';
       }).join('');
-      return '<div class="grp'+(allDone?' done':'')+'"><div class="gh">'+gtitle
+      return '<div class="grp'+(allDone?' done':'')+'" data-gid="'+gid+'"><div class="gh">'
+        +'<span class="ghandle" title="ລາກຍ້າຍກຸ່ມ">'+GRIP+'</span>'+gtitle
         +'<span class="gcount">'+gd+'/'+gt+'</span>'+(allDone?'<span class="gbadge">✓ ເສັດ</span>':'')
         +'<button class="iconbtn" data-act="editg" data-id="'+gid+'">'+PEN+'</button>'
         +'<button class="iconbtn danger" data-act="delg" data-id="'+gid+'">'+TRASH+'</button></div>'
@@ -167,6 +186,25 @@
     document.getElementById('pbar').style.width=(total?Math.round(done/total*100):0)+'%';
     document.getElementById('ppct').textContent=done+'/'+total;
     var ed=document.getElementById('ed'); if(ed){ if(cur!=null) ed.value=cur; ed.focus(); ed.select&&!cur&&ed.select(); }
+    initSort();
+  }
+
+  /* ---------- ลาก/จัดเรียง (SortableJS — กลุ่ม + รายการ + ข้ามกลุ่ม · mouse+touch) ---------- */
+  function readLayout(){
+    return Array.prototype.map.call(groupsEl.querySelectorAll('.grp'), function(gEl){
+      return { gid: gEl.getAttribute('data-gid'),
+        items: Array.prototype.map.call(gEl.querySelectorAll('.it'), function(iEl){ return iEl.getAttribute('data-iid'); }) };
+    });
+  }
+  function onDragEnd(){ var layout=readLayout(); setTimeout(function(){ dragging=false; C.applyLayout(layout); }, 0); }
+  function initSort(){
+    if(!window.Sortable) return;
+    sortables.forEach(function(s){ try{s.destroy();}catch(e){} }); sortables=[];
+    var common={ animation:160, easing:'cubic-bezier(.16,1,.3,1)', forceFallback:true, fallbackTolerance:5, onStart:function(){dragging=true;}, onEnd:onDragEnd };
+    sortables.push(new Sortable(groupsEl, Object.assign({draggable:'.grp', handle:'.ghandle'}, common)));
+    Array.prototype.forEach.call(groupsEl.querySelectorAll('.items'), function(el){
+      sortables.push(new Sortable(el, Object.assign({draggable:'.it', handle:'.ihandle', group:'loo-items'}, common)));
+    });
   }
 
   function commit(val){
